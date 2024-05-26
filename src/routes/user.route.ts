@@ -1,8 +1,8 @@
-import express, { Router } from 'express';
-import { UserController } from '../controllers';
+import express, { Router } from 'express'
+import { UserController } from '../controllers'
 
-const router: Router = express.Router();
-const userController = new UserController();
+const router: Router = express.Router()
+const userController = new UserController()
 
 /**
  * @swagger
@@ -21,7 +21,7 @@ const userController = new UserController();
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: number
  *         required: true
  *         description: User ID
  *     responses:
@@ -34,7 +34,8 @@ const userController = new UserController();
  *       404:
  *         description: User not found
  */
-router.get('/:id', userController.getUser);
+router.get('/:id', userController.getUser)
+
 /**
  * @swagger
  * /users:
@@ -57,9 +58,63 @@ router.get('/:id', userController.getUser);
  *       500:
  *         description: Internal server error
  */
-router.post('/', userController.createUser);
+router.post('/', userController.createUser)
 
-router.put('/:id', userController.updateUser);
-router.delete('/:id', userController.deleteUser);
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateUserDto'
+ *     responses:
+ *       200:
+ *         description: Updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/:id', userController.updateUser)
 
-export default router;
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: Deleted user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:id', userController.deleteUser)
+
+export default router

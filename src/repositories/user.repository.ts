@@ -1,31 +1,25 @@
-import { User } from '../interfaces';
+import { UserEntity } from '../entities/user.entity'
+import { AppDataSource } from '../config/typeorm'
+import { CreateUserDto, UpdateUserDto } from '../dtos'
+import { DeleteResult, InsertResult } from 'typeorm'
 
 export class UserRepository {
-  private users: User[] = [];
+  private userRepo = AppDataSource.getRepository(UserEntity)
 
-  public findUserById = (userId: string): User | undefined => {
-    return this.users.find(user => user.id === userId);
-  };
+  public findUserById = (userId: string): Promise<UserEntity> => {
+    return this.userRepo.findOneByOrFail({id: parseInt(userId)})
+  }
 
-  public createUser = (user: User): User => {
-    this.users.push(user);
-    return user;
-  };
+  public createUser = (userData: CreateUserDto): Promise<InsertResult> => {
+    const newUser = this.userRepo.create(userData)
+    return this.userRepo.insert(newUser)
+  }
 
-  public updateUser = (user: User): User => {
-    const userIndex = this.users.findIndex(u => u.id === user.id);
-    if (userIndex === -1) {
-      throw new Error('User not found');
-    }
-    this.users[userIndex] = user;
-    return user;
-  };
+  public updateUser = (userId: string, userData: UpdateUserDto): Promise<UserEntity> => {
+    return this.userRepo.save({...userData, id: parseInt(userId)})
+  }
 
-  public deleteUser = (userId: string): void => {
-    const userIndex = this.users.findIndex(user => user.id === userId);
-    if (userIndex === -1) {
-      throw new Error('User not found');
-    }
-    this.users.splice(userIndex, 1);
-  };
+  public deleteUser = (userId: string): Promise<DeleteResult> => {
+    return this.userRepo.delete({id: parseInt(userId)})
+  }
 }

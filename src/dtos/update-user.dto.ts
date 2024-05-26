@@ -2,11 +2,8 @@
  * @swagger
  * components:
  *   schemas:
- *     CreateUserDto:
+ *     UpdateUserDto:
  *       type: object
- *       required:
- *         - name
- *         - email
  *       properties:
  *         name:
  *           type: string
@@ -15,12 +12,7 @@
  *           type: string
  *           description: The user's email
  */
-export class CreateUserDto {
-  name: string
-  email: string
-
-  constructor(name: string, email: string) {
-    this.name = name
-    this.email = email
-  }
+export class UpdateUserDto {
+  name!: string
+  email!: string
 }
