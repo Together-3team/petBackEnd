@@ -1,4 +1,52 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Timestamp } from 'typeorm'
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ProductList:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: 고유 ID
+ *         title:
+ *           type: string
+ *           description: 상품명
+ *         originalPrice:
+ *           type: integer
+ *           description: 원가
+ *         price:
+ *           type: integer
+ *           description: 판매가
+ *         discountRate:
+ *           type: integer
+ *           description: 할인율
+ *         thumbNailImage:
+ *           type: string
+ *           nullable: true
+ *           description: 썸네일 이미지
+ *         isDeleted:
+ *           type: integer
+ *           description: 삭제 여부
+ *         createdAt:
+ *           type: string
+ *           format: Timestamp
+ *           description: 생성일
+ *         updatedAt:
+ *           type: string
+ *           format: Timestamp
+ *           description: 수정일
+ *       required:
+ *         - id
+ *         - title
+ *         - originalPrice
+ *         - price
+ *         - discountRate
+ *         - isDeleted
+ *         - createdAt
+ *         - updatedAt
+ */
 
 @Entity('productList')
 export class ProductList {
@@ -28,5 +76,4 @@ export class ProductList {
 
     @UpdateDateColumn()
     updatedAt!: Timestamp;
-
 }

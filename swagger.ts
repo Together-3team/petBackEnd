@@ -1,6 +1,5 @@
-import swaggerJsdoc from 'swagger-jsdoc'
-import swaggerUi from 'swagger-ui-express'
-import { Express } from 'express'
+
+import swaggerJsdoc from 'swagger-jsdoc';
 
 // Swagger 설정 옵션
 const options = {
@@ -16,49 +15,13 @@ const options = {
         url: `http://localhost:${process.env.SERVER_PORT}`, // 서버 주소
       },
     ],
-    components: {
-      schemas: {
-        User: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              description: 'User ID'
-            },
-            name: {
-              type: 'string',
-              description: 'User name'
-            },
-            email: {
-              type: 'string',
-              description: 'User email'
-            }
-          },
-          required: ['id', 'name', 'email']
-        },
-        CreateUserDto: {
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string',
-              description: 'User name'
-            },
-            email: {
-              type: 'string',
-              description: 'User email'
-            }
-          },
-          required: ['name', 'email']
-        }
-      }
-    }
   },
   apis: ['./src/routes/*.ts', './src/dtos/*.ts'], // API 경로 (라우트 및 DTO 경로)
-}
+};
 
 // Swagger 문서 생성
-const swaggerSpec = swaggerJsdoc(options)
+const swaggerSpec = swaggerJsdoc(options);
 
-export const setupSwagger = (app: Express) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-}
+export const setupSwagger = () => {
+  return swaggerSpec;
+};

@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 import { UserController } from '../controllers'
 
-const router: Router = express.Router()
+const UserRouter: Router = express.Router()
 const userController = new UserController()
 
 /**
@@ -34,7 +34,7 @@ const userController = new UserController()
  *       404:
  *         description: User not found
  */
-router.get('/:id', userController.getUser)
+UserRouter.get('/:id', userController.getUser)
 
 /**
  * @swagger
@@ -58,7 +58,7 @@ router.get('/:id', userController.getUser)
  *       500:
  *         description: Internal server error
  */
-router.post('/', userController.createUser)
+UserRouter.post('/', userController.createUser)
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ router.post('/', userController.createUser)
  *       500:
  *         description: Internal server error
  */
-router.put('/:id', userController.updateUser)
+UserRouter.put('/:id', userController.updateUser)
 
 
 /**
@@ -115,6 +115,6 @@ router.put('/:id', userController.updateUser)
  *       500:
  *         description: Internal server error
  */
-router.delete('/:id', userController.deleteUser)
+UserRouter.delete('/:id', userController.deleteUser)
 
-export default router
+export default UserRouter
