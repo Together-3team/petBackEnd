@@ -1,4 +1,4 @@
-import { ProductList } from '../entities'
+import { Product } from '../entities'
 import { ProductRepository } from '../repositories'
 
 export class ProductService {
@@ -8,7 +8,7 @@ export class ProductService {
     this.productRepository = new ProductRepository();
   }
 
-  public getProductList = (): Promise<ProductList[]> => {
+  public getProductList = (): Promise<Product[]> => {
     return this.productRepository.getProductList()
   }
 }

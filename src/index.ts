@@ -1,7 +1,6 @@
-
 import express from 'express';
 import cors from 'cors';
-import { AppDataSource } from './config/typeorm';
+import { AppDataSource } from './config/typeorm'
 import { setupSwagger } from '../swagger'
 import userRoute from './routes/user.route';
 import productRoute from './routes/product.route';
