@@ -4,11 +4,11 @@ config()
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_DATABASE,
+    host: process.env.MYSQL_HOST,
+    port: parseInt(process.env.MYSQL_PORT || '3306'),
+    username: process.env.MYSQL_USER_NAME,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
     logging: true,
     synchronize: true,
     entities: ['src/entities/*.ts']
