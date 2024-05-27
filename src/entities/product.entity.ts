@@ -48,8 +48,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
  *         - updatedAt
  */
 
-@Entity('productList')
-export class ProductList {
+@Entity('product')
+export class Product {
     @PrimaryGeneratedColumn()
     id!: number;
 

@@ -42,11 +42,11 @@ const productController = new ProductController();
  *           description: 삭제 여부
  *         createdAt:
  *           type: string
- *           format: Timestamp
+ *           format: timestamp
  *           description: 생성일
  *         updatedAt:
  *           type: string
- *           format: Timestamp
+ *           format: timestamp
  *           description: 수정일
  *       required:
  *         - id
@@ -65,6 +65,19 @@ const productController = new ProductController();
  *   get:
  *     summary: 제품 목록 가져오는 엔드포인트
  *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 페이지 번호
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: 페이지당 항목 수
  *     responses:
  *       200:
  *         description: 요청 성공
