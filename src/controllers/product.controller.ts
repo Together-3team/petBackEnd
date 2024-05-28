@@ -2,13 +2,12 @@ import { Request, Response } from 'express';
 import { ProductService } from '../services';
 import { Product } from '../entities';
 import { ProductListRequestDTO } from '../dtos'
+import { Product } from '../entities';
 
-// ProductController 클래스 정의
 export class ProductController {
   private productService: ProductService;
 
   constructor() {
-    // ProductService 인스턴스를 생성하여 초기화
     this.productService = new ProductService();
   }
 
