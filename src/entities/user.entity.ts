@@ -3,29 +3,35 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp } f
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn('increment')
-    id?: number
+    id!: number
 
     @Column('varchar', {length: 30})
     email: string
 
     @Column('varchar', {length: 30})
-    name: string
+    nickname: string
 
-    // @Column('varchar', {length: 30})
-    // password?: string
+    @Column('varchar', {length: 30})
+    password!: string
 
-    // @Column('varchar', {length: 30})
-    // phoneNumber: string
+    @Column('varchar', {length: 30})
+    phoneNumber: string
 
-    // @Column('text')
-    // profileImage?: string
+    @Column('text')
+    profileImage: string = ''
 
-    // @CreateDateColumn()
-    // createdAt?: Timestamp
+    @CreateDateColumn()
+    createdAt!: Timestamp
 
-    constructor(email: string, name: string) {
+    @Column('varchar', {length: 20})
+    snsId: string = 'local'
+
+    @Column('varchar', {length: 10})
+    provider: string = 'local'
+
+    constructor(email: string, nickname: string, phoneNumber: string) {
         this.email = email
-        this.name = name
-        // this.phoneNumber = phoneNumber
+        this.nickname = nickname
+        this.phoneNumber = phoneNumber
     }
 }

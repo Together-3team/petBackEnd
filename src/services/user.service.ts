@@ -14,7 +14,7 @@ export class UserService {
     return this.userRepository.findUserById(userId)
   }
 
-  public createUser = (userData: CreateUserDto): Promise<InsertResult> => {
+  public createUser = (userData: CreateUserDto): Promise<User> => {
     return this.userRepository.createUser(userData)
   }
 

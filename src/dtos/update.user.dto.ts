@@ -5,14 +5,22 @@
  *     UpdateUserDto:
  *       type: object
  *       properties:
- *         name:
+ *         nickname:
  *           type: string
- *           description: The user's name
- *         email:
+ *           description: 사용자 닉네임
+ *         password:
  *           type: string
- *           description: The user's email
+ *           description: 사용자 비밀번호
+ *         phoneNumber:
+ *           type: string
+ *           description: 사용자 휴대폰 번호
+ *         profileImage:
+ *           type: string
+ *           description: 사용자 프로필 이미지
  */
 export class UpdateUserDto {
-  name!: string
-  email!: string
+  nickname!: string
+  password!: string
+  phoneNumber!: string
+  profileImage!: string
 }
