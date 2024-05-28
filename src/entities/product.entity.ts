@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Timestamp } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    Timestamp,
+    ManyToOne,
+} from 'typeorm'
 
 /**
  * @swagger
@@ -19,9 +27,6 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
  *         price:
  *           type: integer
  *           description: 판매가
- *         discountRate:
- *           type: integer
- *           description: 할인율
  *         thumbNailImage:
  *           type: string
  *           nullable: true
@@ -50,30 +55,52 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity('product')
 export class Product {
+    /**
+     * 고유 ID
+     */
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ type: 'varchar', length: 30 })
+    /**
+     * 상품명
+     */
+    @Column({ type: 'varchar', length: 60 })
     title!: string;
 
+    /**
+     * 원가
+     */
     @Column({ type: 'int' })
     originalPrice!: number;
 
+    /**
+     * 판매가
+     */
     @Column({ type: 'int'})
     price!: number;
 
-    @Column({ type: 'int' })
-    discountRate!: number;
-
+    /**
+     * 썸네일이미지
+     */
     @Column({ type: 'text', nullable: true })
     thumbNailImage: string = '';
 
-    @Column({ type: 'tinyint' })
+    /**
+     * 삭제여부
+     */
+    @Column({ type: 'tinyint', default: 0 })
     isDeleted: number = 0;
 
+    /**
+     * 생성일
+     */
     @CreateDateColumn()
     createdAt!: Timestamp;
 
+
+    /**
+     * 수정일
+     */
     @UpdateDateColumn()
     updatedAt!: Timestamp;
 }

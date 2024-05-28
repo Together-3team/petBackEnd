@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp } from 'typeorm'
-import { Product } from './product.entity';
-import { Category } from './category.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp, OneToMany } from 'typeorm'
+import { Category, Product, Option, OptionCombination } from '../entities';
 
 /**
  * @swagger
@@ -52,16 +51,14 @@ export class ProductDetail {
 
     /**
      * 상품 참조 키
-     * Product 엔티티와의 ManyToOne 관계
      */
-    @ManyToOne(() => Product, product => product.id, { nullable: false })
+    @ManyToOne(() => Product, product => product.id, { nullable: true })
     productId?: Product;
 
     /**
      * 카테고리 참조 키
-     * Category 엔티티와의 ManyToOne 관계
      */
-    @ManyToOne(() => Category, category => category.id, { nullable: false })
+    @ManyToOne(() => Category, category => category.id, { nullable: true })
     categoryId?: Category;
 
     /**
@@ -69,6 +66,12 @@ export class ProductDetail {
      */
     @Column('text', { nullable: true })
     productImages?: string;
+
+    @OneToMany(() => Option, option => option.productDetailId)
+    options?: Option[];
+
+    @OneToMany(() => OptionCombination, optionCombination => optionCombination.productDetailId, { nullable: true })
+    optionCombinations?: OptionCombination[];
 
     /**
      * 설명 이미지

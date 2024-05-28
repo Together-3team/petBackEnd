@@ -19,6 +19,9 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Ti
  *         depth:
  *           type: integer
  *           description: 뎁스
+ *         categoryStr:
+ *           type: string
+ *           description: 카테고리문자열
  *         isDeleted:
  *           type: boolean
  *           description: 삭제 여부
@@ -60,6 +63,12 @@ export class Category {
      */
     @Column('int', { nullable: false })
     depth?: number;
+
+    /**
+     * 카테고리문자열
+     */
+    @Column('varchar', { length: 50, nullable: false })
+    categoryStr?: number;
 
     /**
      * 삭제 여부

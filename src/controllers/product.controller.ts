@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ProductService } from '../services';
 import { Product } from '../entities';
-import { ProductListRequestDTO } from '../dtos'
+import { ProductDetailResponseDTO, ProductListRequestDTO } from '../dtos'
 
 export class ProductController {
   private productService: ProductService;
@@ -30,4 +30,30 @@ export class ProductController {
       res.status(500).json({ error: errorMessage });
     }
   };
+
+  /**
+   * 상품 목록 가져오는 메서드
+   * @param req
+   * @param res
+   */
+
+  public getProductDetail = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const productId = parseInt(req.params.id, 10);
+      if (isNaN(productId)) {
+        res.status(400).json({ error: 'Invalid product id' });
+        return
+      }
+
+      const productInfo: ProductDetailResponseDTO | null = await this.productService.getProductDetail(productId);
+      if (productId) {
+        res.status(200).json(productInfo);
+      } else {
+        res.status(404).json({ error: 'Product not found' });
+      }
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      res.status(500).json({ error: errorMessage });
+    }
+  }
 }
