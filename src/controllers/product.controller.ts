@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { ProductService } from '../services';
 import { Product } from '../entities';
 import { ProductListRequestDTO } from '../dtos'
-import { Product } from '../entities';
 
 export class ProductController {
   private productService: ProductService;
