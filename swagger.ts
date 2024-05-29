@@ -12,7 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.SERVER_PORT}`, // 서버 주소
+        url: `http://${process.env.PUBLIC_IP}:${process.env.SERVER_PORT}`, // 서버 주소
       },
     ],
   },
