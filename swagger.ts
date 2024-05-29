@@ -6,7 +6,7 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Pet Store API',
+      title: '3Team Pet Store API',
       version: '1.0.0',
       description: 'APIs for managing pet',
     },
