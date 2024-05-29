@@ -9,7 +9,8 @@
     "dev": "nodemon",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "format": "prettier --write \"**/*.+(js|json|ts|tsx)\""
+    "format": "prettier --write \"**/*.+(js|json|ts|tsx)\"",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
