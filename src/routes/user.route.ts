@@ -8,14 +8,14 @@ const userController = new UserController()
  * @swagger
  * tags:
  *   name: Users
- *   description: User management
+ *   description: 사용자
  */
 
 /**
  * @swagger
  * /users/{id}:
  *   get:
- *     summary: Get a user by ID
+ *     summary: 사용자 상세 정보
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -23,16 +23,16 @@ const userController = new UserController()
  *         schema:
  *           type: number
  *         required: true
- *         description: User ID
+ *         description: 사용자 ID
  *     responses:
  *       200:
- *         description: User data
+ *         description: 사용자 상세 정보
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       404:
- *         description: User not found
+ *         description: 존재하지 않는 사용자입니다
  */
 UserRouter.get('/:id', userController.getUser)
 
@@ -40,7 +40,7 @@ UserRouter.get('/:id', userController.getUser)
  * @swagger
  * /users:
  *   post:
- *     summary: Create a new user
+ *     summary: 사용자 등록
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -50,7 +50,7 @@ UserRouter.get('/:id', userController.getUser)
  *             $ref: '#/components/schemas/CreateUserDto'
  *     responses:
  *       200:
- *         description: Created user
+ *         description: 사용자 등록
  *         content:
  *           application/json:
  *             schema:
@@ -64,7 +64,7 @@ UserRouter.post('/', userController.createUser)
  * @swagger
  * /users/{id}:
  *   put:
- *     summary: Update a user
+ *     summary: 사용자 수정
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -72,7 +72,7 @@ UserRouter.post('/', userController.createUser)
  *         schema:
  *           type: number
  *         required: true
- *         description: User ID
+ *         description: 사용자 ID
  *     requestBody:
  *       required: true
  *       content:
@@ -81,7 +81,7 @@ UserRouter.post('/', userController.createUser)
  *             $ref: '#/components/schemas/UpdateUserDto'
  *     responses:
  *       200:
- *         description: Updated user
+ *         description: 사용자 수정
  *         content:
  *           application/json:
  *             schema:
@@ -96,7 +96,7 @@ UserRouter.put('/:id', userController.updateUser)
  * @swagger
  * /users/{id}:
  *   delete:
- *     summary: Delete a user
+ *     summary: 사용자 삭제
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -104,10 +104,10 @@ UserRouter.put('/:id', userController.updateUser)
  *         schema:
  *           type: number
  *         required: true
- *         description: User ID
+ *         description: 사용자 ID
  *     responses:
  *       200:
- *         description: Deleted user
+ *         description: 삭제된 사용자
  *         content:
  *           application/json:
  *             schema:

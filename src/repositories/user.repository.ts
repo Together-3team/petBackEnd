@@ -10,9 +10,18 @@ export class UserRepository {
     return this.userRepo.findOneByOrFail({id: parseInt(userId)})
   }
 
-  public createUser = (userData: CreateUserDto): Promise<InsertResult> => {
+  public findUserByEmail = (email: string): Promise<User> => {
+    return this.userRepo.findOneByOrFail({email})
+  }
+
+  public findUserBySNS = (snsId: string, provider: string): Promise<User | null> => {
+    return this.userRepo.findOne({where: {snsId, provider}})
+  }
+
+  public createUser = async (userData: CreateUserDto): Promise<User> => {
     const newUser = this.userRepo.create(userData)
-    return this.userRepo.insert(newUser)
+    const result = await this.userRepo.insert(newUser)
+    return this.userRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 
   public updateUser = (userId: string, userData: UpdateUserDto): Promise<User> => {
