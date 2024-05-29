@@ -12,7 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://${process.env.PUBLIC_IP}:${process.env.SWAGGER_PORT}`, // 서버 주소
+        url: `http://${process.env.SWAGGER_PUBLIC_IP}:${process.env.SWAGGER_PORT}`, // 서버 주소
       },
     ],
   },
