@@ -32,8 +32,8 @@ jobs:
 
     - name: Docker 이미지 빌드 및 푸시
       run: |
-        docker build -t tmdwns1674/3team-back-server:latest .
-        docker push tmdwns1674/3team-back-server:latest
+        docker build -t ohseungjun/3team-back-server:latest .
+        docker push ohseungjun/3team-back-server:latest
 
     - name: SSH 키 추가
       uses: webfactory/ssh-agent@v0.5.3
@@ -43,7 +43,7 @@ jobs:
     - name: EC2에 배포
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          docker pull tmdwns1674/3team-back-server:latest
+          docker pull ohseungjun/3team-back-server:latest
           docker stop 3team-back-server || true
           docker rm 3team-back-server || true
           docker run -d -p 80:3000 \
@@ -60,5 +60,5 @@ jobs:
             -e SWAGGER_PUBLIC_IP='${{ secrets.SWAGGER_PUBLIC_IP }}' \
             -e SWAGGER_PORT='${{ secrets.SWAGGER_PORT }}' \
             --name 3team-back-server \
-            tmdwns1674/3team-back-server:latest
+            ohseungjun/3team-back-server:latest
         EOF
