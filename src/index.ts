@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
-// app.use(cors());
+app.use(cors());
 AppDataSource.initialize().catch(error => console.log(error));
 
 // 스웨거 기본 세팅

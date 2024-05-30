@@ -1,5 +1,5 @@
 export { default as UserRouter } from './user.route'
 export { default as ProductRouter } from './product.route'
-export { default as AuthRouter } from './user.route'
+export { default as AuthRouter } from './auth.route'
 export { default as ReviewRouter } from './review.route'
 export { default as Utility } from './utility.route'
