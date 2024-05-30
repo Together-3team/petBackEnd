@@ -15,6 +15,18 @@ const options = {
         url: `http://${process.env.SWAGGER_PUBLIC_IP}:${process.env.SWAGGER_PORT}`, // 서버 주소
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          in: 'header',
+          name: 'Authorization',
+          description: 'Bearer Token',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   apis: ['./src/routes/*.ts', './src/dtos/*.ts'], // API 경로 (라우트 및 DTO 경로)
 };

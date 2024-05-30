@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import { UserController } from '../controllers'
+import passport from 'passport'
 
 const UserRouter: Router = express.Router()
 const userController = new UserController()
@@ -18,7 +19,7 @@ const userController = new UserController()
  *     summary: 내 정보
  *     tags: [Users]
  *     security:
- *       - googleOAuth2: [read]
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: 사용자 상세 정보
@@ -29,7 +30,7 @@ const userController = new UserController()
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-UserRouter.get('/me', userController.getMe)
+UserRouter.get('/me', passport.authenticate('jwt', { session: false }), userController.getMe)
 
 /**
  * @swagger

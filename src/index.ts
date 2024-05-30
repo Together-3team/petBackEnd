@@ -6,6 +6,7 @@ import { UserRouter, ReviewRouter, AuthRouter, ProductRouter, Utility } from './
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import './passport';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(cors());
+app.use(cookieParser());
 AppDataSource.initialize().catch(error => console.log(error));
 
 // 스웨거 기본 세팅
