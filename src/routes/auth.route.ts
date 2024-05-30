@@ -18,7 +18,7 @@ const authController = new AuthController()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/AuthDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */
@@ -37,7 +37,7 @@ AuthRouter.get('/google/callback', authController.authenticateGoogle)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/AuthDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */
