@@ -59,6 +59,9 @@ jobs:
             -e GOOGLE_CALLBACK_URL='${{ secrets.GOOGLE_CALLBACK_URL }}' \
             -e SWAGGER_PUBLIC_IP='${{ secrets.SWAGGER_PUBLIC_IP }}' \
             -e SWAGGER_PORT='${{ secrets.SWAGGER_PORT }}' \
+            -e SWAGGER_PORT='${{ secrets.AWS_REGION }}' \
+            -e SWAGGER_PORT='${{ secrets.AWS_ACCESS_KEY_ID }}' \
+            -e SWAGGER_PORT='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
             --name 3team-back-server \
             ohseungjun/3team-back-server:latest
         EOF
