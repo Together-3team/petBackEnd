@@ -12,7 +12,6 @@ passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
   }, async (payload, done) => {
     try {
-      console.log(payload)
       const user = await userRepository.findUserById(payload.id);
       if (!user) return done(null, false, {message: "로그인이 필요합니다"});
       return done(null, user);
