@@ -21,10 +21,7 @@ export class UserController {
   }
   
   public getMe = async (req: Request, res: Response): Promise<void> => {
-    // const userId = req.user
     try {
-      console.log('start!')
-      console.log(req.user)
       res.json(req.user)
     } catch (error) {
       const errorMessage = (error as Error).message
