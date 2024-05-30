@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp, OneToMany } from 'typeorm'
-import { Category, Product, Option, OptionCombination } from '../entities';
+import { Category, Product, Option, OptionCombination, Review } from '../entities'
 
 /**
  * @swagger
@@ -54,6 +54,12 @@ export class ProductDetail {
      */
     @ManyToOne(() => Product, product => product.id, { nullable: true })
     productId?: Product;
+
+    /**
+     * review 관계 설정
+     */
+    @OneToMany(() => Review, review => review.id, { nullable: true })
+    reviews?: Review[];
 
     /**
      * 카테고리 참조 키

@@ -2,9 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { AppDataSource } from './config/typeorm'
 import { setupSwagger } from '../swagger'
-import userRoute from './routes/user.route';
-import productRoute from './routes/product.route';
-import authRoute from './routes/auth.route'
+import { UserRouter, ReviewRouter, AuthRouter, ProductRouter, Utility } from './routes';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import './passport';
@@ -22,11 +20,15 @@ const swaggerSpec = setupSwagger();
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // users 라우터 세팅
-app.use('/users', userRoute);
+app.use('/users', UserRouter);
 // products 라우터 세팅
-app.use('/products', productRoute);
+app.use('/products', ProductRouter);
 // auth 라우터 세팅
-app.use('/auth', authRoute);
+app.use('/auth', AuthRouter);
+// review 라우터 세팅
+app.use('/review', ReviewRouter);
+// utility 라우터 세팅
+app.use('/utility', Utility);
 
 // 기존 라우트 설정
 app.get('/', (req, res) => {

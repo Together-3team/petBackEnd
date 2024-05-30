@@ -1,16 +1,16 @@
-import { Product } from '../entities'
+import { Product, ProductDetail, Review } from '../entities'
 import { AppDataSource } from '../config/typeorm'
 import { FindManyOptions } from 'typeorm'
-import { ProductDetail } from '../entities/product.detail.entity'
+import { ReviewRepository } from './review.repository'
 
 export class ProductRepository {
   private productListRepository = AppDataSource.getRepository(Product)
   private productDetailRepository = AppDataSource.getRepository(ProductDetail)
 
+  private reviewRepositoryInstance = new ReviewRepository()
+
   // 페이지 번호와 페이지 크기를 사용하여 상품 목록을 가져오는 메서드
   public getProductList = (page: number, pageSize: number): Promise<Product[]> => {
-    console.log(page);
-    console.log(pageSize);
     const options: FindManyOptions<Product> = {
       skip: (page - 1) * pageSize, // 건너뛸 레코드 수 계산
       take: pageSize // 가져올 레코드 수 설정
@@ -24,6 +24,14 @@ export class ProductRepository {
       where: { id: productId },
       relations: ['productId', 'categoryId', 'options', 'optionCombinations']
     });
+
+    if (!productDetail) {
+      return null;
+    }
+
+    // productId에 해당하는 모든 Review를 가져옴
+    productDetail.reviews = await this.reviewRepositoryInstance.getReviewsByProductId(productId);
+
     return productDetail || null;
   }
 }

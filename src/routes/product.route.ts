@@ -55,6 +55,14 @@ const productController = new ProductController();
  *           type: number
  *           nullable: true
  *           description: 가격
+ *         reviewRating:
+ *           type: number
+ *           nullable: false
+ *           description: 리뷰 평점
+ *         reviewCount:
+ *           type: number
+ *           nullable: false
+ *           description: 리뷰 갯수
  *         options:
  *           type: object
  *           nullable: true
