@@ -27,6 +27,25 @@ AuthRouter.get('/google/callback', authController.authenticateGoogle)
 
 /**
  * @swagger
+ * /auth/kakao:
+ *   get:
+ *     summary: 카카오 인증
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: 사용자 상세 정보
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: 로그인에 실패했습니다
+ */
+AuthRouter.get('/kakao', passport.authenticate('kakao'))
+AuthRouter.get('/kakao/callback', authController.authenticateKakao)
+
+/**
+ * @swagger
  * /auth/register:
  *   post:
  *     summary: 회원 가입
