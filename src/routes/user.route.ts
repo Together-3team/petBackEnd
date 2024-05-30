@@ -112,7 +112,6 @@ UserRouter.post('/', userController.createUser)
  */
 UserRouter.put('/:id', userController.updateUser)
 
-
 /**
  * @swagger
  * /users/{id}:

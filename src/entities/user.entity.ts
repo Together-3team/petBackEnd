@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp } from "typeorm"
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
+import { Delivery } from "./delivery.entity"
 
 /**
  * @swagger
@@ -10,6 +11,9 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp } f
  *         id:
  *           type: integer
  *           description: 고유 ID
+ *         delivery:
+ *           type: delivery[]
+ *           description: 배송지
  *         email:
  *           type: string
  *           description: 이메일
@@ -57,8 +61,8 @@ export class User {
     @Column('varchar', {length: 20})
     phoneNumber: string
 
-    @Column('text')
-    profileImage: string = ''
+    @Column('text', {nullable: true})
+    profileImage?: string
 
     @Column('varchar', {length: 30})
     snsId: string = 'local'
@@ -68,6 +72,9 @@ export class User {
 
     @CreateDateColumn()
     createdAt!: Timestamp
+
+    @OneToMany(() => Delivery, (delivery) => delivery.user, {nullable: true})
+    deliveries?: Delivery[];
 
     constructor(email: string, nickname: string, phoneNumber: string) {
         this.email = email

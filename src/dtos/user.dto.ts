@@ -31,7 +31,6 @@ export class CreateUserDto {
     this.nickname = nickname
     this.email = email
     this.phoneNumber = phoneNumber
-    this.profileImage = ""
   }
 }
 
@@ -53,7 +52,7 @@ export class CreateUserDto {
  *           description: 사용자 프로필 이미지
  */
 export class UpdateUserDto {
-  nickname!: string
-  phoneNumber!: string
-  profileImage!: string
+  nickname?: string
+  phoneNumber?: string
+  profileImage?: string
 }
