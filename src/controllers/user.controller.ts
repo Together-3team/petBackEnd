@@ -11,10 +11,21 @@ export class UserController {
 
   public getUser = async (req: Request, res: Response): Promise<void> => {
     const userId = req.params.id
-    // @ts-ignore
     try {
       const user = await this.userService.getUser(userId)
       res.json(user)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+  
+  public getMe = async (req: Request, res: Response): Promise<void> => {
+    // const userId = req.user
+    try {
+      console.log('start!')
+      console.log(req.user)
+      res.json(req.user)
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })
@@ -37,7 +48,7 @@ export class UserController {
     const userData: UpdateUserDto = req.body
     try {
       this.userService.getUser(userId)
-      const updatedUser = this.userService.updateUser(userId, userData)
+      const updatedUser = await this.userService.updateUser(userId, userData)
       res.json(updatedUser)
     } catch (error) {
       const errorMessage = (error as Error).message

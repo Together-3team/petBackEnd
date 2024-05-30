@@ -1,2 +1,2 @@
-import './local.strategy'
 import './google.strategy'
+import './jwt.strategy'

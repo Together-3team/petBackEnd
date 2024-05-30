@@ -20,7 +20,6 @@
  */
 export class UpdateUserDto {
   nickname!: string
-  password!: string
   phoneNumber!: string
   profileImage!: string
 }

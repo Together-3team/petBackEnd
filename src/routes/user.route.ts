@@ -13,6 +13,26 @@ const userController = new UserController()
 
 /**
  * @swagger
+ * /users/me:
+ *   get:
+ *     summary: 내 정보
+ *     tags: [Users]
+ *     security:
+ *       - googleOAuth2: [read]
+ *     responses:
+ *       200:
+ *         description: 사용자 상세 정보
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: 존재하지 않는 사용자입니다
+ */
+UserRouter.get('/me', userController.getMe)
+
+/**
+ * @swagger
  * /users/{id}:
  *   get:
  *     summary: 사용자 상세 정보

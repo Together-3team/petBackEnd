@@ -25,7 +25,6 @@
 export class CreateUserDto {
   nickname: string
   email: string
-  password?: string
   phoneNumber: string
   profileImage?: string
   snsId?: string
