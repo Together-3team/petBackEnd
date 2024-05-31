@@ -59,14 +59,17 @@ AuthRouter.get('/kakao/callback', authController.authenticateKakao)
  *             properties:
  *               nickname:
  *                 type: string
- *               profileToken:
- *                 type: string
  *               phoneNumber:
+ *                 type: string
+ *               isSubscribedToPromotions:
+ *                 type: boolean
+ *               profileToken:
  *                 type: string
  *             required:
  *               - nickname
- *               - profileToken
  *               - phoneNumber
+ *               - profileToken
+ *               - isSubscribedToPromotions
  *     responses:
  *       200:
  *         description: 사용자 상세 정보

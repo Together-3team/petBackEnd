@@ -18,6 +18,9 @@
  *         phoneNumber:
  *           type: string
  *           description: 사용자 휴대폰 번호
+ *         isSubscribedToPromotions:
+ *           type: boolean
+ *           description: 광고성 정보 수신 여부
  */
 export class CreateUserDto {
   nickname: string
@@ -26,6 +29,7 @@ export class CreateUserDto {
   profileImage?: string
   snsId?: string
   provider?: string
+  isSubscribedToPromotions?: boolean
 
   constructor(nickname: string, email: string, phoneNumber: string) {
     this.nickname = nickname
@@ -50,9 +54,13 @@ export class CreateUserDto {
  *         profileImage:
  *           type: string
  *           description: 사용자 프로필 이미지
+ *         isSubscribedToPromotions:
+ *           type: boolean
+ *           description: 광고성 정보 수신 여부
  */
 export class UpdateUserDto {
   nickname?: string
   phoneNumber?: string
   profileImage?: string
+  isSubscribedToPromotions?: boolean
 }

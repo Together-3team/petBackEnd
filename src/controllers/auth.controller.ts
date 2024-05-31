@@ -39,7 +39,8 @@ export class AuthController {
     const newUser: User = await this.userRepository.createUser({
       ...profile,
       nickname: req.body.nickname,
-      phoneNumber: req.body.phoneNumber
+      phoneNumber: req.body.phoneNumber,
+      isSubscribedToPromotions: req.body.isSubscribedToPromotions
     })
     res.status(201).json(newUser)
   }
