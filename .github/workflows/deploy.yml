@@ -43,10 +43,10 @@ jobs:
     - name: EC2에 배포
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          docker pull ohseungjun/3team-back-server:latest
-          docker stop 3team-back-server || true
-          docker rm 3team-back-server || true
-          docker run -d -p 80:3000 \
+          sudo docker pull ohseungjun/3team-back-server:latest
+          sudo docker stop 3team-back-server || true
+          sudo docker rm 3team-back-server || true
+          sudo docker run -d -p 80:3000 \
             -e MYSQL_HOST='${{ secrets.MYSQL_HOST }}' \
             -e MYSQL_PORT='${{ secrets.MYSQL_PORT }}' \
             -e MYSQL_USER_NAME='${{ secrets.MYSQL_USER_NAME }}' \
