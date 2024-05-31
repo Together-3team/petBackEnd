@@ -70,6 +70,9 @@ export class User {
     @Column('varchar', {length: 10})
     provider: string = 'local'
 
+    @Column('boolean')
+    isSubscribedToPromotions: boolean = false
+
     @CreateDateColumn()
     createdAt!: Timestamp
 
