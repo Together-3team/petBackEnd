@@ -34,6 +34,38 @@ UserRouter.get('/me', passport.authenticate('jwt', { session: false }), userCont
 
 /**
  * @swagger
+ * /users/verifyNickname:
+ *   post:
+ *     summary: 닉네임 중복 검사
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nickname:
+ *                 type: string
+ *                 description: 닉네임
+ *     responses:
+ *       200:
+ *         description: 닉네임 중복 여부
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 duplicated:
+ *                   type: boolean
+ *                   description: 닉네임 중복 여부
+ *       500:
+ *         description: 잘못된 입력입니다
+ */
+UserRouter.post('/verifyNickname', userController.verifyNickname)
+
+/**
+ * @swagger
  * /users/{id}:
  *   get:
  *     summary: 사용자 상세 정보
