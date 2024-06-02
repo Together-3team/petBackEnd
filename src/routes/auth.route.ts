@@ -82,4 +82,38 @@ AuthRouter.get('/kakao/callback', authController.authenticateKakao)
  */
 AuthRouter.post('/register', authController.register)
 
+/**
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: 토큰 갱신
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *             required:
+ *               - refreshToken
+ *     responses:
+ *       200:
+ *         description: 갱신된 토큰
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *       500:
+ *         description: refreshToken이 필요합니다
+ */
+AuthRouter.post('/refresh', authController.refresh)
+
 export default AuthRouter
