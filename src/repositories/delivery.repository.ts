@@ -16,7 +16,6 @@ export class DeliveryRepository {
 
   public createDelivery = async (deliveryData: CreateDeliveryDto, user: User): Promise<Delivery> => {
     const newDelivery = this.deliveryRepo.create({...deliveryData, user})
-    console.log(newDelivery)
     const result = await this.deliveryRepo.insert(newDelivery)
     return this.deliveryRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
