@@ -35,14 +35,6 @@ jobs:
         docker build -t ohseungjun/3team-back-server:latest .
         docker push ohseungjun/3team-back-server:latest
 
-    - name: Clean up Docker images
-      run: |
-        # Delete all dangling images
-        docker image prune -f
-
-        # Optionally delete old images for specific repository
-        docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep 'ohseungjun/3team-back-server' | grep '<none>' | awk '{print $2}' | xargs docker rmi -f
-
     - name: SSH 키 추가
       uses: webfactory/ssh-agent@v0.5.3
       with:
@@ -74,4 +66,10 @@ jobs:
             -e KAKAO_CALLBACK_URL='${{ secrets.KAKAO_CALLBACK_URL }}' \
             --name 3team-back-server \
             ohseungjun/3team-back-server:latest
+        
+          # Clean up unused images
+          sudo docker image prune -f
+        
+          # Optionally delete old images for specific repository
+          sudo docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep 'ohseungjun/3team-back-server' | grep '<none>' | awk '{print $2}' | xargs sudo docker rmi -f
         EOF
