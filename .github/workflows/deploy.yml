@@ -43,7 +43,7 @@ jobs:
     - name: EC2에 배포
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker pull ohseungjun/3team-back-server:latest --pull
+          sudo docker pull ohseungjun/3team-back-server:latest
           sudo docker stop 3team-back-server || true
           sudo docker rm 3team-back-server || true
           sudo docker run -d -p 80:3000 \
@@ -71,5 +71,8 @@ jobs:
           sudo docker image prune -f
         
           # Optionally delete old images for specific repository
-          sudo docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep 'ohseungjun/3team-back-server' | grep '<none>' | awk '{print $2}' | xargs sudo docker rmi -f
+          old_images=$(sudo docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep 'ohseungjun/3team-back-server' | grep '<none>' | awk '{print $2}')
+          if [ -n "$old_images" ]; then
+            sudo docker rmi -f $old_images
+          fi
         EOF
