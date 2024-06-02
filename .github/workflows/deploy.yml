@@ -35,6 +35,14 @@ jobs:
         docker build -t ohseungjun/3team-back-server:latest .
         docker push ohseungjun/3team-back-server:latest
 
+    - name: Clean up Docker images
+      run: |
+        # Delete all dangling images
+        docker image prune -f
+
+        # Optionally delete old images for specific repository
+        docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep 'ohseungjun/3team-back-server' | grep '<none>' | awk '{print $2}' | xargs docker rmi -f
+
     - name: SSH 키 추가
       uses: webfactory/ssh-agent@v0.5.3
       with:
@@ -43,7 +51,7 @@ jobs:
     - name: EC2에 배포
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker pull ohseungjun/3team-back-server:latest
+          sudo docker pull ohseungjun/3team-back-server:latest --pull
           sudo docker stop 3team-back-server || true
           sudo docker rm 3team-back-server || true
           sudo docker run -d -p 80:3000 \
