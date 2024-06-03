@@ -79,6 +79,7 @@ const utilityController = new UtilityController();
  *                   example: Internal Server Error
  */
 
-UtilityRouter.post('/presigned-urls',passport.authenticate('jwt', { session: false }), utilityController.generatePresignedUrls);
+// UtilityRouter.post('/presigned-urls', passport.authenticate('jwt', { session: false }), utilityController.generatePresignedUrls);
+UtilityRouter.post('/presigned-urls', utilityController.generatePresignedUrls);
 
 export default UtilityRouter;
