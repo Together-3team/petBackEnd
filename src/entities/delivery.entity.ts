@@ -95,7 +95,7 @@ export class Delivery {
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => User, (user) => user.deliveries, {eager: true})
+    @ManyToOne(() => User, (user) => user.deliveries, {eager: true, onDelete: 'CASCADE'})
     @JoinColumn()
     user: User
 

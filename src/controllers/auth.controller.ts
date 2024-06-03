@@ -44,4 +44,15 @@ export class AuthController {
     })
     res.status(201).json(newUser)
   }
+
+  public refresh = (req: Request, res: Response) => {
+    const payload = jwt.verify(req.body.refreshToken, process.env.JWT_SECRET_KEY || '')
+    const id = (payload as jwt.JwtPayload).id
+    if ((payload as jwt.JwtPayload).type !== "refresh") res.status(500).json("refreshToken이 필요합니다")
+    else {
+      const accessToken = jwt.sign({ id, type: 'access' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2 hours'})
+      const refreshToken = jwt.sign({ id, type: 'refresh' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '7 days'})
+      res.json({accessToken, refreshToken})
+    }
+  }
 }

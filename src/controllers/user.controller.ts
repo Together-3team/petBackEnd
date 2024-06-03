@@ -63,4 +63,15 @@ export class UserController {
       res.status(500).json({ error: errorMessage })
     }
   }
+
+  public verifyNickname = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const nickname = req.body.nickname
+      const result = await this.userService.getUserByNickname(nickname)
+      res.json({duplicated: result})
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
 }

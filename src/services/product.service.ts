@@ -9,6 +9,10 @@ export class ProductService {
     this.productRepository = new ProductRepository();
   }
 
+  public getProductById = (productId: string): Promise<Product> => {
+    return this.productRepository.getProductById(parseInt(productId))
+  }
+
   public getProductList = (page: number, pageSize: number): Promise<Product[]> => {
     return this.productRepository.getProductList(page, pageSize)
   }

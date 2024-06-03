@@ -9,6 +9,10 @@ export class ProductRepository {
 
   private reviewRepositoryInstance = new ReviewRepository()
 
+  public getProductById = (id: number): Promise<Product> => {
+    return this.productListRepository.findOneByOrFail({id})
+  }
+  
   // 페이지 번호와 페이지 크기를 사용하여 상품 목록을 가져오는 메서드
   public getProductList = (page: number, pageSize: number): Promise<Product[]> => {
     const options: FindManyOptions<Product> = {

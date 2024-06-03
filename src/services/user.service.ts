@@ -14,6 +14,11 @@ export class UserService {
     return this.userRepository.findUserById(parseInt(userId))
   }
 
+  public getUserByNickname = async (nickname: string): Promise<boolean> => {
+    const user = await this.userRepository.findUserByNickname(nickname)
+    return user ? true : false
+  }
+
   public createUser = (userData: CreateUserDto): Promise<User> => {
     return this.userRepository.createUser(userData)
   }

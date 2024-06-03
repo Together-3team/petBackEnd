@@ -18,6 +18,10 @@ export class UserRepository {
     return this.userRepo.findOne({where: {snsId, provider}})
   }
 
+  public findUserByNickname = (nickname: string): Promise<User | null> => {
+    return this.userRepo.findOne({where: {nickname}})
+  }
+
   public createUser = async (userData: CreateUserDto): Promise<User> => {
     const newUser = this.userRepo.create(userData)
     const result = await this.userRepo.insert(newUser)
