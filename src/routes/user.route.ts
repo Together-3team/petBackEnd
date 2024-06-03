@@ -34,7 +34,7 @@ UserRouter.get('/me', passport.authenticate('jwt', { session: false }), userCont
 
 /**
  * @swagger
- * /users/verifyNickname:
+ * /users/verify-nickname:
  *   post:
  *     summary: 닉네임 중복 검사
  *     tags: [Users]
@@ -62,7 +62,7 @@ UserRouter.get('/me', passport.authenticate('jwt', { session: false }), userCont
  *       500:
  *         description: 잘못된 입력입니다
  */
-UserRouter.post('/verifyNickname', userController.verifyNickname)
+UserRouter.post('/verify-nickname', userController.verifyNickname)
 
 /**
  * @swagger
