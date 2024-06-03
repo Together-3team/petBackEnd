@@ -1,43 +1,43 @@
 import express, { Router } from 'express'
-import { WishlistController } from '../controllers'
+import { ZzimController } from '../controllers'
 import passport from 'passport'
 
-const WishlistRouter: Router = express.Router()
-const wishlistController = new WishlistController()
+const ZzimRouter: Router = express.Router()
+const zzimController = new ZzimController()
 
 /**
  * @swagger
  * tags:
- *   name: Wishlists
- *   description: 위시리스트
+ *   name: Zzims
+ *   description: 찜
  */
 
 /**
  * @swagger
- * /wishlists:
+ * /zzims:
  *   get:
- *     summary: 위시리스트 조회
- *     tags: [Wishlists]
+ *     summary: 찜 조회
+ *     tags: [Zzims]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: 위시리스트 리스트
+ *         description: 찜 리스트
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/WishlistList'
+ *               $ref: '#/components/schemas/ZzimList'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-WishlistRouter.get('/', passport.authenticate('jwt', { session: false }), wishlistController.getWishlistsByUser)
+ZzimRouter.get('/', passport.authenticate('jwt', { session: false }), zzimController.getZzimsByUser)
 
 /**
  * @swagger
- * /wishlists:
+ * /zzims:
  *   post:
- *     summary: 위시리스트 등록
- *     tags: [Wishlists]
+ *     summary: 찜 등록
+ *     tags: [Zzims]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -52,22 +52,22 @@ WishlistRouter.get('/', passport.authenticate('jwt', { session: false }), wishli
  *                 description: 상품 ID
  *     responses:
  *       200:
- *         description: 위시리스트 등록
+ *         description: 찜 상세 정보
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Wishlist'
+ *               $ref: '#/components/schemas/Zzim'
  *       500:
  *         description: Internal server error
  */
-WishlistRouter.post('/', passport.authenticate('jwt', { session: false }), wishlistController.createWishlist)
+ZzimRouter.post('/', passport.authenticate('jwt', { session: false }), zzimController.createZzim)
 
 /**
  * @swagger
- * /wishlists/{id}:
+ * /zzims/{id}:
  *   delete:
- *     summary: 위시리스트 삭제
- *     tags: [Wishlists]
+ *     summary: 찜 삭제
+ *     tags: [Zzims]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -76,17 +76,17 @@ WishlistRouter.post('/', passport.authenticate('jwt', { session: false }), wishl
  *         schema:
  *           type: number
  *         required: true
- *         description: 위시리스트 ID
+ *         description: 찜 ID
  *     responses:
  *       200:
- *         description: 삭제된 위시리스트
+ *         description: 삭제된 찜
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Wishlist'
+ *               $ref: '#/components/schemas/Zzim'
  *       500:
  *         description: Internal server error
  */
-WishlistRouter.delete('/:id', passport.authenticate('jwt', { session: false }), wishlistController.deleteWishlist)
+ZzimRouter.delete('/:id', passport.authenticate('jwt', { session: false }), zzimController.deleteZzim)
 
-export default WishlistRouter
+export default ZzimRouter

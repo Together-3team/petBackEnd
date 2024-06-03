@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
-import { Delivery, Wishlist } from "../entities"
+import { Delivery, Zzim } from "../entities"
 
 /**
  * @swagger
@@ -79,8 +79,8 @@ export class User {
     @OneToMany(() => Delivery, (delivery) => delivery.user, {nullable: true})
     deliveries?: Delivery[];
 
-    @OneToMany(() => Wishlist, (wishlist) => wishlist.user, {nullable: true})
-    wishlists?: Wishlist[];
+    @OneToMany(() => Zzim, (zzim) => zzim.user, {nullable: true})
+    zzims?: Zzim[];
     
     constructor(email: string, nickname: string, phoneNumber: string) {
         this.email = email

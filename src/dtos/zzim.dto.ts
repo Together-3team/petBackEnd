@@ -4,7 +4,7 @@ import { Product } from "../entities"
  * @swagger
  * components:
  *   schemas:
- *     CreateWishlistDto:
+ *     CreateZzimDto:
  *       type: object
  *       required:
  *         - product
@@ -13,7 +13,7 @@ import { Product } from "../entities"
  *           type: Product
  *           description: 상품
  */
-export class CreateWishlistDto {
+export class CreateZzimDto {
   product: Product
 
   constructor(product: Product) {

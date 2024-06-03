@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import { UtilityController } from '../controllers';
+import passport from 'passport';
 
 const UtilityRouter: Router = express.Router();
 const utilityController = new UtilityController();
@@ -17,6 +18,8 @@ const utilityController = new UtilityController();
  *   post:
  *     summary: Generate presigned URLs for S3 objects
  *     tags: [Utility]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -76,6 +79,6 @@ const utilityController = new UtilityController();
  *                   example: Internal Server Error
  */
 
-UtilityRouter.post('/presigned-urls', utilityController.generatePresignedUrls);
+UtilityRouter.post('/presigned-urls',passport.authenticate('jwt', { session: false }), utilityController.generatePresignedUrls);
 
 export default UtilityRouter;

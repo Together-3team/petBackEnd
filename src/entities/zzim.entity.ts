@@ -5,7 +5,7 @@ import { User, Product } from "../entities"
  * @swagger
  * components:
  *   schemas:
- *     Wishlist:
+ *     Zzim:
  *       type: object
  *       properties:
  *         id:
@@ -26,21 +26,21 @@ import { User, Product } from "../entities"
  *         - user
  *         - product
  *         - createdAt
- *     WishlistList:
+ *     ZzimList:
  *       type: array
  *       items:
- *         $ref: '#/components/schemas/Wishlist'
+ *         $ref: '#/components/schemas/Zzim'
  */
 
-@Entity('wishlist')
-export class Wishlist {
+@Entity('zzim')
+export class Zzim {
     @PrimaryGeneratedColumn('increment')
     id?: number
 
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => User, (user) => user.wishlists, {eager: true, onDelete: 'CASCADE'})
+    @ManyToOne(() => User, (user) => user.zzims, {eager: true, onDelete: 'CASCADE'})
     @JoinColumn()
     user: User
 
