@@ -54,12 +54,16 @@ export class UtilityService {
    * @returns 생성된 Presigned URL
    * @param items
    */
-  public generatePresignedUrls = async (items: { objectKey: string, contentType?: string }[]): Promise<{ url: string, uniqueFileName: string }[]> => {
-    const urls: { url: string, uniqueFileName: string }[] = [];
+  public generatePresignedUrls = async (items: { objectKey: string, contentType?: string }[]): Promise<{
+    url: string;
+    uniqueFileName: string
+    originalFileName: string
+  }[]> => {
+    const urls: { url: string, uniqueFileName: string, originalFileName: string }[] = [];
     for (const item of items) {
       const uniqueFileName = this.generateUniqueFileName(item.objectKey);
       const url = await this.generatePresignedUrl(uniqueFileName, item.contentType);
-      urls.push({ url, uniqueFileName });
+      urls.push({ url, uniqueFileName, originalFileName: item.objectKey });
     }
     return urls;
   }
