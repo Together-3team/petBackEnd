@@ -34,10 +34,13 @@ const utilityController = new UtilityController();
  *                   properties:
  *                     objectKey:
  *                       type: string
- *                       example: image1.jpg
+ *                       example: cloud.png
  *                     contentType:
  *                       type: string
- *                       example: image/jpeg
+ *                       example: image/png
+ *               bucketName:
+ *                 type: string
+ *                 example: review-image-3team
  *     responses:
  *       200:
  *         description: Presigned URLs generated successfully
@@ -53,10 +56,10 @@ const utilityController = new UtilityController();
  *                     properties:
  *                       url:
  *                         type: string
- *                         example: https://s3.ap-northeast-2.amazonaws.com/review-image-3team/image1.jpg?...
- *                       uniqueFileName:
+ *                         example: https://s3.ap-northeast-2.amazonaws.com/review-image-3team/cloud.png?...
+ *                       objectKey:
  *                         type: string
- *                         example: fjer2i3rjfj.jpg
+ *                         example: cloud.png
  *       400:
  *         description: Bad request, invalid input
  *         content:

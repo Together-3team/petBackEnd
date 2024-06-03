@@ -17,6 +17,7 @@ export class UtilityController {
     try {
       // 요청에서 필요한 데이터 추출
       const items: { objectKey: string, contentType?: string }[] = req.body.items;
+      const bucketName: string = req.body.bucketName;
 
       if (!items || !Array.isArray(items) || items.length === 0) {
         res.status(400).json({ error: 'items array is required and must not be empty' });
@@ -24,7 +25,7 @@ export class UtilityController {
       }
 
       // Presigned URL 생성
-      const presignedUrl = await this.utilityService.generatePresignedUrls(items);
+      const presignedUrl = await this.utilityService.generatePresignedUrls(items, bucketName);
 
       // 클라이언트에 응답 반환
       res.status(200).json({ presignedUrl });
