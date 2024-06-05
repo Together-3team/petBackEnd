@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm"
-import { User } from "./user.entity"
+import { User } from "../entities"
 
 /**
  * @swagger
@@ -11,9 +11,6 @@ import { User } from "./user.entity"
  *         id:
  *           type: integer
  *           description: 고유 ID
- *         userId:
- *           type: integer
- *           description: 사용자 참조 키
  *         user:
  *           type: User
  *           description: 사용자
@@ -66,7 +63,7 @@ import { User } from "./user.entity"
 @Entity('delivery')
 export class Delivery {
     @PrimaryGeneratedColumn('increment')
-    id?: number
+    id!: number
 
     @Column('varchar', {length: 30})
     name: string
@@ -95,7 +92,7 @@ export class Delivery {
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => User, (user) => user.deliveries, {eager: true, onDelete: 'CASCADE'})
+    @ManyToOne(() => User, {eager: true, onDelete: 'CASCADE'})
     @JoinColumn()
     user: User
 
