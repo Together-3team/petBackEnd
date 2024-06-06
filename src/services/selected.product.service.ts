@@ -1,5 +1,5 @@
 import { DeleteResult } from 'typeorm'
-import { CreateSelectedProductDto } from '../dtos'
+import { CreateSelectedProductDto, UpdateSelectedProductDto } from '../dtos'
 import { SelectedProduct, User } from '../entities'
 import { SelectedProductRepository } from '../repositories'
 
@@ -8,6 +8,10 @@ export class SelectedProductService {
 
   constructor() {
     this.selectedProductRepository = new SelectedProductRepository()
+  }
+
+  public getSelectedProductByUser = (user: User): Promise<SelectedProduct[]> => {
+    return this.selectedProductRepository.findSelectedProductByUser(user)
   }
 
   public getSelectedProductById = (selectedProductId: string): Promise<SelectedProduct> => {
@@ -30,11 +34,19 @@ export class SelectedProductService {
     return this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 1)
   }
 
+  public updateSelectedProduct = (selectedProductId: string, SelectedProductData: UpdateSelectedProductDto): Promise<SelectedProduct> => {
+    return this.selectedProductRepository.updateSelectedProduct(parseInt(selectedProductId), SelectedProductData)
+  }
+
   public deleteSelectedProduct = (SelectedProductId: string): Promise<DeleteResult> => {
     return this.selectedProductRepository.deleteSelectedProduct(parseInt(SelectedProductId))
   }
 
-  public completeOrder = (status: number, user: User): Promise<SelectedProduct[]> => {
-    return this.selectedProductRepository.updateStatus(status, 2, user)
+  public deleteByStatus = (status: string, user: User): Promise<DeleteResult> => {
+    return this.selectedProductRepository.deleteByStatus(parseInt(status), user)
+  }
+
+  public updateStatus = (fromStatus: number, toStatus: number, user: User): Promise<SelectedProduct[]> => {
+    return this.selectedProductRepository.updateStatus(fromStatus, toStatus, user)
   }
 }

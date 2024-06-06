@@ -1,5 +1,3 @@
-import { OptionCombination } from "../entities"
-
 /**
  * @swagger
  * components:
@@ -7,22 +5,41 @@ import { OptionCombination } from "../entities"
  *     CreateSelectedProductDto:
  *       type: object
  *       required:
- *         - optionCombination
+ *         - optionCombinationId
  *         - quantity
  *       properties:
- *         optionCombination:
- *           type: OptionCombination
- *           description: 옵션 조합
+ *         optionCombinationId:
+ *           type: integer
+ *           description: 옵션 조합 ID
  *         quantity:
  *           type: integer
  *           description: 수량
  */
 export class CreateSelectedProductDto {
-  optionCombination: OptionCombination
+  optionCombinationId: number
   quantity: number
 
-  constructor(optionCombination: OptionCombination, quantity: number) {
-    this.optionCombination = optionCombination
+  constructor(optionCombinationId: number, quantity: number) {
+    this.optionCombinationId = optionCombinationId
     this.quantity = quantity
   }
+}
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UpdateSelectedProductDto:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: integer
+ *           description: 상태
+ *         quantity:
+ *           type: integer
+ *           description: 수량
+ */
+export class UpdateSelectedProductDto {
+  status?: number
+  quantity?: number
 }

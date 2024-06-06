@@ -1,11 +1,17 @@
-import { User, SelectedProduct } from '../entities'
+import { User, SelectedProduct, OptionCombination } from '../entities'
 import { AppDataSource } from '../config/typeorm'
-import { CreateSelectedProductDto } from '../dtos'
+import { CreateSelectedProductDto, UpdateSelectedProductDto } from '../dtos'
 import { DeleteResult } from 'typeorm'
 
 export class SelectedProductRepository {
   private selectedProductRepo = AppDataSource.getRepository(SelectedProduct)
+  private optionCombinationRepo = AppDataSource.getRepository(OptionCombination)
 
+  
+  public findSelectedProductByUser = (user: User): Promise<SelectedProduct[]> => {
+    return this.selectedProductRepo.findBy({user: {id: user.id}})
+  }
+  
   public findSelectedProductById = (id: number): Promise<SelectedProduct> => {
     return this.selectedProductRepo.findOneByOrFail({id})
   }
@@ -15,9 +21,14 @@ export class SelectedProductRepository {
   }
 
   public createSelectedProduct = async (selectedProductData: CreateSelectedProductDto, user: User, status: number): Promise<SelectedProduct> => {
-    const newSelectedProduct = this.selectedProductRepo.create({...selectedProductData, user, status})
+    const optionCombination = await this.optionCombinationRepo.findOneOrFail({where: {id: selectedProductData.optionCombinationId}})
+    const newSelectedProduct = this.selectedProductRepo.create({optionCombination, user, status, quantity: selectedProductData.quantity})
     const result = await this.selectedProductRepo.insert(newSelectedProduct)
     return this.selectedProductRepo.findOneByOrFail({id: result.identifiers[0].id})
+  }
+
+  public updateSelectedProduct = (id: number, selectedProductData: UpdateSelectedProductDto): Promise<SelectedProduct> => {
+    return this.selectedProductRepo.save({...selectedProductData, id})
   }
 
   public updateStatus = async (fromStatus: number, toStatus: number, user: User): Promise<SelectedProduct[]> => {
@@ -28,5 +39,9 @@ export class SelectedProductRepository {
 
   public deleteSelectedProduct = (id: number): Promise<DeleteResult> => {
     return this.selectedProductRepo.delete({id})
+  }
+
+  public deleteByStatus = (status: number, user: User): Promise<DeleteResult> => {
+    return this.selectedProductRepo.delete({status, user: {id: user.id}})
   }
 }

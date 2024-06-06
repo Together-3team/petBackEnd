@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { SelectedProductService } from '../services'
-import { CreateSelectedProductDto } from '../dtos'
+import { CreateSelectedProductDto, UpdateSelectedProductDto } from '../dtos'
 import { User } from '../entities'
 
 export class SelectedProductController {
@@ -8,6 +8,17 @@ export class SelectedProductController {
 
   constructor() {
     this.selectedProductService = new SelectedProductService()
+  }
+
+  public getSelectedProducts = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const selectedProducts = await this.selectedProductService.getSelectedProductByUser(user)
+      res.json(selectedProducts)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
   }
 
   public getCarts = async (req: Request, res: Response): Promise<void> => {
@@ -32,17 +43,17 @@ export class SelectedProductController {
     }
   }
   
-  public addToCart = async (req: Request, res: Response): Promise<void> => {
-    const rawData: CreateSelectedProductDto = req.body
-    const user = req.user as User
-    try {
-      const selectedProduct = await this.selectedProductService.addToCart(rawData, user)
-      res.json(selectedProduct)
-    } catch (error) {
-      const errorMessage = (error as Error).message
-      res.status(500).json({ error: errorMessage })
-    }
-  }
+  // public addToCart = async (req: Request, res: Response): Promise<void> => {
+  //   const rawData: CreateSelectedProductDto = req.body
+  //   const user = req.user as User
+  //   try {
+  //     const selectedProduct = await this.selectedProductService.addToCart(rawData, user)
+  //     res.json(selectedProduct)
+  //   } catch (error) {
+  //     const errorMessage = (error as Error).message
+  //     res.status(500).json({ error: errorMessage })
+  //   }
+  // }
   
   public addToOrder = async (req: Request, res: Response): Promise<void> => {
     const rawData: CreateSelectedProductDto = req.body
@@ -50,6 +61,34 @@ export class SelectedProductController {
     try {
       const selectedProduct = await this.selectedProductService.addToOrder(rawData, user)
       res.json(selectedProduct)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+  
+  public orderToCart = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const selectedProduct = await this.selectedProductService.updateStatus(1, 0, user)
+      res.json(selectedProduct)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
+  public updateSelectedProduct = async (req: Request, res: Response): Promise<void> => {
+    const selectedProductId = req.params.id
+    const selectedProductData: UpdateSelectedProductDto = req.body
+    const user = req.user as User
+    try {
+      const selectedProduct = await this.selectedProductService.getSelectedProductById(selectedProductId)
+      if (selectedProduct.user.id !== user.id) res.status(401).json({message: "상속 관계에 있지 않습니다"})
+      else {
+        const result = await this.selectedProductService.updateSelectedProduct(selectedProductId, selectedProductData)
+        res.json(result)
+      }
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })
@@ -66,6 +105,28 @@ export class SelectedProductController {
         const result = await this.selectedProductService.deleteSelectedProduct(selectedProductId)
         res.json(result)
       }
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
+  public deleteCarts = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const result = await this.selectedProductService.deleteByStatus('0', user)
+      res.json(result)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
+  public deleteOrders = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const result = await this.selectedProductService.deleteByStatus('1', user)
+      res.json(result)
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })
