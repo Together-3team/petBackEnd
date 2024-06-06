@@ -17,8 +17,8 @@ export class ProductService {
     return this.productRepository.getProductList(page, pageSize)
   }
 
-  public makeOptions = async (options: Option[]) => {
-    return options.reduce((acc, option) => {
+  public makeOptions = async (options: Option[] | undefined) => {
+    return options?.reduce((acc, option) => {
       const { id, optionKey, optionValue } = option;
       if (optionKey !== undefined && id !== undefined && optionValue !== undefined) { // 타입 가드 추가
         if (!acc[optionKey]) {
@@ -52,34 +52,48 @@ export class ProductService {
     return { rating, reviewCount };
   }
 
-  public getProductDetail = async (productId: number): Promise<ProductDetailResponseDTO> => {
-    const productDetail = await this.productRepository.getProductDetail(productId);
+  public getProductDetail = async (productId: number): Promise<{
+    productImages: any;
+    originalPrice: any;
+    productId: any;
+    reviewCount: any;
+    price: any;
+    options: any;
+    thumbNailImage: any;
+    optionCombinations: any;
+    title: any;
+    category: any;
+    descriptionImages: any;
+    reviewRating: any
+  }> => {
+    const result = await this.productRepository.getProductDetail(productId);
+
 
     let makeOptions;
     let makeReviews;
 
-    if (productDetail?.options) {
-      makeOptions = await this.makeOptions(productDetail?.options);
+    if (result?.product?.options) {
+      makeOptions = await this.makeOptions(result?.product?.options);
     }
 
-    if (productDetail?.reviews) {
-      makeReviews = await this.makeReviews(productDetail.reviews);
+    if (result?.productDetail?.reviews) {
+      makeReviews = await this.makeReviews(result?.productDetail.reviews);
     }
 
     // 필요한 데이터만 추출
     return {
-      productImages: productDetail?.productImages,
-      descriptionImages: productDetail?.descriptionImages,
-      thumbNailImage: productDetail?.productId?.thumbNailImage,
-      title: productDetail?.productId?.title,
-      originalPrice: productDetail?.productId?.originalPrice,
-      price: productDetail?.productId?.price,
+      productImages: result?.productDetail?.productImages,
+      descriptionImages: result?.productDetail?.descriptionImages,
+      thumbNailImage: result?.productDetail?.productId?.thumbNailImage,
+      title: result?.productDetail?.productId?.title,
+      originalPrice: result?.productDetail?.productId?.originalPrice,
+      price: result?.productDetail?.productId?.price,
       reviewRating: makeReviews?.rating,
       reviewCount: makeReviews?.reviewCount,
-      productId: productDetail?.productId?.id,
-      category: productDetail?.categoryId?.categoryStr,
+      productId: result?.productDetail?.productId?.id,
+      category: result?.productDetail?.categoryId?.categoryStr,
       options: makeOptions,
-      optionCombinations: productDetail?.optionCombinations?.map(({ createdAt, ...rest }) => rest),
+      optionCombinations: result?.product?.optionCombinations?.map(({ createdAt, ...rest }) => rest),
     }
   }
 }

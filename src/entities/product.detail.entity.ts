@@ -73,12 +73,6 @@ export class ProductDetail {
     @Column('text', { nullable: true })
     productImages?: string;
 
-    @OneToMany(() => Option, option => option.productDetailId)
-    options?: Option[];
-
-    @OneToMany(() => OptionCombination, optionCombination => optionCombination.productDetailId, { nullable: true })
-    optionCombinations?: OptionCombination[];
-
     /**
      * 설명 이미지
      */

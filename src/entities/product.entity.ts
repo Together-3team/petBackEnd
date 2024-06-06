@@ -5,8 +5,10 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     Timestamp,
-    ManyToOne,
+    ManyToOne, OneToMany,
 } from 'typeorm'
+import { Option } from './option.entity'
+import { OptionCombination } from './option.combination.entity'
 
 /**
  * @swagger
@@ -90,6 +92,12 @@ export class Product {
      */
     @Column({ type: 'tinyint', default: 0 })
     isDeleted: number = 0;
+
+    @OneToMany(() => Option, option => option.productId)
+    options?: Option[];
+
+    @OneToMany(() => OptionCombination, optionCombination => optionCombination.productId, { nullable: true })
+    optionCombinations?: OptionCombination[];
 
     /**
      * 생성일

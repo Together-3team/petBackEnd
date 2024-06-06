@@ -21,6 +21,7 @@ export class UtilityService {
    * Presigned URL 생성
    * @param objectKey 업로드할 객체 키
    * @param contentType 업로드할 객체의 MIME 타입
+   * @param bucketName
    * @returns 생성된 Presigned URL
    */
   public generatePresignedUrl = async (objectKey: string, contentType?: string, bucketName?: string): Promise<string> => {

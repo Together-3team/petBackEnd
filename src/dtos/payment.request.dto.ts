@@ -10,5 +10,5 @@ export class PaymentRequestDto {
 
   @IsNotEmpty()
   @IsString()
-  orderName?: string;
+  paymentKey?: string;
 }

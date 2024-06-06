@@ -8,7 +8,7 @@ export class PaymentService {
     this.paymentRepository = new PaymentRepository();
   }
 
-  public orderStatus = async (amount: number | undefined, orderId: string | undefined, orderName: string | undefined): Promise<void> => {
+  public paymentsConfirm = async (amount: number | undefined, orderId: string | undefined, paymentKey: string | undefined): Promise<void> => {
     const paymentSecretKey = process.env.PAYMENT_SECRET_KEY;
 
     if (!paymentSecretKey) {
@@ -19,7 +19,7 @@ export class PaymentService {
     return await axios.post('https://api.tosspayments.com/v1/payments/confirm', {
       amount,
       orderId,
-      orderName,
+      paymentKey,
     }, {
       headers: {
         Authorization: `Basic ${Buffer.from(`${paymentSecretKey}:`).toString('base64')}`,

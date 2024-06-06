@@ -23,19 +23,29 @@ export class ProductRepository {
     return this.productListRepository.find(options)
   }
 
-  public getProductDetail = async (productId: number): Promise<ProductDetail | null> => {
+  public getProductDetail = async (productId: number): Promise<{
+    product: Product;
+    productDetail: ProductDetail
+  } | null> => {
     const productDetail = await this.productDetailRepository.findOne({
       where: { id: productId },
-      relations: ['productId', 'categoryId', 'options', 'optionCombinations']
+      relations: ['productId', 'categoryId']
     });
 
-    if (!productDetail) {
+    const product = await this.productListRepository.findOne({
+      where: { id: productId },
+      relations: ['options', 'optionCombinations']
+    })
+
+
+
+    if (!productDetail || !product) {
       return null;
     }
 
     // productId에 해당하는 모든 Review를 가져옴
     productDetail.reviews = await this.reviewRepositoryInstance.getReviewsByProductId(productId);
 
-    return productDetail || null;
+    return {productDetail, product} || null;
   }
 }

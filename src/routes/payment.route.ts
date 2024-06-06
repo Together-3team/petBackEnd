@@ -11,8 +11,9 @@ const paymentController = new PaymentController();
  *   description: 결제 관련 API
  */
 
-PaymentRouter.post('/order-status', paymentController.orderStatus);
 
-PaymentRouter.post('/webhook', paymentController.webHook)
+// PaymentRouter.post('/webhook', paymentController.webHook)
+
+PaymentRouter.post('/confirm', paymentController.paymentsConfirm)
 
 export default PaymentRouter

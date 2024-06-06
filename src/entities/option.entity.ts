@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Timestamp } from 'typeorm'
-import { ProductDetail } from '../entities'
+import { Product, ProductDetail } from '../entities'
 
 /**
  * @swagger
@@ -58,7 +58,7 @@ export class Option {
   /**
    * 상품 참조 키
    */
-  @ManyToOne(() => ProductDetail, (productDetail: { id: any; }) => productDetail.id, { nullable: false })
-  productDetailId?: ProductDetail;
+  @ManyToOne(() => Product, (Product: { id: any; }) => Product.id, { nullable: false })
+  productId?: Product;
 
 }
