@@ -10,16 +10,19 @@ config()
 export class AuthController {
   private userRepository = new UserRepository();
 
-  public authenticateCallback = (req: Request, res: Response) => async (err: Error, profile: ProfileDto, info: any) => {
-    const user = await this.userRepository.findUserBySNS(profile.snsId, profile.provider);
-    if (user) {
-      const accessToken = jwt.sign({ id: user.id, type: 'access' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2 hours'})
-      const refreshToken = jwt.sign({ id: user.id, type: 'refresh' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '7 days'})
-      res.json({ registered: true, accessToken, refreshToken})
-    }
+  public authenticateCallback = (req: Request, res: Response) => async (err: Error, profile: ProfileDto | false, info: any) => {
+    if (!profile) res.status(404).json({message: '로그인에 실패했습니다'})
     else {
-      const profileToken = jwt.sign({profile}, process.env.JWT_SECRET_KEY || '', { expiresIn: '30 minutes'})
-      res.json({ registered: false, profileToken})
+      const user = await this.userRepository.findUserBySNS(profile.snsId, profile.provider);
+      if (user) {
+        const accessToken = jwt.sign({ id: user.id, type: 'access' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2 hours'})
+        const refreshToken = jwt.sign({ id: user.id, type: 'refresh' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '7 days'})
+        res.json({ registered: true, accessToken, refreshToken})
+      }
+      else {
+        const profileToken = jwt.sign({profile}, process.env.JWT_SECRET_KEY || '', { expiresIn: '30 minutes'})
+        res.json({ registered: false, profileToken})
+      }
     }
   }
 

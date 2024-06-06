@@ -27,9 +27,9 @@ export class ZzimController {
     const rawData = req.body
     const user = req.user as User
     try {
-      const product = await this.productService.getProductById(rawData.productId)
-      const Zzim = await this.zzimService.createZzim({product: product}, user)
-      res.json(Zzim)
+      const zzimData: CreateZzimDto = {product: await this.productService.getProductById(rawData.productId)}
+      const zzim = await this.zzimService.createZzim(zzimData, user)
+      res.json(zzim)
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })
@@ -40,8 +40,8 @@ export class ZzimController {
     const zzimId = req.params.id
     const user = req.user as User
     try {
-      const Zzim = await this.zzimService.getZzimById(zzimId)
-      if (Zzim.user.id !== user.id) res.status(401).json({message: "상속 관계에 있지 않습니다"})
+      const zzim = await this.zzimService.getZzimById(zzimId)
+      if (zzim.user.id !== user.id) res.status(401).json({message: "상속 관계에 있지 않습니다"})
       else {
         const result = await this.zzimService.deleteZzim(zzimId)
         res.json(result)

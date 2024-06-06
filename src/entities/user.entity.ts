@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
-import { Delivery, Zzim } from "../entities"
 
 /**
  * @swagger
@@ -11,9 +10,12 @@ import { Delivery, Zzim } from "../entities"
  *         id:
  *           type: integer
  *           description: 고유 ID
- *         delivery:
- *           type: delivery[]
- *           description: 배송지
+ *         deliveries:
+ *           type: Delivery[]
+ *           description: 배송지 목록
+ *         zzims:
+ *           type: Zzim[]
+ *           description: 찜 목록
  *         email:
  *           type: string
  *           description: 이메일
@@ -75,12 +77,6 @@ export class User {
 
     @CreateDateColumn()
     createdAt!: Timestamp
-
-    @OneToMany(() => Delivery, (delivery) => delivery.user, {nullable: true})
-    deliveries?: Delivery[];
-
-    @OneToMany(() => Zzim, (zzim) => zzim.user, {nullable: true})
-    zzims?: Zzim[];
     
     constructor(email: string, nickname: string, phoneNumber: string) {
         this.email = email

@@ -35,12 +35,12 @@ import { User, Product } from "../entities"
 @Entity('zzim')
 export class Zzim {
     @PrimaryGeneratedColumn('increment')
-    id?: number
+    id!: number
 
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => User, (user) => user.zzims, {eager: true, onDelete: 'CASCADE'})
+    @ManyToOne(() => User, {eager: true, onDelete: 'CASCADE'})
     @JoinColumn()
     user: User
 
