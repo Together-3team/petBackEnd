@@ -22,7 +22,7 @@ export class AuthController {
         }
         else {
           const profileToken = jwt.sign({profile}, process.env.JWT_SECRET_KEY || '', { expiresIn: '30 minutes'})
-          res.json({ registered: false, profileToken})
+          res.json({ registered: false, email: profile.email, profileToken})
         }
       }
     } catch (error) {
