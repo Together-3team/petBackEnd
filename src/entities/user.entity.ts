@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
+import { Purchase } from './purchase.entity'
 
 /**
  * @swagger
@@ -71,6 +72,9 @@ export class User {
 
     @Column('varchar', {length: 10})
     provider: string = 'local'
+
+    @OneToMany(() => Purchase, purchase => purchase.user)
+    purchases?: Purchase[];
 
     @Column('boolean')
     isSubscribedToPromotions: boolean = false

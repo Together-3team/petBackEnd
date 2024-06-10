@@ -8,7 +8,7 @@ export class GroupBuying {
     id!: number
 
     @OneToMany(type => SelectedProduct, (selectedProduct) => selectedProduct.groupBuying)
-    selectedProducts: SelectedProduct[] | undefined;
+    selectedProducts?: SelectedProduct[];
 
     @Column({ type: 'tinyint' })
     status?: number

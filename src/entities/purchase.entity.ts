@@ -58,6 +58,9 @@ export class Purchase {
     @JoinColumn()
     delivery: Delivery
 
+    @ManyToOne(() => User, user => user)
+    user?: User
+
     @OneToMany(() => SelectedProduct, selectedProduct => selectedProduct.id)
     selectedProducts: SelectedProduct[];
 

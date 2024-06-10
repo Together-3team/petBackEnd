@@ -55,7 +55,6 @@ export class SelectedProduct {
     createdAt!: Timestamp
 
     @ManyToOne(() => GroupBuying, groupBuying => groupBuying.selectedProducts)
-    @JoinColumn({ name: 'groupBuyingId', referencedColumnName: 'groupBuyingId' })
     groupBuying?: GroupBuying
 
     @ManyToOne(() => User, {eager: true})
