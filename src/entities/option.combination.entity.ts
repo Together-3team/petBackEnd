@@ -34,7 +34,7 @@ export class OptionCombination {
    * 고유 ID
    */
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   /**
   * 옵션 조합

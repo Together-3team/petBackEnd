@@ -26,11 +26,9 @@ export class SelectedProductService {
     return this.selectedProductRepository.findSelectedProductsByUserAndStatus(1, user)
   }
 
-  public addToCart = (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProduct> => {
-    return this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 0)
-  }
-
-  public addToOrder = (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProduct> => {
+  public addToOrder = async (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProduct> => {
+    const selectedProduct = await this.selectedProductRepository.findSelectedProductByOptionCombinationId(selectedProductData.optionCombinationId, user)
+    if (selectedProduct) return this.selectedProductRepository.updateSelectedProduct(selectedProduct.id, {...selectedProduct, quantity: selectedProduct.quantity + selectedProductData.quantity})
     return this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 1)
   }
 

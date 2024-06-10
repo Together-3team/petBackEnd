@@ -16,6 +16,10 @@ export class SelectedProductRepository {
     return this.selectedProductRepo.findOneByOrFail({id})
   }
   
+  public findSelectedProductByOptionCombinationId = (optionCombinationId: number, user: User): Promise<SelectedProduct | null> => {
+    return this.selectedProductRepo.findOneBy({optionCombination: {id: optionCombinationId}, user: {id: user.id}})
+  }
+  
   public findSelectedProductsByUserAndStatus = (status: number, user: User): Promise<SelectedProduct[]> => {
     return this.selectedProductRepo.findBy({status, user: {id: user.id}})
   }
@@ -33,8 +37,13 @@ export class SelectedProductRepository {
 
   public updateStatus = async (fromStatus: number, toStatus: number, user: User): Promise<SelectedProduct[]> => {
     const selectedProducts: SelectedProduct[] = await this.selectedProductRepo.findBy({user: {id: user.id}, status: fromStatus})
-    selectedProducts.forEach(x => x.status = toStatus)
-    return this.selectedProductRepo.save(selectedProducts)
+    let result: SelectedProduct[] = []
+    selectedProducts.forEach(async x => {
+      const y = await this.findSelectedProductByOptionCombinationId(x.optionCombination.id, x.user)
+      if (y) result.push(await this.selectedProductRepo.save({...y, quantity: y.quantity + x.quantity}))
+      else result.push(await this.selectedProductRepo.save({...x}))
+    })
+    return result
   }
 
   public deleteSelectedProduct = (id: number): Promise<DeleteResult> => {
