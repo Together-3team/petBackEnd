@@ -49,6 +49,12 @@ export class OptionCombination {
   combinationPrice?: number;
 
   /**
+   * 조합 명
+   */
+  @Column({ type: 'varchar', length: 100 })
+  combinationName?: String;
+
+  /**
    * 생성일
    */
   @CreateDateColumn()

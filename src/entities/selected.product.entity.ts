@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm"
 import { OptionCombination, Purchase, User } from "../entities"
+import { GroupBuying } from './group.buying.entity'
 
 /**
  * @swagger
@@ -52,6 +53,10 @@ export class SelectedProduct {
 
     @CreateDateColumn()
     createdAt!: Timestamp
+
+    @ManyToOne(() => GroupBuying, groupBuying => groupBuying.selectedProducts)
+    @JoinColumn({ name: 'groupBuyingId', referencedColumnName: 'groupBuyingId' })
+    groupBuying?: GroupBuying
 
     @ManyToOne(() => User, {eager: true})
     @JoinColumn()
