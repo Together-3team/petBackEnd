@@ -27,7 +27,7 @@ export class SelectedProductService {
   }
 
   public addToOrder = async (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProduct> => {
-    const selectedProduct = await this.selectedProductRepository.findSelectedProductByOptionCombinationId(selectedProductData.optionCombinationId, user)
+    const selectedProduct = await this.selectedProductRepository.findSelectedProductByOptionCombinationIdAndStatus(selectedProductData.optionCombinationId, 1, user)
     if (selectedProduct) return this.selectedProductRepository.updateSelectedProduct(selectedProduct.id, {...selectedProduct, quantity: selectedProduct.quantity + selectedProductData.quantity})
     return this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 1)
   }
