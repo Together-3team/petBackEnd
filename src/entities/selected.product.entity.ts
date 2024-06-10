@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm"
-import { OptionCombination, User } from "../entities"
+import { OptionCombination, Purchase, User } from "../entities"
 
 /**
  * @swagger
@@ -53,9 +53,13 @@ export class SelectedProduct {
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => User, {eager: true, onDelete: 'CASCADE'})
+    @ManyToOne(() => User, {eager: true})
     @JoinColumn()
     user: User
+
+    @ManyToOne(() => Purchase, {eager: true})
+    @JoinColumn({name: 'orderId', referencedColumnName: 'orderId'})
+    purchase?: Purchase
 
     @ManyToOne(() => OptionCombination, {eager: true})
     @JoinColumn()

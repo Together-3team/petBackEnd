@@ -16,8 +16,8 @@ export class SelectedProductRepository {
     return this.selectedProductRepo.findOneByOrFail({id})
   }
   
-  public findSelectedProductByOptionCombinationId = (optionCombinationId: number, user: User): Promise<SelectedProduct | null> => {
-    return this.selectedProductRepo.findOneBy({optionCombination: {id: optionCombinationId}, user: {id: user.id}})
+  public findSelectedProductByOptionCombinationIdAndStatus = (optionCombinationId: number, status: number, user: User): Promise<SelectedProduct | null> => {
+    return this.selectedProductRepo.findOneBy({optionCombination: {id: optionCombinationId}, status, user: {id: user.id}})
   }
   
   public findSelectedProductsByUserAndStatus = (status: number, user: User): Promise<SelectedProduct[]> => {
@@ -39,7 +39,7 @@ export class SelectedProductRepository {
     const selectedProducts: SelectedProduct[] = await this.selectedProductRepo.findBy({user: {id: user.id}, status: fromStatus})
     let result: SelectedProduct[] = []
     selectedProducts.forEach(async x => {
-      const y = await this.findSelectedProductByOptionCombinationId(x.optionCombination.id, x.user)
+      const y = await this.findSelectedProductByOptionCombinationIdAndStatus(x.optionCombination.id, toStatus, x.user)
       if (y) result.push(await this.selectedProductRepo.save({...y, quantity: y.quantity + x.quantity}))
       else result.push(await this.selectedProductRepo.save({...x}))
     })
