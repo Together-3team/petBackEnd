@@ -40,8 +40,11 @@ export class SelectedProductRepository {
     let result: SelectedProduct[] = []
     selectedProducts.forEach(async x => {
       const y = await this.findSelectedProductByOptionCombinationIdAndStatus(x.optionCombination.id, toStatus, x.user)
-      if (y) result.push(await this.selectedProductRepo.save({...y, quantity: y.quantity + x.quantity}))
-      else result.push(await this.selectedProductRepo.save({...x}))
+      if (y) {
+        result.push(await this.selectedProductRepo.save({...y, quantity: y.quantity + x.quantity}))
+        await this.selectedProductRepo.delete({id: x.id})
+      }
+      else result.push(await this.selectedProductRepo.save({...x, status: toStatus}))
     })
     return result
   }
