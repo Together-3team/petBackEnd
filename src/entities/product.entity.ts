@@ -93,7 +93,7 @@ export class Product {
     @Column({ type: 'tinyint', default: 0 })
     isDeleted: number = 0;
 
-    @OneToMany(() => Option, option => option.productId)
+    @OneToMany(() => Option, option => option.productId, { nullable: true })
     options?: Option[];
 
     @OneToMany(() => OptionCombination, optionCombination => optionCombination.productId, { nullable: true })

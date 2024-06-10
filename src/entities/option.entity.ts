@@ -58,7 +58,7 @@ export class Option {
   /**
    * 상품 참조 키
    */
-  @ManyToOne(() => Product, (Product: { id: any; }) => Product.id, { nullable: false })
-  productId?: Product;
+  @ManyToOne(() => Product, product => product.options, { nullable: true })
+  productId?: number;
 
 }
