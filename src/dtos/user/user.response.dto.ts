@@ -1,5 +1,6 @@
 import { Exclude, Expose } from "class-transformer"
 import { IsBoolean, IsDate, IsEmail, IsInt, IsString, IsUrl, Matches } from "class-validator"
+import { Timestamp } from 'typeorm'
 
 /**
  * @swagger
@@ -70,7 +71,7 @@ export class UserResponseDto {
 
   @Exclude()
   @IsDate()
-  createdAt!: Date
+  createdAt!: Timestamp
 
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial)

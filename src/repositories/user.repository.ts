@@ -7,7 +7,7 @@ import { plainToInstance } from 'class-transformer'
 export class UserRepository {
   private userRepo = AppDataSource.getRepository(User)
 
-  public findUserById = async (id: number | undefined): Promise<UserResponseDto> => {
+  public findUserById = async (id: number | undefined): Promise<User> => {
     if (id === undefined) {
       throw new Error('User ID is undefined')
     }

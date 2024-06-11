@@ -2,6 +2,7 @@ import { DeliveryRepository, PaymentRepository, SelectedProductRepository, UserR
 import axios from 'axios'
 import { PaymentRequestDto } from '../dtos'
 import { Purchase } from '../entities'
+import { InsertResult } from 'typeorm'
 
 export class PaymentService {
   private paymentRepository: PaymentRepository
@@ -16,33 +17,32 @@ export class PaymentService {
     this.userRepository = new UserRepository();
   }
 
-  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<void> => {
-    console.log(paymentRequestDto);
+  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<InsertResult> => {
 
     const selectedProductList = await Promise.all((paymentRequestDto?.selectedProductIds?.split(',') ?? []).map(async (productId) => {
       return await this.selectedPaymentRepository.findSelectedProductById(Number(productId));
     }));
-    console.log(selectedProductList);
 
     const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
-    console.log(delivery);
 
     const user = await this.userRepository.findUserById(paymentRequestDto?.userId);
-    console.log(user);
-    //
-    // const newPurchase: Purchase = {
-    //   selectedProducts: selectedProductList,
-    //   delivery: delivery,
-    //   user: user,
-    //   amount: paymentRequestDto!.amount,
-    //   discount: paymentRequestDto!.discount,
-    //   orderId: paymentRequestDto!.orderId!,
-    //   paymentKey: paymentRequestDto!.paymentKey!,
-    // }
 
-    // const createPurchase = await this.paymentRepository.create(newPurchase);
+    const newPurchase: Purchase = {
+      selectedProducts: selectedProductList,
+      delivery: delivery,
+      user: user,
+      amount: paymentRequestDto!.amount,
+      discount: paymentRequestDto!.discount,
+      orderId: paymentRequestDto!.orderId!,
+      paymentKey: paymentRequestDto!.paymentKey!,
+      createdAt: new Date(),
+      id: 0,
+      paymentStatus: 0,
+      deliveryCompany: '',
+      trackingNumber: '',
+    }
 
-    // const findSelectedProduct =
+    return await this.paymentRepository.create(newPurchase);
   }
 
   public paymentsConfirm = async (amount: number | undefined, orderId: string | undefined, paymentKey: string | undefined): Promise<void> => {
@@ -51,18 +51,22 @@ export class PaymentService {
     if (!paymentSecretKey) {
       throw new Error('PAYMENT_SECRET_KEY is not defined');
     }
-    console.log(paymentSecretKey)
 
-    return await axios.post('https://api.tosspayments.com/v1/payments/confirm', {
-      amount,
-      orderId,
-      paymentKey,
-    }, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${paymentSecretKey}:`).toString('base64')}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    try {
+      return await axios.post('https://api.tosspayments.com/v1/payments/confirm', {
+        amount,
+        orderId,
+        paymentKey,
+      }, {
+        headers: {
+          Authorization: `Basic ${Buffer.from(`${paymentSecretKey}:`).toString('base64')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      console.log(error)
+      throw new Error(error as string);
+    }
   }
 
 }

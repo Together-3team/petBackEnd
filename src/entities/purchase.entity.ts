@@ -52,20 +52,20 @@ export class Purchase {
     id!: number
 
     @CreateDateColumn()
-    createdAt!: Timestamp
+    createdAt!: Date | Timestamp
 
     @ManyToOne(() => Delivery, {eager: true, onDelete: 'CASCADE'})
     @JoinColumn()
-    delivery: Delivery
+    delivery?: Delivery
 
     @ManyToOne(() => User, user => user)
     user?: User
 
     @OneToMany(() => SelectedProduct, selectedProduct => selectedProduct.id)
-    selectedProducts: SelectedProduct[];
+    selectedProducts?: SelectedProduct[];
 
     @Column({ type: 'varchar', length: 30, unique: true })
-    orderId: string;
+    orderId?: string;
 
     @Column({type: 'int', nullable: true })
     amount?: number;
@@ -85,9 +85,4 @@ export class Purchase {
     @Column({ type: 'varchar', length: 20 })
     trackingNumber?: string = '';
     
-    constructor(delivery: Delivery, orderId: string, selectedProducts: SelectedProduct[]) {
-        this.delivery = delivery
-        this.orderId = orderId
-        this.selectedProducts = selectedProducts
-    }
 }
