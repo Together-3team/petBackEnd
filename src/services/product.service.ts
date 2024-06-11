@@ -91,7 +91,7 @@ export class ProductService {
       reviewRating: makeReviews?.rating,
       reviewCount: makeReviews?.reviewCount,
       productId: result?.productDetail?.productId?.id,
-      category: result?.productDetail?.categoryId?.categoryStr,
+      category: result?.product?.category?.categoryStr,
       options: makeOptions,
       optionCombinations: result?.product?.optionCombinations?.map(({ createdAt, ...rest }) => rest),
     }

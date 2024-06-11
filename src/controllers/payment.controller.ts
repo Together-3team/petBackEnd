@@ -28,6 +28,9 @@ export class PaymentController {
     try {
       const paymentRequestDto: PaymentRequestDto = req.body
 
+      const paymentInfo = await this.paymentService.createPurchase(paymentRequestDto);
+
+      console.log(paymentInfo);
 
       const { amount, orderId, paymentKey } = paymentRequestDto;
       const response = await this.paymentService.paymentsConfirm(amount, orderId, paymentKey);

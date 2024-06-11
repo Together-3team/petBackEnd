@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import passport from '../index'
+import { passport } from '../index'
 import { User } from '../entities'
 import jwt from 'jsonwebtoken'
 import { config } from 'dotenv'

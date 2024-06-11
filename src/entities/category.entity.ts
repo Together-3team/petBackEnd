@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    CreateDateColumn,
+    Timestamp,
+    OneToMany,
+    OneToOne, JoinColumn,
+} from 'typeorm'
+import { Product } from './product.entity'
 
 /**
  * @swagger
@@ -52,6 +62,9 @@ export class Category {
     @Column('varchar', { length: 20, nullable: false })
     name?: string;
 
+    @OneToOne(() => Product, product => product.category, { nullable: true })
+    product?: Product;
+
     /**
      * 부모 카테고리 ID
      */
@@ -68,7 +81,7 @@ export class Category {
      * 카테고리문자열
      */
     @Column('varchar', { length: 50, nullable: false })
-    categoryStr?: number;
+    categoryStr?: string;
 
     /**
      * 삭제 여부

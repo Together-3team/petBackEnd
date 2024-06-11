@@ -12,8 +12,8 @@ export class SelectedProductRepository {
     return this.selectedProductRepo.findBy({user: {id: user.id}})
   }
   
-  public findSelectedProductById = (id: number): Promise<SelectedProduct> => {
-    return this.selectedProductRepo.findOneByOrFail({id})
+  public findSelectedProductById = async (id: number): Promise<SelectedProduct> => {
+    return await this.selectedProductRepo.findOneByOrFail({ id })
   }
   
   public findSelectedProductByOptionCombinationIdAndStatus = (optionCombinationId: number, status: number, user: User): Promise<SelectedProduct | null> => {

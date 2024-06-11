@@ -29,12 +29,12 @@ export class ProductRepository {
   } | null> => {
     const productDetail = await this.productDetailRepository.findOne({
       where: { id: productId },
-      relations: ['productId', 'categoryId']
+      relations: ['productId']
     });
 
     const product = await this.productListRepository.findOne({
       where: { id: productId },
-      relations: ['options', 'optionCombinations']
+      relations: ['options', 'optionCombinations', 'category']
     })
 
 

@@ -53,4 +53,4 @@ app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
 
-export default passport
+export { app, passport }

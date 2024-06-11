@@ -5,10 +5,11 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     Timestamp,
-    ManyToOne, OneToMany,
+    ManyToOne, OneToMany, OneToOne, JoinColumn,
 } from 'typeorm'
 import { Option } from './option.entity'
 import { OptionCombination } from './option.combination.entity'
+import { Category } from './category.entity'
 
 /**
  * @swagger
@@ -93,11 +94,15 @@ export class Product {
     @Column({ type: 'tinyint', default: 0 })
     isDeleted: number = 0;
 
-    @OneToMany(() => Option, option => option.productId, { nullable: true })
+    @OneToMany(() => Option, option => option.product, { nullable: true })
     options?: Option[];
 
-    @OneToMany(() => OptionCombination, optionCombination => optionCombination.productId, { nullable: true })
+    @OneToMany(() => OptionCombination, optionCombination => optionCombination.product, { nullable: true })
     optionCombinations?: OptionCombination[];
+
+    @OneToOne(() => Category, (category: { product: any; }) => category.product, { nullable: true })
+    @JoinColumn()
+    category?: Category;
 
     /**
      * 생성일

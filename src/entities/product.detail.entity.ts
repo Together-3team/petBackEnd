@@ -62,12 +62,6 @@ export class ProductDetail {
     reviews?: Review[];
 
     /**
-     * 카테고리 참조 키
-     */
-    @ManyToOne(() => Category, category => category.id, { nullable: true })
-    categoryId?: Category;
-
-    /**
      * 상품 이미지
      */
     @Column('text', { nullable: true })

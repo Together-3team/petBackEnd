@@ -66,23 +66,28 @@ export class Purchase {
 
     @Column({ type: 'varchar', length: 30, unique: true })
     orderId: string;
+
+    @Column({type: 'int', nullable: true })
+    amount?: number;
+
+    @Column( { type: 'int', nullable: true })
+    discount?: number;
+
+    @Column({ type: 'varchar', length: 30, unique: true })
+    paymentKey?: string;
     
     @Column({ type: 'tinyint' })
     paymentStatus: number = 0;
     
     @Column({ type: 'varchar', length: 20 })
-    deliveryCompany?: string;
+    deliveryCompany?: string = '';
     
     @Column({ type: 'varchar', length: 20 })
-    trackingNumber?: string;
+    trackingNumber?: string = '';
     
-    @Column({ type: 'int' })
-    discountPrice: number;
-    
-    constructor(delivery: Delivery, orderId: string, discountPrice: number, selectedProducts: SelectedProduct[]) {
+    constructor(delivery: Delivery, orderId: string, selectedProducts: SelectedProduct[]) {
         this.delivery = delivery
         this.orderId = orderId
-        this.discountPrice = discountPrice
         this.selectedProducts = selectedProducts
     }
 }

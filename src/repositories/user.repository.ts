@@ -6,8 +6,11 @@ import { DeleteResult } from 'typeorm'
 export class UserRepository {
   private userRepo = AppDataSource.getRepository(User)
 
-  public findUserById = (id: number): Promise<User> => {
-    return this.userRepo.findOneByOrFail({id})
+  public findUserById = async (id: number | undefined): Promise<User> => {
+    if (id === undefined) {
+      throw new Error('User ID is undefined')
+    }
+    return await this.userRepo.findOneByOrFail({ id })
   }
 
   public findUserByEmail = (email: string): Promise<User> => {

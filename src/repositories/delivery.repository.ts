@@ -6,8 +6,11 @@ import { DeleteResult } from 'typeorm'
 export class DeliveryRepository {
   private deliveryRepo = AppDataSource.getRepository(Delivery)
 
-  public findDeliveryById = (id: number): Promise<Delivery> => {
-    return this.deliveryRepo.findOneByOrFail({id})
+  public findDeliveryById = async (id: number | undefined): Promise<Delivery> => {
+    if (id === undefined) {
+      throw new Error('Delivery ID is undefined')
+    }
+    return await this.deliveryRepo.findOneByOrFail({ id })
   }
   
   public findDeliveriesByUser = (user: User): Promise<Delivery[]> => {
