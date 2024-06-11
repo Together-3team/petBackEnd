@@ -8,6 +8,8 @@ export class PaymentController {
 
   constructor() {
     this.paymentService = new PaymentService();
+    this.webHook = this.webHook.bind(this);
+    this.paymentsConfirm = this.paymentsConfirm.bind(this);
   }
 
   public async webHook(req: Request, res: Response, next: NextFunction) {
