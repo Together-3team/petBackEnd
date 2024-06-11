@@ -11,12 +11,6 @@ import { Purchase } from './purchase.entity'
  *         id:
  *           type: integer
  *           description: 고유 ID
- *         deliveries:
- *           type: Delivery[]
- *           description: 배송지 목록
- *         zzims:
- *           type: Zzim[]
- *           description: 찜 목록
  *         email:
  *           type: string
  *           description: 이메일

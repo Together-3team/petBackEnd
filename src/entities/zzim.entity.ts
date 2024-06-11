@@ -12,11 +12,9 @@ import { User, Product } from "../entities"
  *           type: integer
  *           description: 고유 ID
  *         user:
- *           type: User
- *           description: 사용자
+ *           $ref: '#/components/schemas/User'
  *         product:
- *           type: Product
- *           description: 상품
+ *           $ref: '#/components/schemas/Product'
  *         createdAt:
  *           type: string
  *           format: Timestamp

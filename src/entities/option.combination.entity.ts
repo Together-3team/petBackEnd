@@ -22,10 +22,10 @@ import { Option, Product, ProductDetail } from '../entities'
  *           type: string
  *           format: date-time
  *           description: 생성일
- *         productDetailId:
+ *         productId:
  *           type: integer
  *           nullable: true
- *           description: 상품 디테일 ID
+ *           description: 상품 ID
  */
 
 @Entity()
@@ -61,7 +61,7 @@ export class OptionCombination {
   createdAt?: Timestamp;
 
   /**
-   * 상품 디테일 참조 키
+   * 상품 참조 키
    */
   @ManyToOne(() => Product, product => product.optionCombinations, { nullable: true })
   productId?: number;
