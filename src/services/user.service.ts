@@ -1,6 +1,5 @@
 import { DeleteResult } from 'typeorm'
-import { CreateUserDto, UpdateUserDto } from '../dtos'
-import { User } from '../entities'
+import { UserCreateRequestDto, UserResponseDto, UserUpdateRequestDto } from '../dtos'
 import { UserRepository } from '../repositories'
 
 export class UserService {
@@ -10,7 +9,7 @@ export class UserService {
     this.userRepository = new UserRepository()
   }
 
-  public getUser = (userId: string): Promise<User> => {
+  public getUser = (userId: string): Promise<UserResponseDto> => {
     return this.userRepository.findUserById(parseInt(userId))
   }
 
@@ -19,11 +18,11 @@ export class UserService {
     return user ? true : false
   }
 
-  public createUser = (userData: CreateUserDto): Promise<User> => {
+  public createUser = (userData: UserCreateRequestDto): Promise<UserResponseDto> => {
     return this.userRepository.createUser(userData)
   }
 
-  public updateUser = (userId: string, userData: UpdateUserDto): Promise<User> => {
+  public updateUser = (userId: string, userData: UserUpdateRequestDto): Promise<UserResponseDto> => {
     return this.userRepository.updateUser(parseInt(userId), userData)
   }
 

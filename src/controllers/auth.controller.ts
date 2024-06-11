@@ -4,7 +4,7 @@ import { User } from '../entities'
 import jwt from 'jsonwebtoken'
 import { config } from 'dotenv'
 import { UserRepository } from '../repositories'
-import { AuthNotRegisteredResponseDto, AuthRegisteredResponseDto, ProfileDto, TokenResponseDto } from '../dtos'
+import { AuthNotRegisteredResponseDto, AuthRegisteredResponseDto, ProfileDto, TokenResponseDto, UserResponseDto } from '../dtos'
 config()
 
 export class AuthController {
@@ -58,7 +58,7 @@ export class AuthController {
       const profile: ProfileDto = (payload as jwt.JwtPayload).profile
       const user = await this.userRepository.findUserBySNS(profile.snsId, profile.provider)
       if (user) return res.status(403).json({message: "이미 회원 가입이 완료된 계정입니다"});
-      const newUser: User = await this.userRepository.createUser({
+      const newUser: UserResponseDto = await this.userRepository.createUser({
         ...profile,
         nickname: req.body.nickname,
         phoneNumber: req.body.phoneNumber,

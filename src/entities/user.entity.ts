@@ -22,7 +22,7 @@ import { Purchase } from './purchase.entity'
  *           description: 연락처
  *         profileImage:
  *           type: string
- *           nullable: true
+ *           format: uri
  *           description: 프로필 이미지
  *         snsId:
  *           type: string
@@ -58,8 +58,8 @@ export class User {
     @Column('varchar', {length: 20})
     phoneNumber: string
 
-    @Column('text', {nullable: true})
-    profileImage?: string
+    @Column('text')
+    profileImage: string
 
     @Column('varchar', {length: 30})
     snsId: string = 'local'
@@ -76,9 +76,10 @@ export class User {
     @CreateDateColumn()
     createdAt!: Timestamp
     
-    constructor(email: string, nickname: string, phoneNumber: string) {
+    constructor(email: string, nickname: string, phoneNumber: string, profileImage: string) {
         this.email = email
         this.nickname = nickname
         this.phoneNumber = phoneNumber
+        this.profileImage = profileImage
     }
 }

@@ -26,7 +26,7 @@ const userController = new UserController()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/UserResponseDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
@@ -83,35 +83,11 @@ UserRouter.post('/verify-nickname', userController.verifyNickname)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/UserResponseDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
 UserRouter.get('/:id', userController.getUser)
-
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: 사용자 등록
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateUserDto'
- *     responses:
- *       200:
- *         description: 사용자 등록
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       500:
- *         description: Internal server error
- */
-UserRouter.post('/', userController.createUser)
 
 /**
  * @swagger
@@ -131,14 +107,14 @@ UserRouter.post('/', userController.createUser)
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateUserDto'
+ *             $ref: '#/components/schemas/UserUpdateRequestDto'
  *     responses:
  *       200:
  *         description: 사용자 수정
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/UserResponseDto'
  *       500:
  *         description: Internal server error
  */
@@ -163,9 +139,23 @@ UserRouter.put('/:id', userController.updateUser)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/DeleteResult'
  *       500:
  *         description: Internal server error
+ * 
+ * components:
+ *   schemas:
+ *     DeleteResult:
+ *       type: object
+ *       properties:
+ *         raw:
+ *           type: array
+ *           items:
+ *             type: object
+ *           description: Raw database response
+ *         affected:
+ *           type: integer
+ *           description: Number of rows affected
  */
 UserRouter.delete('/:id', userController.deleteUser)
 
