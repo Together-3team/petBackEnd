@@ -9,6 +9,23 @@ export class PaymentRepository {
   private userRepository = AppDataSource.getRepository(User)
   private purchaseRepository = AppDataSource.getRepository(Purchase)
 
+
+  public updatePurchase = async (orderId: string, status: number): Promise<Purchase> => {
+    try {
+      const purchase = await this.purchaseRepository.findOne({ where: { orderId } })
+
+      if (!purchase) {
+        throw new Error(`Purchase with orderId ${orderId} not found`);
+      }
+
+      purchase.paymentStatus = status;
+
+      return await this.purchaseRepository.save(purchase);
+    } catch (error) {
+      throw new Error('');
+    }
+  }
+
   public create = async (newPurchase: Purchase): Promise<InsertResult> => {
     try {
       return await this.purchaseRepository.insert(newPurchase);

@@ -17,6 +17,14 @@ export class PaymentService {
     this.userRepository = new UserRepository();
   }
 
+  public changedStatus = async (orderId: string): Promise<void> => {
+    try {
+      const changedStatus = await this.paymentRepository.updatePurchase(orderId, 1);
+    } catch (error) {
+      throw new Error('');
+    }
+  }
+
   public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<InsertResult> => {
 
     const selectedProductList = await Promise.all((paymentRequestDto?.selectedProductIds?.split(',') ?? []).map(async (productId) => {

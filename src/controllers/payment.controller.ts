@@ -10,15 +10,16 @@ export class PaymentController {
     this.paymentService = new PaymentService();
   }
 
-  public webHook(req: Request, res: Response, next: NextFunction) {
+  public async webHook(req: Request, res: Response, next: NextFunction) {
     try {
       console.log(req.body);
       const webHookStatus = req.body.eventType;
       if (webHookStatus === 'PAYMENT_STATUS_CHANGED') {
-        const { orderId, status, approvedAt } = req.body.data.orderId;
+        const { orderId, status, approvedAt } = req.body.data;
         console.log(orderId, status, approvedAt);
         if (status !== 'DONE') return res.status(400).json({ "result": "fail" })
-        // const paymentComplete = this.paymentService.
+        const paymentComplete = await this.paymentService.changedStatus(orderId);
+        console.log(paymentComplete);
       }
       return res.status(200).send({ "result": "finish" })
     } catch (error) {
