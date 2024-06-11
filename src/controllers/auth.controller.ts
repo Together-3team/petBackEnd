@@ -4,11 +4,17 @@ import { User } from '../entities'
 import jwt from 'jsonwebtoken'
 import { config } from 'dotenv'
 import { UserRepository } from '../repositories'
-import { ProfileDto } from '../dtos'
+import { AuthNotRegisteredResponseDto, AuthRegisteredResponseDto, ProfileDto, TokenResponseDto } from '../dtos'
 config()
 
 export class AuthController {
   private userRepository = new UserRepository();
+
+  public login = (id: number) => {
+    const accessToken = jwt.sign({ id, type: 'access' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2 hours'})
+    const refreshToken = jwt.sign({ id, type: 'refresh' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '7 days'})
+    return { accessToken, refreshToken }
+  }
 
   public authenticateCallback = (req: Request, res: Response) => async (err: Error, profile: ProfileDto | false, info: any) => {
     try {
@@ -16,13 +22,20 @@ export class AuthController {
       else {
         const user = await this.userRepository.findUserBySNS(profile.snsId, profile.provider);
         if (user) {
-          const accessToken = jwt.sign({ id: user.id, type: 'access' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2 hours'})
-          const refreshToken = jwt.sign({ id: user.id, type: 'refresh' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '7 days'})
-          res.json({ registered: true, accessToken, refreshToken})
+          const response: AuthRegisteredResponseDto = {
+            registered: true,
+            ...this.login(user.id)
+          }
+          res.json(response)
         }
         else {
           const profileToken = jwt.sign({profile}, process.env.JWT_SECRET_KEY || '', { expiresIn: '30 minutes'})
-          res.json({ registered: false, email: profile.email, profileToken})
+          const response: AuthNotRegisteredResponseDto = {
+            registered: false,
+            email: profile.email,
+            profileToken
+          }
+          res.json(response)
         }
       }
     } catch (error) {
@@ -51,7 +64,8 @@ export class AuthController {
         phoneNumber: req.body.phoneNumber,
         isSubscribedToPromotions: req.body.isSubscribedToPromotions
       })
-      res.status(201).json(newUser)
+      const response: TokenResponseDto = this.login(newUser.id)
+      res.status(201).json(response)
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })
@@ -64,9 +78,8 @@ export class AuthController {
       const id = (payload as jwt.JwtPayload).id
       if ((payload as jwt.JwtPayload).type !== "refresh") res.status(500).json("refreshToken이 필요합니다")
       else {
-        const accessToken = jwt.sign({ id, type: 'access' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2 hours'})
-        const refreshToken = jwt.sign({ id, type: 'refresh' }, process.env.JWT_SECRET_KEY || '', { expiresIn: '7 days'})
-        res.json({accessToken, refreshToken})
+        const response: TokenResponseDto = this.login(id)
+        res.json(response)
       }
     } catch (error) {
       const errorMessage = (error as Error).message
