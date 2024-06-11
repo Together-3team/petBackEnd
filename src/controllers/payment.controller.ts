@@ -18,6 +18,7 @@ export class PaymentController {
         const { orderId, status, approvedAt } = req.body.data;
         console.log(orderId, status, approvedAt);
         if (status !== 'DONE') return res.status(400).json({ "result": "fail" })
+        console.log('start');
         const paymentComplete = await this.paymentService.changedStatus(orderId);
         console.log(paymentComplete);
       }

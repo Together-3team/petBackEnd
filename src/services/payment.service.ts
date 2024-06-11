@@ -17,10 +17,10 @@ export class PaymentService {
     this.userRepository = new UserRepository();
   }
 
-  public changedStatus = async (orderId: string): Promise<void> => {
+  public changedStatus = async (orderId: string): Promise<Purchase> => {
     try {
       console.log(orderId);
-      const changedStatus = await this.paymentRepository.updatePurchase(orderId, 1);
+      return await this.paymentRepository.updatePurchase(orderId, 1);
     } catch (error) {
       console.error(error);
       throw new Error('changedStatus error');
