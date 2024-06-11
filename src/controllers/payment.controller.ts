@@ -12,6 +12,7 @@ export class PaymentController {
 
   public webHook(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log(req.body);
       const webHookStatus = req.body.eventType;
       if (webHookStatus === 'PAYMENT_STATUS_CHANGED') {
         const { orderId, status, approvedAt } = req.body.data.orderId;
