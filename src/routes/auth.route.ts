@@ -18,7 +18,9 @@ const authController = new AuthController()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthDto'
+ *               oneOf:
+ *                  - $ref: '#/components/schemas/AuthRegisteredResponseDto'
+ *                  - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */
@@ -37,7 +39,9 @@ AuthRouter.get('/google/callback', authController.authenticateGoogle)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthDto'
+ *               oneOf:
+ *                  - $ref: '#/components/schemas/AuthRegisteredResponseDto'
+ *                  - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */
@@ -55,28 +59,14 @@ AuthRouter.get('/kakao/callback', authController.authenticateKakao)
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               nickname:
- *                 type: string
- *               phoneNumber:
- *                 type: string
- *               isSubscribedToPromotions:
- *                 type: boolean
- *               profileToken:
- *                 type: string
- *             required:
- *               - nickname
- *               - phoneNumber
- *               - profileToken
- *               - isSubscribedToPromotions
+ *             $ref: '#/components/schemas/RegisterRequestDto'
  *     responses:
  *       200:
  *         description: 사용자 상세 정보
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/TokenResponseDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */
@@ -105,12 +95,7 @@ AuthRouter.post('/register', authController.register)
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 accessToken:
- *                   type: string
- *                 refreshToken:
- *                   type: string
+ *               $ref: '#/components/schemas/TokenResponseDto'
  *       500:
  *         description: refreshToken이 필요합니다
  */

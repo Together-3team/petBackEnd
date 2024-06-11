@@ -28,7 +28,7 @@ const options = {
       },
     },
   },
-  apis: ['./src/routes/*.ts', './src/dtos/*.ts', './src/entities/*.ts'], // API 경로 (라우트 및 DTO 경로)
+  apis: ['./src/routes/*.ts', './src/dtos/*.ts', './src/dtos/**/*.ts', './src/entities/*.ts'], // API 경로 (라우트 및 DTO 경로)
 };
 
 // Swagger 문서 생성
