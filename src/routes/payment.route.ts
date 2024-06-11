@@ -12,7 +12,7 @@ const paymentController = new PaymentController();
  */
 
 
-// PaymentRouter.post('/webhook', paymentController.webHook)
+PaymentRouter.post('/webhook', paymentController.webHook)
 
 PaymentRouter.post('/confirm', paymentController.paymentsConfirm)
 
