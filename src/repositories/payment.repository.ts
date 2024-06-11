@@ -22,6 +22,7 @@ export class PaymentRepository {
 
       return await this.purchaseRepository.save(purchase);
     } catch (error) {
+      console.log(error);
       throw new Error('');
     }
   }

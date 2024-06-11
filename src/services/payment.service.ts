@@ -21,7 +21,8 @@ export class PaymentService {
     try {
       const changedStatus = await this.paymentRepository.updatePurchase(orderId, 1);
     } catch (error) {
-      throw new Error('');
+      console.error(error);
+      throw new Error('changedStatus error');
     }
   }
 
