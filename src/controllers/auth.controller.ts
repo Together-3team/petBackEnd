@@ -87,7 +87,7 @@ export class AuthController {
         + `&${encodeURIComponent('redirect_uri')}=${encodeURIComponent(process.env.KAKAO_CALLBACK_URL || '')}`
         + `&${encodeURIComponent('grant_type')}=${encodeURIComponent('authorization_code')}`,
         {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
       console.log(tokenResponse)
       const profileResponse = await axios.get(`https://kapi.kakao.com/v2/user/me`, {
