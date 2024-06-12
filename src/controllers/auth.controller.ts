@@ -67,8 +67,13 @@ export class AuthController {
       }
       this.authenticateCallback(req, res, profile)
     } catch (error) {
-      const errorMessage = (error as Error).message
-      res.status(500).json({ error: errorMessage })
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data || error.message;
+        res.status(error.response?.status || 500).json({ error: errorMessage });
+      } else {
+        const errorMessage = (error as Error).message;
+        res.status(500).json({ error: errorMessage });
+      }
     }
   }
 
@@ -94,8 +99,13 @@ export class AuthController {
       }
       this.authenticateCallback(req, res, profile)
     } catch (error) {
-      const errorMessage = (error as Error).message
-      res.status(500).json({ error: errorMessage })
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data || error.message;
+        res.status(error.response?.status || 500).json({ error: errorMessage });
+      } else {
+        const errorMessage = (error as Error).message;
+        res.status(500).json({ error: errorMessage });
+      }
     }
   }
 
