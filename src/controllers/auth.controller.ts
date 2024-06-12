@@ -80,14 +80,14 @@ export class AuthController {
 
   public authenticateKakao = async (req: Request, res: Response) => {
     try {
-      const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token', qs.stringify({
-        code: req.query.code as string,
-        client_id: process.env.KAKAO_CLIENT_ID,
-        client_secret: process.env.KAKAO_CLIENT_SECRET,
-        redirect_uri: process.env.KAKAO_CALLBACK_URL,
-        grant_type: 'authorization_code'
-      }), {
-        headers: { 'Content-Type': 'application/json;charset=utf-8' }
+      const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token'
+        + `${encodeURIComponent('?code')}=${encodeURIComponent(req.query.code as string)}`
+        + `${encodeURIComponent('&client_id')}=${encodeURIComponent(process.env.KAKAO_CLIENT_ID || '')}`
+        + `${encodeURIComponent('&client_secret')}=${encodeURIComponent(process.env.KAKAO_CLIENT_SECRET || '')}`
+        + `${encodeURIComponent('&redirect_uri')}=${encodeURIComponent(process.env.KAKAO_CALLBACK_URL || '')}`
+        + encodeURIComponent('&grant_type=authorization_code'),
+        {
+        headers: { 'Content-Type': 'application/json' }
       })
       console.log(tokenResponse)
       const profileResponse = await axios.get(`https://kapi.kakao.com/v2/user/me`, {
