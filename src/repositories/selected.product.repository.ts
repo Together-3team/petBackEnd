@@ -35,17 +35,21 @@ export class SelectedProductRepository {
     return this.selectedProductRepo.save({...selectedProductData, id})
   }
 
+  public updateSelectedProductOrigin = (selectedProductData: SelectedProduct): Promise<SelectedProduct> => {
+    return this.selectedProductRepo.save(selectedProductData)
+  }
+
   public updateStatus = async (fromStatus: number, toStatus: number, user: User): Promise<SelectedProduct[]> => {
     const selectedProducts: SelectedProduct[] = await this.selectedProductRepo.findBy({user: {id: user.id}, status: fromStatus})
     let result: SelectedProduct[] = []
-    selectedProducts.forEach(async x => {
+    for (const x of selectedProducts) {
       const y = await this.findSelectedProductByOptionCombinationIdAndStatus(x.optionCombination.id, toStatus, x.user)
       if (y) {
         result.push(await this.selectedProductRepo.save({...y, quantity: y.quantity + x.quantity}))
         await this.selectedProductRepo.delete({id: x.id})
       }
       else result.push(await this.selectedProductRepo.save({...x, status: toStatus}))
-    })
+    }
     return result
   }
 

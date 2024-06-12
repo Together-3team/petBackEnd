@@ -22,7 +22,7 @@ export class PaymentController {
         if (status !== 'DONE') return res.status(400).json({ "result": "fail" })
         console.log('start');
         const paymentComplete = await this.paymentService.changedStatus(orderId);
-        console.log(paymentComplete);
+        await this.paymentService.createGroupBuying(paymentComplete);
       }
       return res.status(200).send({ "result": "finish" })
     } catch (error) {

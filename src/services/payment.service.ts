@@ -3,6 +3,7 @@ import axios from 'axios'
 import { PaymentRequestDto } from '../dtos'
 import { Purchase } from '../entities'
 import { InsertResult } from 'typeorm'
+import { GroupBuying } from '../entities/group.buying.entity'
 
 export class PaymentService {
   private paymentRepository: PaymentRepository
@@ -26,11 +27,37 @@ export class PaymentService {
     }
   }
 
-  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<InsertResult> => {
+  public createGroupBuying = async (paymentComplete: Purchase): Promise<void> => {
+    try {
+      const selectedProducts = paymentComplete.selectedProducts;
+
+      if (!selectedProducts || selectedProducts.length === 0) {
+        throw new Error('No selected products found');
+      }
+
+      for (const selectedProduct of selectedProducts) {
+        const newGroupBuying = new GroupBuying();
+        newGroupBuying.status = 0; // Example status, change as needed
+        newGroupBuying.selectedProducts = [selectedProduct];
+        await this.paymentRepository.createGroupBuying(newGroupBuying)
+
+        selectedProduct.groupBuying = newGroupBuying;
+        await this.selectedPaymentRepository.updateSelectedProductOrigin(selectedProduct);
+      }
+
+    } catch (error) {
+      console.error(error);
+      throw new Error('createGroupBuyingError');
+    }
+  }
+
+  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<Purchase> => {
 
     const selectedProductList = await Promise.all((paymentRequestDto?.selectedProductIds?.split(',') ?? []).map(async (productId) => {
       return await this.selectedPaymentRepository.findSelectedProductById(Number(productId));
     }));
+
+    console.log('Selected Products:', selectedProductList);
 
     const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
 
@@ -52,6 +79,8 @@ export class PaymentService {
     }
 
     return await this.paymentRepository.create(newPurchase);
+
+
   }
 
   public paymentsConfirm = async (amount: number | undefined, orderId: string | undefined, paymentKey: string | undefined): Promise<void> => {
