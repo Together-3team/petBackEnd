@@ -1,3 +1,4 @@
+import { IsInt } from "class-validator"
 import { Product } from "../../entities"
 
 /**
@@ -7,6 +8,8 @@ import { Product } from "../../entities"
  *     ZzimResponseDto:
  *       type: object
  *       properties:
+ *         id:
+ *           type: integer
  *         product:
  *           $ref: '#/components/schemas/ProductList'
  *     ZzimResponseListDto:
@@ -15,5 +18,8 @@ import { Product } from "../../entities"
  *         $ref: '#/components/schemas/ZzimResponseDto'
  */
 export class ZzimResponseDto {
+  @IsInt()
+  id!: number
+
   product!: Product
 }
