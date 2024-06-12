@@ -61,7 +61,7 @@ export class Purchase {
     @ManyToOne(() => User, user => user)
     user?: User
 
-    @OneToMany(() => SelectedProduct, selectedProduct => selectedProduct.id)
+    @OneToMany(() => SelectedProduct, selectedProduct => selectedProduct.purchase, { cascade: true })
     selectedProducts?: SelectedProduct[];
 
     @Column({ type: 'varchar', length: 30, unique: true })
