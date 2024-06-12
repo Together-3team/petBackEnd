@@ -42,6 +42,7 @@ export class PaymentService {
         await this.paymentRepository.createGroupBuying(newGroupBuying)
 
         selectedProduct.groupBuying = newGroupBuying;
+        selectedProduct.status = 2;
         await this.selectedPaymentRepository.updateSelectedProductOrigin(selectedProduct);
       }
 

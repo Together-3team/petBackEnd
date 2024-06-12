@@ -61,6 +61,12 @@ export class OptionCombination {
   createdAt?: Timestamp;
 
   /**
+   * 재고
+   */
+  @Column({ type: 'int' })
+  amount?: number;
+
+  /**
    * 상품 참조 키
    */
   @ManyToOne(() => Product, product => product.optionCombinations, { nullable: true })
