@@ -61,7 +61,7 @@ export class SelectedProduct {
     @JoinColumn()
     user: User
 
-    @ManyToOne(() => Purchase, {eager: true})
+    @ManyToOne(() => Purchase, purchase => purchase.selectedProducts, { onDelete: 'CASCADE'})
     @JoinColumn({name: 'orderId', referencedColumnName: 'orderId'})
     purchase?: Purchase
 

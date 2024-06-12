@@ -12,7 +12,6 @@ export class PaymentRepository {
 
   public updatePurchase = async (orderId: string, status: number): Promise<Purchase> => {
     try {
-      console.log(orderId);
       const purchase = await this.purchaseRepository.findOne({ where: { orderId: orderId } })
       console.log(purchase);
 

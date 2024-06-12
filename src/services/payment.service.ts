@@ -19,7 +19,6 @@ export class PaymentService {
 
   public changedStatus = async (orderId: string): Promise<Purchase> => {
     try {
-      console.log(orderId);
       return await this.paymentRepository.updatePurchase(orderId, 1);
     } catch (error) {
       console.error(error);
