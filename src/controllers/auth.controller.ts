@@ -58,6 +58,7 @@ export class AuthController {
       }), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
+      console.log(tokenResponse)
       const profileResponse = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokenResponse.data.access_token}`)
       const profile: ProfileDto = {
         snsId: profileResponse.data.id,
@@ -86,8 +87,9 @@ export class AuthController {
         redirect_uri: process.env.KAKAO_CALLBACK_URL,
         grant_type: 'authorization_code'
       }), {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/json;charset=utf-8' }
       })
+      console.log(tokenResponse)
       const profileResponse = await axios.get(`https://kapi.kakao.com/v2/user/me`, {
         headers: { 'Authorization': `Bearer ${tokenResponse.data.access_token}`}
       })
