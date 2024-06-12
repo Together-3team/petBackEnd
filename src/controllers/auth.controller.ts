@@ -83,7 +83,6 @@ export class AuthController {
       const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token'
         + `?${encodeURIComponent('code')}=${encodeURIComponent(req.query.code as string)}`
         + `&${encodeURIComponent('client_id')}=${encodeURIComponent(process.env.KAKAO_CLIENT_ID || '')}`
-        + `&${encodeURIComponent('client_secret')}=${encodeURIComponent(process.env.KAKAO_CLIENT_SECRET || '')}`
         + `&${encodeURIComponent('redirect_uri')}=${encodeURIComponent(process.env.KAKAO_CALLBACK_URL || '')}`
         + `&${encodeURIComponent('grant_type')}=${encodeURIComponent('authorization_code')}`,
         {
