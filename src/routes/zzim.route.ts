@@ -26,7 +26,7 @@ const zzimController = new ZzimController()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ZzimList'
+ *               $ref: '#/components/schemas/ZzimResponseListDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
@@ -45,18 +45,14 @@ ZzimRouter.get('/', passport.authenticate('jwt', { session: false }), zzimContro
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               productId:
- *                 type: integer
- *                 description: 상품 ID
+ *             $ref: '#/components/schemas/ZzimCreateRequestDto'
  *     responses:
  *       200:
  *         description: 찜 상세 정보
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Zzim'
+ *               $ref: '#/components/schemas/ZzimResponseDto'
  *       500:
  *         description: Internal server error
  */
@@ -83,7 +79,7 @@ ZzimRouter.post('/', passport.authenticate('jwt', { session: false }), zzimContr
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Zzim'
+ *               $ref: '#/components/schemas/ZzimResponseDto'
  *       500:
  *         description: Internal server error
  */

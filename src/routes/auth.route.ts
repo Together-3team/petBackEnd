@@ -1,7 +1,6 @@
 import express, { Router } from 'express'
 import { AuthController } from '../controllers'
 import passport from 'passport'
-import cors from 'cors'
 
 const AuthRouter: Router = express.Router()
 const authController = new AuthController()
@@ -19,8 +18,8 @@ const authController = new AuthController()
  *           application/json:
  *             schema:
  *               oneOf:
- *                  - $ref: '#/components/schemas/AuthRegisteredResponseDto'
- *                  - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
+ *                 - $ref: '#/components/schemas/AuthRegisteredResponseDto'
+ *                 - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */
@@ -40,8 +39,8 @@ AuthRouter.get('/google/callback', authController.authenticateGoogle)
  *           application/json:
  *             schema:
  *               oneOf:
- *                  - $ref: '#/components/schemas/AuthRegisteredResponseDto'
- *                  - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
+ *                 - $ref: '#/components/schemas/AuthRegisteredResponseDto'
+ *                 - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
  *       404:
  *         description: 로그인에 실패했습니다
  */

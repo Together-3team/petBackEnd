@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 import { config } from 'dotenv'
 import { UserRepository } from '../repositories'
 import { AuthNotRegisteredResponseDto, AuthRegisteredResponseDto, ProfileDto, TokenResponseDto, UserResponseDto } from '../dtos'
+import axios from 'axios'
+import qs from 'querystring'
 config()
 
 export class AuthController {
@@ -16,7 +18,7 @@ export class AuthController {
     return { accessToken, refreshToken }
   }
 
-  public authenticateCallback = (req: Request, res: Response) => async (err: Error, profile: ProfileDto | false, info: any) => {
+  public authenticateCallback = async (req: Request, res: Response, profile: ProfileDto) => {
     try {
       if (!profile) res.status(404).json({message: '로그인에 실패했습니다'})
       else {
@@ -44,12 +46,47 @@ export class AuthController {
     }
   }
 
-  public authenticateGoogle = (req: Request, res: Response) => {
-    passport.authenticate('google', { session: false }, this.authenticateCallback(req, res))(req, res)
+  public authenticateGoogle = async (req: Request, res: Response) => {
+    if (req.query.error === 'access_denied') return res.status(404).json({ message: "google OAuth2 로그인 액세스 요청을 거부하였습니다"})
+    const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', qs.stringify({
+      code: req.query.code as string,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: process.env.GOOGLE_CALLBACK_URL,
+      grant_type: 'authorization_code'
+    }), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    const profileResponse = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokenResponse.data.access_token}`)
+    const profile: ProfileDto = {
+      snsId: profileResponse.data.id,
+      email: profileResponse.data.email,
+      profileImage: profileResponse.data.picture,
+      provider: 'google'
+    }
+    this.authenticateCallback(req, res, profile)
   }
 
-  public authenticateKakao = (req: Request, res: Response) => {
-    passport.authenticate('kakao', { session: false }, this.authenticateCallback(req, res))(req, res)
+  public authenticateKakao = async (req: Request, res: Response) => {
+    const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token', qs.stringify({
+      code: req.query.code as string,
+      client_id: process.env.KAKAO_CLIENT_ID,
+      client_secret: process.env.KAKAO_CLIENT_SECRET,
+      redirect_uri: process.env.KAKAO_CALLBACK_URL,
+      grant_type: 'authorization_code'
+    }), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    const profileResponse = await axios.get(`https://kapi.kakao.com/v2/user/me`, {
+      headers: { 'Authorization': `Bearer ${tokenResponse.data.access_token}`}
+    })
+    const profile: ProfileDto = {
+      snsId: profileResponse.data.id,
+      email: profileResponse.data.kakao_account.email,
+      profileImage: profileResponse.data.properties.profile_image,
+      provider: 'kakao'
+    }
+    this.authenticateCallback(req, res, profile)
   }
 
   public register = async (req: Request, res: Response) => {
@@ -65,6 +102,7 @@ export class AuthController {
         isSubscribedToPromotions: req.body.isSubscribedToPromotions
       })
       const response: TokenResponseDto = this.login(newUser.id)
+      res.redirect
       res.status(201).json(response)
     } catch (error) {
       const errorMessage = (error as Error).message
