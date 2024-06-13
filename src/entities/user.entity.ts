@@ -73,6 +73,9 @@ export class User {
     @Column('boolean')
     isSubscribedToPromotions: boolean = false
 
+    @Column('tinyint')
+    preferredPet: number = 0
+
     @CreateDateColumn()
     createdAt!: Timestamp
     

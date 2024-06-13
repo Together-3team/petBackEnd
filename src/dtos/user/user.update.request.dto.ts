@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString, IsUrl, Matches } from "class-validator"
+import { IsBoolean, IsInt, IsOptional, IsString, IsUrl, Matches } from "class-validator"
 
 /**
  * @swagger
@@ -22,6 +22,9 @@ import { IsBoolean, IsOptional, IsString, IsUrl, Matches } from "class-validator
  *         isSubscribedToPromotions:
  *           type: boolean
  *           description: 광고성 정보 수신 여부
+ *         preferredPet:
+ *           type: number
+ *           description: 선호하는 반려동물
  */
 export class UserUpdateRequestDto {
   @IsOptional()
@@ -40,4 +43,8 @@ export class UserUpdateRequestDto {
   @IsOptional()
   @IsBoolean()
   isSubscribedToPromotions?: boolean
+
+  @IsOptional()
+  @IsInt()
+  preferredPet?: number
 }

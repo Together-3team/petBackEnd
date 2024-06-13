@@ -69,6 +69,10 @@ export class UserResponseDto {
   @IsBoolean()
   isSubscribedToPromotions!: boolean
 
+  @Expose()
+  @IsInt()
+  preferredPet!: number
+
   @Exclude()
   @IsDate()
   createdAt!: Timestamp
