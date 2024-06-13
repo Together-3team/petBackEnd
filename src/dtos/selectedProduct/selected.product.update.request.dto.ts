@@ -14,7 +14,7 @@ import { IsInt } from "class-validator"
  *           type: integer
  *           description: 수량
  */
-export class UpdateSelectedProductDto {
+export class SelectedProductUpdateRequestDto {
   @IsInt()
   status?: number
 

@@ -1,8 +1,7 @@
 import { DeleteResult } from 'typeorm'
-import { CreateSelectedProductDto, OptionCombinationResponseDto, ProductResponseDto, UpdateSelectedProductDto } from '../dtos'
+import { OptionCombinationResponseDto, ProductResponseDto, SelectedProductCreateRequestDto, SelectedProductResponseDto, SelectedProductUpdateRequestDto } from '../dtos'
 import { SelectedProduct, User } from '../entities'
 import { SelectedProductRepository } from '../repositories'
-import { SelectedProductResponseDto } from '../dtos/selectedProduct'
 import { plainToInstance } from 'class-transformer'
 
 export class SelectedProductService {
@@ -36,13 +35,13 @@ export class SelectedProductService {
     return orders.map(order => this.entityToResponseDto(order))
   }
 
-  public addToOrder = async (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProductResponseDto> => {
+  public addToOrder = async (selectedProductData: SelectedProductCreateRequestDto, user: User): Promise<SelectedProductResponseDto> => {
     const selectedProduct = await this.selectedProductRepository.findSelectedProductByOptionCombinationIdAndStatus(selectedProductData.optionCombinationId, 0, user)
     if (selectedProduct) return this.entityToResponseDto(await this.selectedProductRepository.updateSelectedProduct(selectedProduct.id, {...selectedProduct, quantity: selectedProduct.quantity + selectedProductData.quantity}))
     return this.entityToResponseDto(await this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 0))
   }
 
-  public updateSelectedProduct = (selectedProductId: string, SelectedProductData: UpdateSelectedProductDto): Promise<SelectedProduct> => {
+  public updateSelectedProduct = (selectedProductId: string, SelectedProductData: SelectedProductUpdateRequestDto): Promise<SelectedProduct> => {
     return this.selectedProductRepository.updateSelectedProduct(parseInt(selectedProductId), SelectedProductData)
   }
 

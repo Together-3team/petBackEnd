@@ -17,7 +17,7 @@ import { IsInt } from "class-validator"
  *           type: integer
  *           description: 수량
  */
-export class CreateSelectedProductDto {
+export class SelectedProductCreateRequestDto {
   @IsInt()
   optionCombinationId!: number
 

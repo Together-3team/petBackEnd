@@ -1,7 +1,7 @@
 import { User, SelectedProduct, OptionCombination } from '../entities'
 import { AppDataSource } from '../config/typeorm'
-import { CreateSelectedProductDto, UpdateSelectedProductDto } from '../dtos'
 import { DeleteResult } from 'typeorm'
+import { SelectedProductCreateRequestDto, SelectedProductUpdateRequestDto } from '../dtos/selectedProduct'
 
 export class SelectedProductRepository {
   private selectedProductRepo = AppDataSource.getRepository(SelectedProduct)
@@ -39,7 +39,7 @@ export class SelectedProductRepository {
     })
   }
 
-  public createSelectedProduct = async (selectedProductData: CreateSelectedProductDto, user: User, status: number): Promise<SelectedProduct> => {
+  public createSelectedProduct = async (selectedProductData: SelectedProductCreateRequestDto, user: User, status: number): Promise<SelectedProduct> => {
     const optionCombination = await this.optionCombinationRepo.findOneOrFail({where: {id: selectedProductData.optionCombinationId}})
     const newSelectedProduct = this.selectedProductRepo.create({optionCombination, user, status, quantity: selectedProductData.quantity})
     const result = await this.selectedProductRepo.insert(newSelectedProduct)
@@ -50,7 +50,7 @@ export class SelectedProductRepository {
       }})
   }
 
-  public updateSelectedProduct = (id: number, selectedProductData: UpdateSelectedProductDto): Promise<SelectedProduct> => {
+  public updateSelectedProduct = (id: number, selectedProductData: SelectedProductUpdateRequestDto): Promise<SelectedProduct> => {
     return this.selectedProductRepo.save({...selectedProductData, id})
   }
 

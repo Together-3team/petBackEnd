@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { SelectedProductService } from '../services'
-import { CreateSelectedProductDto, UpdateSelectedProductDto } from '../dtos'
 import { User } from '../entities'
+import { SelectedProductCreateRequestDto, SelectedProductUpdateRequestDto } from '../dtos/selectedProduct'
 
 export class SelectedProductController {
   private selectedProductService: SelectedProductService
@@ -56,7 +56,7 @@ export class SelectedProductController {
   // }
   
   public addToOrder = async (req: Request, res: Response): Promise<void> => {
-    const rawData: CreateSelectedProductDto = req.body
+    const rawData: SelectedProductCreateRequestDto = req.body
     const user = req.user as User
     try {
       const selectedProduct = await this.selectedProductService.addToOrder(rawData, user)
@@ -80,7 +80,7 @@ export class SelectedProductController {
 
   public updateSelectedProduct = async (req: Request, res: Response): Promise<void> => {
     const selectedProductId = req.params.id
-    const selectedProductData: UpdateSelectedProductDto = req.body
+    const selectedProductData: SelectedProductUpdateRequestDto = req.body
     const user = req.user as User
     try {
       const selectedProduct = await this.selectedProductService.getSelectedProductById(selectedProductId)

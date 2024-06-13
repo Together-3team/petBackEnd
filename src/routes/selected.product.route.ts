@@ -165,7 +165,7 @@ SelectedProductRouter.put('/:id', passport.authenticate('jwt', { session: false 
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/DeletedResultDto'
+ *               $ref: '#/components/schemas/DeleteResultDto'
  *       500:
  *         description: Internal server error
  */
@@ -185,7 +185,7 @@ SelectedProductRouter.delete('/carts', passport.authenticate('jwt', { session: f
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/DeletedResultDto'
+ *               $ref: '#/components/schemas/DeleteResultDto'
  *       500:
  *         description: Internal server error
  */
@@ -212,7 +212,7 @@ SelectedProductRouter.delete('/orders', passport.authenticate('jwt', { session: 
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/DeletedResultDto'
+ *               $ref: '#/components/schemas/DeleteResultDto'
  *       500:
  *         description: Internal server error
  */

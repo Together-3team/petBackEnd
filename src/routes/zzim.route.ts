@@ -79,7 +79,7 @@ ZzimRouter.post('/', passport.authenticate('jwt', { session: false }), zzimContr
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ZzimResponseDto'
+ *               $ref: '#/components/schemas/DeleteResultDto'
  *       500:
  *         description: Internal server error
  */
