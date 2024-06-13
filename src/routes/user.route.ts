@@ -139,13 +139,13 @@ UserRouter.put('/:id', userController.updateUser)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/DeleteResult'
+ *               $ref: '#/components/schemas/DeletedResultDto'
  *       500:
  *         description: Internal server error
  * 
  * components:
  *   schemas:
- *     DeleteResult:
+ *     DeletedResultDto:
  *       type: object
  *       properties:
  *         raw:

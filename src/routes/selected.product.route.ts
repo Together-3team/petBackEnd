@@ -46,7 +46,7 @@ SelectedProductRouter.get('/', passport.authenticate('jwt', { session: false }),
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProductList'
+ *               $ref: '#/components/schemas/SelectedProductListResponseDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
@@ -66,7 +66,7 @@ SelectedProductRouter.get('/carts', passport.authenticate('jwt', { session: fals
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProductList'
+ *               $ref: '#/components/schemas/SelectedProductListResponseDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
@@ -86,7 +86,7 @@ SelectedProductRouter.get('/orders', passport.authenticate('jwt', { session: fal
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProductList'
+ *               $ref: '#/components/schemas/SelectedProductListResponseDto'
  *       500:
  *         description: Internal server error
  */
@@ -105,14 +105,14 @@ SelectedProductRouter.get('/orders-to-carts', passport.authenticate('jwt', { ses
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CreateSelectedProductDto'
+ *             $ref: '#/components/schemas/SelectedProductCreateRequestDto'
  *     responses:
  *       200:
  *         description: 선택된 상품 정보
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProduct'
+ *               $ref: '#/components/schemas/SelectedProductResponseDto'
  *       500:
  *         description: Internal server error
  */
@@ -138,14 +138,14 @@ SelectedProductRouter.post('/orders', passport.authenticate('jwt', { session: fa
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateSelectedProductDto'
+ *             $ref: '#/components/schemas/SelectedProductUpdateRequestDto'
  *     responses:
  *       200:
  *         description: 선택된 상품
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProduct'
+ *               $ref: '#/components/schemas/SelectedProductResponseDto'
  *       500:
  *         description: Internal server error
  */
@@ -165,7 +165,7 @@ SelectedProductRouter.put('/:id', passport.authenticate('jwt', { session: false 
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProduct'
+ *               $ref: '#/components/schemas/DeletedResultDto'
  *       500:
  *         description: Internal server error
  */
@@ -185,7 +185,7 @@ SelectedProductRouter.delete('/carts', passport.authenticate('jwt', { session: f
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProduct'
+ *               $ref: '#/components/schemas/DeletedResultDto'
  *       500:
  *         description: Internal server error
  */
@@ -212,7 +212,7 @@ SelectedProductRouter.delete('/orders', passport.authenticate('jwt', { session: 
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SelectedProduct'
+ *               $ref: '#/components/schemas/DeletedResultDto'
  *       500:
  *         description: Internal server error
  */

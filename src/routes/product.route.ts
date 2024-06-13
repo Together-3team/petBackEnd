@@ -157,7 +157,7 @@ const productController = new ProductController();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/ProductList'
+ *                 $ref: '#/components/schemas/Product'
  *       500:
  *         description: Internal server error
  */

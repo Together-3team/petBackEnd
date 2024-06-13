@@ -13,11 +13,9 @@ import { GroupBuying } from './group.buying.entity'
  *           type: integer
  *           description: 고유 ID
  *         user:
- *           type: User
- *           description: 사용자
+ *           $ref: '#/components/schemas/User'
  *         optionCombination:
- *           type: OptionCombination
- *           description: 옵션 조합
+ *           $ref: '#/components/schemas/OptionCombination'
  *         quantity:
  *           type: integer
  *           description: 수량
@@ -40,7 +38,7 @@ import { GroupBuying } from './group.buying.entity'
  *         $ref: '#/components/schemas/SelectedProduct'
  */
 
-@Entity('select product')
+@Entity('select_product')
 export class SelectedProduct {
     @PrimaryGeneratedColumn('increment')
     id!: number

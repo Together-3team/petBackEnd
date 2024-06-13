@@ -88,7 +88,6 @@ export class AuthController {
         {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
-      console.log(tokenResponse)
       const profileResponse = await axios.get(`https://kapi.kakao.com/v2/user/me`, {
         headers: { 'Authorization': `Bearer ${tokenResponse.data.access_token}`}
       })

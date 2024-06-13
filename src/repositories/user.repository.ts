@@ -1,8 +1,7 @@
 import { User } from '../entities'
 import { AppDataSource } from '../config/typeorm'
-import { UserCreateRequestDto, UserResponseDto, UserUpdateRequestDto } from '../dtos'
+import { UserCreateRequestDto, UserUpdateRequestDto } from '../dtos'
 import { DeleteResult } from 'typeorm'
-import { plainToInstance } from 'class-transformer'
 
 export class UserRepository {
   private userRepo = AppDataSource.getRepository(User)
@@ -11,31 +10,26 @@ export class UserRepository {
     if (id === undefined) {
       throw new Error('User ID is undefined')
     }
-    const user = this.userRepo.findOneByOrFail({ id })
-    return plainToInstance(UserResponseDto, user)
+    return this.userRepo.findOneByOrFail({ id })
   }
 
-  public findUserBySNS = async (snsId: string, provider: string): Promise<UserResponseDto | null> => {
-    const user = this.userRepo.findOneBy({ snsId, provider })
-    return plainToInstance(UserResponseDto, user)
+  public findUserBySNS = async (snsId: string, provider: string): Promise<User | null> => {
+    return this.userRepo.findOneBy({ snsId, provider })
   }
 
-  public findUserByNickname = async (nickname: string): Promise<UserResponseDto | null> => {
-    const user = this.userRepo.findOneBy({ nickname })
-    return plainToInstance(UserResponseDto, user)
+  public findUserByNickname = async (nickname: string): Promise<User | null> => {
+    return this.userRepo.findOneBy({ nickname })
   }
 
-  public createUser = async (userData: UserCreateRequestDto): Promise<UserResponseDto> => {
+  public createUser = async (userData: UserCreateRequestDto): Promise<User> => {
     const newUser = this.userRepo.create(userData)
     const result = await this.userRepo.insert(newUser)
-    const user = this.userRepo.findOneByOrFail({id: result.identifiers[0].id})
-    return plainToInstance(UserResponseDto, user)
+    return this.userRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 
-  public updateUser = async (id: number, userData: UserUpdateRequestDto): Promise<UserResponseDto> => {
+  public updateUser = async (id: number, userData: UserUpdateRequestDto): Promise<User> => {
     await this.userRepo.save({...userData, id})
-    const user = this.userRepo.findOneByOrFail({ id })
-    return plainToInstance(UserResponseDto, user)
+    return this.userRepo.findOneByOrFail({ id })
   }
 
   public deleteUser = (id: number): Promise<DeleteResult> => {

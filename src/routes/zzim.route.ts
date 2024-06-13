@@ -26,7 +26,7 @@ const zzimController = new ZzimController()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ZzimResponseListDto'
+ *               $ref: '#/components/schemas/ZzimListResponseDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */

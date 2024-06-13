@@ -9,7 +9,12 @@ export class SelectedProductRepository {
 
   
   public findSelectedProductByUser = (user: User): Promise<SelectedProduct[]> => {
-    return this.selectedProductRepo.findBy({user: {id: user.id}})
+    return this.selectedProductRepo.find({
+      relations: ['optionCombination', 'optionCombination.product'],
+      where: {
+        user: {id: user.id}
+      }
+    })
   }
   
   public findSelectedProductById = async (id: number): Promise<SelectedProduct> => {
@@ -17,18 +22,32 @@ export class SelectedProductRepository {
   }
   
   public findSelectedProductByOptionCombinationIdAndStatus = (optionCombinationId: number, status: number, user: User): Promise<SelectedProduct | null> => {
-    return this.selectedProductRepo.findOneBy({optionCombination: {id: optionCombinationId}, status, user: {id: user.id}})
+    return this.selectedProductRepo.findOne({
+      relations: ['optionCombination', 'optionCombination.product'],
+      where: {
+        optionCombination: {id: optionCombinationId}, status, user: {id: user.id}
+      }
+    })
   }
   
   public findSelectedProductsByUserAndStatus = (status: number, user: User): Promise<SelectedProduct[]> => {
-    return this.selectedProductRepo.findBy({status, user: {id: user.id}})
+    return this.selectedProductRepo.find({
+      relations: ['optionCombination', 'optionCombination.product'],
+      where: {
+        status, user: {id: user.id}
+      }
+    })
   }
 
   public createSelectedProduct = async (selectedProductData: CreateSelectedProductDto, user: User, status: number): Promise<SelectedProduct> => {
     const optionCombination = await this.optionCombinationRepo.findOneOrFail({where: {id: selectedProductData.optionCombinationId}})
     const newSelectedProduct = this.selectedProductRepo.create({optionCombination, user, status, quantity: selectedProductData.quantity})
     const result = await this.selectedProductRepo.insert(newSelectedProduct)
-    return this.selectedProductRepo.findOneByOrFail({id: result.identifiers[0].id})
+    return this.selectedProductRepo.findOneOrFail({
+      relations: ['optionCombination', 'optionCombination.product'],
+      where: {
+        id: result.identifiers[0].id
+      }})
   }
 
   public updateSelectedProduct = (id: number, selectedProductData: UpdateSelectedProductDto): Promise<SelectedProduct> => {
@@ -41,7 +60,7 @@ export class SelectedProductRepository {
 
   public updateStatus = async (fromStatus: number, toStatus: number, user: User): Promise<SelectedProduct[]> => {
     const selectedProducts: SelectedProduct[] = await this.selectedProductRepo.findBy({user: {id: user.id}, status: fromStatus})
-    let result: SelectedProduct[] = []
+    var result: SelectedProduct[] = []
     for (const x of selectedProducts) {
       const y = await this.findSelectedProductByOptionCombinationIdAndStatus(x.optionCombination.id, toStatus, x.user)
       if (y) {

@@ -1,7 +1,9 @@
 import { DeleteResult } from 'typeorm'
-import { CreateSelectedProductDto, UpdateSelectedProductDto } from '../dtos'
+import { CreateSelectedProductDto, OptionCombinationResponseDto, ProductResponseDto, UpdateSelectedProductDto } from '../dtos'
 import { SelectedProduct, User } from '../entities'
 import { SelectedProductRepository } from '../repositories'
+import { SelectedProductResponseDto } from '../dtos/selectedProduct'
+import { plainToInstance } from 'class-transformer'
 
 export class SelectedProductService {
   private selectedProductRepository: SelectedProductRepository
@@ -10,7 +12,13 @@ export class SelectedProductService {
     this.selectedProductRepository = new SelectedProductRepository()
   }
 
-  public getSelectedProductByUser = (user: User): Promise<SelectedProduct[]> => {
+  public entityToResponseDto = (selectProduct: SelectedProduct): SelectedProductResponseDto => {
+    const productResponse = plainToInstance(ProductResponseDto, selectProduct.optionCombination.product)
+    const optionCombinationResponse = plainToInstance(OptionCombinationResponseDto, {...selectProduct.optionCombination, product: productResponse})
+    return plainToInstance(SelectedProductResponseDto, {...selectProduct, optionCombination: optionCombinationResponse})
+  }
+
+  public getSelectedProductByUser = async (user: User): Promise<SelectedProduct[]> => {
     return this.selectedProductRepository.findSelectedProductByUser(user)
   }
 
@@ -18,18 +26,20 @@ export class SelectedProductService {
     return this.selectedProductRepository.findSelectedProductById(parseInt(selectedProductId))
   }
 
-  public getCarts = (user: User): Promise<SelectedProduct[]> => {
-    return this.selectedProductRepository.findSelectedProductsByUserAndStatus(0, user)
+  public getCarts = async (user: User): Promise<SelectedProductResponseDto[]> => {
+    const carts = await this.selectedProductRepository.findSelectedProductsByUserAndStatus(1, user)
+    return carts.map(cart => this.entityToResponseDto(cart))
   }
 
-  public getOrders = (user: User): Promise<SelectedProduct[]> => {
-    return this.selectedProductRepository.findSelectedProductsByUserAndStatus(1, user)
+  public getOrders = async (user: User): Promise<SelectedProductResponseDto[]> => {
+    const orders = await this.selectedProductRepository.findSelectedProductsByUserAndStatus(0, user)
+    return orders.map(order => this.entityToResponseDto(order))
   }
 
-  public addToOrder = async (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProduct> => {
-    const selectedProduct = await this.selectedProductRepository.findSelectedProductByOptionCombinationIdAndStatus(selectedProductData.optionCombinationId, 1, user)
-    if (selectedProduct) return this.selectedProductRepository.updateSelectedProduct(selectedProduct.id, {...selectedProduct, quantity: selectedProduct.quantity + selectedProductData.quantity})
-    return this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 1)
+  public addToOrder = async (selectedProductData: CreateSelectedProductDto, user: User): Promise<SelectedProductResponseDto> => {
+    const selectedProduct = await this.selectedProductRepository.findSelectedProductByOptionCombinationIdAndStatus(selectedProductData.optionCombinationId, 0, user)
+    if (selectedProduct) return this.entityToResponseDto(await this.selectedProductRepository.updateSelectedProduct(selectedProduct.id, {...selectedProduct, quantity: selectedProduct.quantity + selectedProductData.quantity}))
+    return this.entityToResponseDto(await this.selectedProductRepository.createSelectedProduct(selectedProductData, user, 0))
   }
 
   public updateSelectedProduct = (selectedProductId: string, SelectedProductData: UpdateSelectedProductDto): Promise<SelectedProduct> => {
@@ -44,7 +54,8 @@ export class SelectedProductService {
     return this.selectedProductRepository.deleteByStatus(parseInt(status), user)
   }
 
-  public updateStatus = (fromStatus: number, toStatus: number, user: User): Promise<SelectedProduct[]> => {
-    return this.selectedProductRepository.updateStatus(fromStatus, toStatus, user)
+  public updateStatus = async (fromStatus: number, toStatus: number, user: User): Promise<SelectedProductResponseDto[]> => {
+    const selectedProducts = await this.selectedProductRepository.updateStatus(fromStatus, toStatus, user)
+    return selectedProducts.map(selectedProduct => this.entityToResponseDto(selectedProduct))
   }
 }

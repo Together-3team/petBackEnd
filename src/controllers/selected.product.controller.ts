@@ -70,7 +70,7 @@ export class SelectedProductController {
   public orderToCart = async (req: Request, res: Response): Promise<void> => {
     const user = req.user as User
     try {
-      const selectedProduct = await this.selectedProductService.updateStatus(1, 0, user)
+      const selectedProduct = await this.selectedProductService.updateStatus(0, 1, user)
       res.json(selectedProduct)
     } catch (error) {
       const errorMessage = (error as Error).message
@@ -114,7 +114,7 @@ export class SelectedProductController {
   public deleteCarts = async (req: Request, res: Response): Promise<void> => {
     const user = req.user as User
     try {
-      const result = await this.selectedProductService.deleteByStatus('0', user)
+      const result = await this.selectedProductService.deleteByStatus('1', user)
       res.json(result)
     } catch (error) {
       const errorMessage = (error as Error).message
@@ -125,7 +125,7 @@ export class SelectedProductController {
   public deleteOrders = async (req: Request, res: Response): Promise<void> => {
     const user = req.user as User
     try {
-      const result = await this.selectedProductService.deleteByStatus('1', user)
+      const result = await this.selectedProductService.deleteByStatus('0', user)
       res.json(result)
     } catch (error) {
       const errorMessage = (error as Error).message

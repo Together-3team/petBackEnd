@@ -12,7 +12,7 @@ import { Product } from "../../entities"
  *           type: integer
  *         product:
  *           $ref: '#/components/schemas/ProductList'
- *     ZzimResponseListDto:
+ *     ZzimListResponseDto:
  *       type: array
  *       items:
  *         $ref: '#/components/schemas/ZzimResponseDto'

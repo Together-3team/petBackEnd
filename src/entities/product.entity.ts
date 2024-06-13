@@ -15,7 +15,7 @@ import { Category } from './category.entity'
  * @swagger
  * components:
  *   schemas:
- *     ProductList:
+ *     Product:
  *       type: object
  *       properties:
  *         id:

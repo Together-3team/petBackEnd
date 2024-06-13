@@ -22,10 +22,8 @@ import { Option, Product, ProductDetail } from '../entities'
  *           type: string
  *           format: date-time
  *           description: 생성일
- *         productId:
- *           type: integer
- *           nullable: true
- *           description: 상품 ID
+ *         product:
+ *           $ref: '#/components/schemas/product'
  */
 
 @Entity()
