@@ -1,7 +1,9 @@
 import { DeleteResult } from 'typeorm'
-import { CreateDeliveryDto, UpdateDeliveryDto } from '../dtos'
 import { Delivery, User } from '../entities'
 import { DeliveryRepository } from '../repositories'
+import { DeliveryCreateRequestDto, DeliveryUpdateRequestDto } from '../dtos'
+import { plainToInstance } from 'class-transformer'
+import { DeliveryResponseDto } from '../dtos/delivery/delivery.response'
 
 export class DeliveryService {
   private deliveryRepository: DeliveryRepository
@@ -10,23 +12,27 @@ export class DeliveryService {
     this.deliveryRepository = new DeliveryRepository()
   }
 
-  public getDeliveryById = (deliveryId: string): Promise<Delivery> => {
-    return this.deliveryRepository.findDeliveryById(parseInt(deliveryId))
+  public getDeliveryById = async (deliveryId: string): Promise<DeliveryResponseDto> => {
+    const delivery = this.deliveryRepository.findDeliveryById(parseInt(deliveryId))
+    return plainToInstance(DeliveryResponseDto, delivery)
   }
 
-  public getDeliveriesByUser = (user: User): Promise<Delivery[]> => {
-    return this.deliveryRepository.findDeliveriesByUser(user)
+  public getDeliveriesByUser = async (user: User): Promise<DeliveryResponseDto[]> => {
+    const deliveries = await this.deliveryRepository.findDeliveriesByUser(user)
+    return deliveries.map(delivery => plainToInstance(DeliveryResponseDto, delivery))
   }
 
-  public createDelivery = (deliveryData: CreateDeliveryDto, user: User): Promise<Delivery> => {
-    return this.deliveryRepository.createDelivery(deliveryData, user)
+  public createDelivery = async (deliveryData: DeliveryCreateRequestDto, user: User): Promise<DeliveryResponseDto> => {
+    const delivery = this.deliveryRepository.createDelivery(deliveryData, user)
+    return plainToInstance(DeliveryResponseDto, delivery)
   }
 
-  public updateDelivery = (deliveryId: string, deliveryData: UpdateDeliveryDto): Promise<Delivery> => {
-    return this.deliveryRepository.updateDelivery(parseInt(deliveryId), deliveryData)
+  public updateDelivery = async (deliveryId: string, deliveryData: DeliveryUpdateRequestDto): Promise<DeliveryResponseDto> => {
+    const delivery = this.deliveryRepository.updateDelivery(parseInt(deliveryId), deliveryData)
+    return plainToInstance(DeliveryResponseDto, delivery)
   }
 
-  public deleteDelivery = (deliveryId: string): Promise<DeleteResult> => {
+  public deleteDelivery = async (deliveryId: string): Promise<DeleteResult> => {
     return this.deliveryRepository.deleteDelivery(parseInt(deliveryId))
   }
 }

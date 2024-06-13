@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import { SelectedProductController } from '../controllers'
 import passport from 'passport'
+import { validateDto } from '../middleware'
+import { SelectedProductCreateRequestDto, SelectedProductUpdateRequestDto } from '../dtos'
 
 const SelectedProductRouter: Router = express.Router()
 const selectedProductController = new SelectedProductController()
@@ -30,7 +32,9 @@ const selectedProductController = new SelectedProductController()
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-SelectedProductRouter.get('/', passport.authenticate('jwt', { session: false }), selectedProductController.getSelectedProducts)
+SelectedProductRouter.get('/',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.getSelectedProducts)
 
 /**
  * @swagger
@@ -50,7 +54,9 @@ SelectedProductRouter.get('/', passport.authenticate('jwt', { session: false }),
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-SelectedProductRouter.get('/carts', passport.authenticate('jwt', { session: false }), selectedProductController.getCarts)
+SelectedProductRouter.get('/carts',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.getCarts)
 
 /**
  * @swagger
@@ -70,7 +76,9 @@ SelectedProductRouter.get('/carts', passport.authenticate('jwt', { session: fals
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-SelectedProductRouter.get('/orders', passport.authenticate('jwt', { session: false }), selectedProductController.getOrders)
+SelectedProductRouter.get('/orders',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.getOrders)
 
 /**
  * @swagger
@@ -90,7 +98,9 @@ SelectedProductRouter.get('/orders', passport.authenticate('jwt', { session: fal
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.get('/orders-to-carts', passport.authenticate('jwt', { session: false }), selectedProductController.orderToCart)
+SelectedProductRouter.get('/orders-to-carts',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.orderToCart)
 
 /**
  * @swagger
@@ -116,7 +126,10 @@ SelectedProductRouter.get('/orders-to-carts', passport.authenticate('jwt', { ses
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.post('/orders', passport.authenticate('jwt', { session: false }), selectedProductController.addToOrder)
+SelectedProductRouter.post('/orders',
+    passport.authenticate('jwt', { session: false }),
+    validateDto(SelectedProductCreateRequestDto),
+    selectedProductController.addToOrder)
 
 /**
  * @swagger
@@ -149,7 +162,10 @@ SelectedProductRouter.post('/orders', passport.authenticate('jwt', { session: fa
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.put('/:id', passport.authenticate('jwt', { session: false }), selectedProductController.updateSelectedProduct)
+SelectedProductRouter.put('/:id',
+    passport.authenticate('jwt', { session: false }),
+    validateDto(SelectedProductUpdateRequestDto),
+    selectedProductController.updateSelectedProduct)
 
 /**
  * @swagger
@@ -169,7 +185,9 @@ SelectedProductRouter.put('/:id', passport.authenticate('jwt', { session: false 
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.delete('/carts', passport.authenticate('jwt', { session: false }), selectedProductController.deleteCarts)
+SelectedProductRouter.delete('/carts',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.deleteCarts)
 
 /**
  * @swagger
@@ -189,7 +207,9 @@ SelectedProductRouter.delete('/carts', passport.authenticate('jwt', { session: f
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.delete('/orders', passport.authenticate('jwt', { session: false }), selectedProductController.deleteOrders)
+SelectedProductRouter.delete('/orders',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.deleteOrders)
 
 /**
  * @swagger
@@ -216,6 +236,8 @@ SelectedProductRouter.delete('/orders', passport.authenticate('jwt', { session: 
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.delete('/:id', passport.authenticate('jwt', { session: false }), selectedProductController.deleteSelectedProduct)
+SelectedProductRouter.delete('/:id',
+    passport.authenticate('jwt', { session: false }),
+    selectedProductController.deleteSelectedProduct)
 
 export default SelectedProductRouter

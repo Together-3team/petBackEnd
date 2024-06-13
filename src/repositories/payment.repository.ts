@@ -1,6 +1,5 @@
 import { Delivery, Product, Purchase, Review, User } from '../entities'
 import { AppDataSource } from '../config/typeorm'
-import { CreateDeliveryDto } from '../dtos'
 import { InsertResult } from 'typeorm'
 import { GroupBuying } from '../entities/group.buying.entity'
 

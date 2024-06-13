@@ -1,4 +1,4 @@
-import { IsInt } from "class-validator"
+import { IsInt, IsOptional } from "class-validator"
 
 /**
  * @swagger
@@ -15,9 +15,11 @@ import { IsInt } from "class-validator"
  *           description: 수량
  */
 export class SelectedProductUpdateRequestDto {
+  @IsOptional()
   @IsInt()
   status?: number
 
+  @IsOptional()
   @IsInt()
   quantity?: number
 }

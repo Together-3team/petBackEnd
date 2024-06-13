@@ -32,10 +32,6 @@ import { User } from "../entities"
  *         detailedAddress:
  *           type: string
  *           description: 상세 주소
- *         instruction:
- *           type: string
- *           nullable: true
- *           description: 요청 사항
  *         isDefault:
  *           type: boolean
  *           description: 기본 배송지 여부
@@ -83,16 +79,13 @@ export class Delivery {
     @Column('varchar', {length: 30})
     detailedAddress: string
 
-    @Column('varchar', {length: 30, nullable: true})
-    instruction?: string
-
     @Column('boolean')
     isDefault: boolean = false
 
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => User, {eager: true, onDelete: 'CASCADE'})
+    @ManyToOne(() => User, { eager: true, onDelete: 'CASCADE' })
     @JoinColumn()
     user: User
 

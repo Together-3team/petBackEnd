@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import { AuthController } from '../controllers'
 import passport from 'passport'
+import { validateDto } from '../middleware'
+import { RegisterRequestDto } from '../dtos'
 
 const AuthRouter: Router = express.Router()
 const authController = new AuthController()
@@ -69,7 +71,9 @@ AuthRouter.get('/kakao/callback', authController.authenticateKakao)
  *       404:
  *         description: 로그인에 실패했습니다
  */
-AuthRouter.post('/register', authController.register)
+AuthRouter.post('/register',
+    validateDto(RegisterRequestDto),
+    authController.register)
 
 /**
  * @swagger

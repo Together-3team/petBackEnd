@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import { ZzimController } from '../controllers'
 import passport from 'passport'
+import { validateDto } from '../middleware'
+import { ZzimCreateRequestDto } from '../dtos'
 
 const ZzimRouter: Router = express.Router()
 const zzimController = new ZzimController()
@@ -30,7 +32,9 @@ const zzimController = new ZzimController()
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-ZzimRouter.get('/', passport.authenticate('jwt', { session: false }), zzimController.getZzimsByUser)
+ZzimRouter.get('/',
+    passport.authenticate('jwt', { session: false }),
+    zzimController.getZzimsByUser)
 
 /**
  * @swagger
@@ -56,7 +60,10 @@ ZzimRouter.get('/', passport.authenticate('jwt', { session: false }), zzimContro
  *       500:
  *         description: Internal server error
  */
-ZzimRouter.post('/', passport.authenticate('jwt', { session: false }), zzimController.createZzim)
+ZzimRouter.post('/',
+    passport.authenticate('jwt', { session: false }),
+    validateDto(ZzimCreateRequestDto),
+    zzimController.createZzim)
 
 /**
  * @swagger
@@ -83,6 +90,8 @@ ZzimRouter.post('/', passport.authenticate('jwt', { session: false }), zzimContr
  *       500:
  *         description: Internal server error
  */
-ZzimRouter.delete('/:id', passport.authenticate('jwt', { session: false }), zzimController.deleteZzim)
+ZzimRouter.delete('/:id',
+    passport.authenticate('jwt', { session: false }),
+    zzimController.deleteZzim)
 
 export default ZzimRouter

@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import { UserController } from '../controllers'
 import passport from 'passport'
+import { validateDto } from '../middleware'
+import { UserUpdateRequestDto } from '../dtos'
 
 const UserRouter: Router = express.Router()
 const userController = new UserController()
@@ -30,7 +32,9 @@ const userController = new UserController()
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-UserRouter.get('/me', passport.authenticate('jwt', { session: false }), userController.getMe)
+UserRouter.get('/me',
+    passport.authenticate('jwt', { session: false }),
+    userController.getMe)
 
 /**
  * @swagger
@@ -62,7 +66,8 @@ UserRouter.get('/me', passport.authenticate('jwt', { session: false }), userCont
  *       500:
  *         description: 잘못된 입력입니다
  */
-UserRouter.post('/verify-nickname', userController.verifyNickname)
+UserRouter.post('/verify-nickname',
+    userController.verifyNickname)
 
 /**
  * @swagger
@@ -87,7 +92,8 @@ UserRouter.post('/verify-nickname', userController.verifyNickname)
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
-UserRouter.get('/:id', userController.getUser)
+UserRouter.get('/:id',
+    userController.getUser)
 
 /**
  * @swagger
@@ -118,7 +124,9 @@ UserRouter.get('/:id', userController.getUser)
  *       500:
  *         description: Internal server error
  */
-UserRouter.put('/:id', userController.updateUser)
+UserRouter.put('/:id',
+    validateDto(UserUpdateRequestDto),
+    userController.updateUser)
 
 /**
  * @swagger
@@ -157,6 +165,7 @@ UserRouter.put('/:id', userController.updateUser)
  *           type: integer
  *           description: Number of rows affected
  */
-UserRouter.delete('/:id', userController.deleteUser)
+UserRouter.delete('/:id',
+    userController.deleteUser)
 
 export default UserRouter

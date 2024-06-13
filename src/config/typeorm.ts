@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm"
 import { config } from "dotenv"
+import { Subscriber } from "./subscriber"
 config()
 
 export const AppDataSource = new DataSource({
@@ -11,5 +12,6 @@ export const AppDataSource = new DataSource({
     database: process.env.MYSQL_DATABASE,
     logging: false,
     synchronize: true,
-    entities: ['src/entities/*.ts']
+    entities: ['src/entities/*.ts'],
+    subscribers: [Subscriber]
 })

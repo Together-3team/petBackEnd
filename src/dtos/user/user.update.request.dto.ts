@@ -1,4 +1,4 @@
-import { IsBoolean, IsString, IsUrl, Matches } from "class-validator"
+import { IsBoolean, IsOptional, IsString, IsUrl, Matches } from "class-validator"
 
 /**
  * @swagger
@@ -24,16 +24,20 @@ import { IsBoolean, IsString, IsUrl, Matches } from "class-validator"
  *           description: 광고성 정보 수신 여부
  */
 export class UserUpdateRequestDto {
+  @IsOptional()
   @IsString()
   nickname?: string
 
+  @IsOptional()
   @IsString()
   @Matches(/^010-\d{4}-\d{4}$/, {message: 'phoneNumber must be a valid Korean phone number (010-XXXX-XXXX)'})
   phoneNumber?: string
 
+  @IsOptional()
   @IsUrl()
   profileImage?: string
 
+  @IsOptional()
   @IsBoolean()
   isSubscribedToPromotions?: boolean
 }
