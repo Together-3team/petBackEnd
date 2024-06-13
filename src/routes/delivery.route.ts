@@ -16,6 +16,28 @@ const deliveryController = new DeliveryController()
 
 /**
  * @swagger
+ * /deliveries/default:
+ *   get:
+ *     summary: 기본 배송지 조회
+ *     tags: [Deliveries]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 배송지
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeliveryResponseDto'
+ *       404:
+ *         description: 존재하지 않는 사용자입니다
+ */
+deliveryRouter.get('/default',
+    passport.authenticate('jwt', { session: false }),
+    deliveryController.getDefaultDelivery)
+    
+/**
+ * @swagger
  * /deliveries/{id}:
  *   get:
  *     summary: 배송지 상세 정보

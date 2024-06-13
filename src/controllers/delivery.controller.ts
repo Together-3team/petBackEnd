@@ -33,6 +33,17 @@ export class DeliveryController {
     }
   }
   
+  public getDefaultDelivery = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const delivery = await this.deliveryService.getDefaultDelivery(user)
+      res.json(delivery)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+  
   public createDelivery = async (req: Request, res: Response): Promise<void> => {
     const deliveryData: DeliveryCreateRequestDto = req.body
     const user = req.user as User

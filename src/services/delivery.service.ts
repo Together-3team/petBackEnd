@@ -22,6 +22,11 @@ export class DeliveryService {
     return deliveries.map(delivery => plainToInstance(DeliveryResponseDto, delivery))
   }
 
+  public getDefaultDelivery = async (user: User): Promise<DeliveryResponseDto | null> => {
+    const delivery = await this.deliveryRepository.findDefaultDelivery(user)
+    return delivery ? plainToInstance(DeliveryResponseDto, delivery) : null
+  }
+
   public createDelivery = async (deliveryData: DeliveryCreateRequestDto, user: User): Promise<DeliveryResponseDto> => {
     const delivery = this.deliveryRepository.createDelivery(deliveryData, user)
     return plainToInstance(DeliveryResponseDto, delivery)

@@ -22,6 +22,10 @@ export class DeliveryRepository {
     return this.deliveryRepo.findBy({user: {id: user.id}})
   }
 
+  public findDefaultDelivery = (user: User): Promise<Delivery | null> => {
+    return this.deliveryRepo.findOneBy({user: {id: user.id}, isDefault: true})
+  }
+
   public createDelivery = async (deliveryData: DeliveryCreateRequestDto, user: User): Promise<Delivery> => {
     const newDelivery = this.deliveryRepo.create({...deliveryData, user})
     if (newDelivery.isDefault) await this.removeDefault(user)
