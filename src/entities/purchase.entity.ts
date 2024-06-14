@@ -65,12 +65,10 @@ export class Purchase {
   @Column({ type: 'varchar', length: 30, unique: true })
   orderId!: string;
 
-  @Column({ type: 'varchar', length: 30, unique: true })
-  paymentKey!: string;
-  
-  @Column({ type: 'tinyint' })
-  paymentStatus: number = 0;    
-  
-  @Column({ type: 'varchar', length: 30, nullable: true })
-  deliveryMessage?: string;    
+    @Column({ type: 'varchar', length: 30, unique: true })
+    paymentKey?: string;
+    
+    @Column({ type: 'tinyint' })
+    paymentStatus: number = 0;
+
 }

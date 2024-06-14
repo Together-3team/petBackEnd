@@ -17,9 +17,6 @@ export class PaymentRequestDto {
   @IsNumber()
   amount?: number;
 
-  @IsNumber()
-  discount?: number;
-
   @IsNotEmpty()
   @IsString()
   orderId?: string;
