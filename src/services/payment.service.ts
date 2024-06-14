@@ -90,7 +90,7 @@ export class PaymentService {
       createdAt: new Date(), // Set to current date or any valid Date object
       combinationPrice: product.optionCombination?.combinationPrice ?? 0,
       deliveryCompany: '',
-      optionCombinationName: product.optionCombination?.combinationName ?? '',
+      combinationName: product.optionCombination?.combinationName ?? '',
       originalPrice: product.optionCombination?.product?.originalPrice ?? 0,
       price: product.optionCombination?.product?.price ?? 0,
       quantity: product.quantity,
@@ -99,7 +99,7 @@ export class PaymentService {
       title: product.optionCombination?.product?.title ?? '',
       trackingNumber: '',
       user: user,
-    } as PurchaseProduct; // Explicitly type-cast
+    } as unknown as PurchaseProduct; // Explicitly type-cast
   }
 
   public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<Purchase> => {
@@ -118,6 +118,7 @@ export class PaymentService {
     for (const product of selectedProductList) {
 
       const newPurchaseProduct = await this.toPurchaseProduct(product, user);
+
 
       await this.paymentRepository.createPurchaseProduct(newPurchaseProduct);
 

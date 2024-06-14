@@ -17,6 +17,7 @@ export class PurchaseRepository {
   }
 
   public createPurchase = async (purchaseData: PurchaseCreateRequestDto, user: User): Promise<Purchase> => {
+    // @ts-ignore
     const newPurchase = this.purchaseRepo.create({
       user,
       delivery: {id: purchaseData.deliveryId},
@@ -26,7 +27,7 @@ export class PurchaseRepository {
     })
     const result = await this.purchaseRepo.insert(newPurchase)
     const purchase = await this.purchaseRepo.findOneByOrFail({id: result.identifiers[0].id})
-    purchaseData.selectedProductIds.forEach(async id => {
+    for (const id of purchaseData.selectedProductIds) {
       const selectedProduct = await this.selectedProductRepo.findOneOrFail({
         relations: ['optionCombination', 'optionCombination.product'],
         where: {id}
@@ -43,7 +44,7 @@ export class PurchaseRepository {
         thumbNailImage: selectedProduct.optionCombination.product.thumbNailImage
       })
       await this.purchaseProductRepo.insert(newPurchaseProduct)
-    })
+    }
     return this.purchaseRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 

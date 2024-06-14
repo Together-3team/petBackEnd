@@ -51,6 +51,7 @@ export class PaymentRepository {
 
   public createPurchaseProduct = async (newPurchaseProduct: PurchaseProduct): Promise<PurchaseProduct> => {
     try {
+      console.log('newPurchaseProduct :::::: ', newPurchaseProduct);
       return await this.purchaseProductRepository.save(newPurchaseProduct);
     } catch (error) {
 

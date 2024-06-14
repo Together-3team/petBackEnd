@@ -24,7 +24,7 @@ export class PurchaseService {
 
   public getPurchasesByUser = async (user: User): Promise<PurchaseResponseDto[]> => {
     const purchases = await this.purchaseRepository.findPurchasesByUser(user)
-    return purchases.map(purchase => this.entityToResponseDto(purchase))
+    return purchases.map((purchase: Purchase) => this.entityToResponseDto(purchase))
   }
 
   public createPurchase = async (PurchaseData: PurchaseCreateRequestDto, user: User): Promise<PurchaseResponseDto> => {
