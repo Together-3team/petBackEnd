@@ -12,72 +12,65 @@ import { PurchaseProduct } from './purchase.product.entity'
  *         id:
  *           type: integer
  *           description: 고유 ID
+ *         user:
+ *           $ref: '#/components/schemas/User'
  *         delivery:
- *           type: Delivery
- *           description: 배송지
+ *           $ref: '#/components/schemas/Delivery'
+ *         purchaseProducts:
+ *           $ref: '#/components/schemas/PurchaseProductList'
  *         orderId:
  *           type: string
  *           description: 결제 ID
+ *         paymentKey:
+ *           type: string
+ *           description: 결제 키
  *         paymentStatus:
  *           type: integer
  *           description: 결제 상태
- *         deliveryCompany:
+ *         deliveryMessage:
  *           type: string
- *           description: 배송 회사
- *         trackingNumber:
- *           type: string
- *           description: 송장 번호
- *         discountPrice:
- *           type: integer
- *           description: 할인 금액
+ *           description: 배송 메시지
  *         createdAt:
  *           type: string
  *           format: Timestamp
  *           description: 생성일
  *       required:
  *         - id
+ *         - user
  *         - delivery
+ *         - purchaseProducts
  *         - orderId
+ *         - paymentKey
  *         - paymentStatus
- *         - discountPrice
  *         - createdAt
- *     PurchaseList:
- *       type: array
- *       items:
- *         $ref: '#/components/schemas/Purchase'
  */
 
 @Entity('purchase')
 export class Purchase {
-    @PrimaryGeneratedColumn('increment')
-    id!: number
+  @PrimaryGeneratedColumn('increment')
+  id!: number
 
-    @CreateDateColumn()
-    createdAt!: Date | Timestamp
+  @CreateDateColumn()
+  createdAt!: Date | Timestamp
 
-    @ManyToOne(() => Delivery, {eager: true, onDelete: 'CASCADE'})
-    @JoinColumn()
-    delivery?: Delivery
+  @ManyToOne(() => User, { eager: true })
+  user!: User
 
-    @ManyToOne(() => User, user => user)
-    user?: User
+  @ManyToOne(() => Delivery, { eager: true })
+  delivery!: Delivery
 
-    @OneToMany(() => PurchaseProduct, purchaseProduct => purchaseProduct.purchase, { cascade: true })
-    purchaseProducts?: PurchaseProduct[];
+  @OneToMany(() => PurchaseProduct, purchaseProduct => purchaseProduct.purchase, { eager: true, cascade: true })
+  purchaseProducts!: PurchaseProduct[];
 
-    @Column({ type: 'varchar', length: 30, unique: true })
-    orderId?: string;
+  @Column({ type: 'varchar', length: 30, unique: true })
+  orderId!: string;
 
-    @Column({ type: 'varchar', length: 30, unique: true })
-    paymentKey?: string;
-    
-    @Column({ type: 'tinyint' })
-    paymentStatus: number = 0;
-    
-    @Column({ type: 'varchar', length: 20 })
-    deliveryCompany?: string = '';
-    
-    @Column({ type: 'varchar', length: 20 })
-    trackingNumber?: string = '';
-    
+  @Column({ type: 'varchar', length: 30, unique: true })
+  paymentKey!: string;
+  
+  @Column({ type: 'tinyint' })
+  paymentStatus: number = 0;    
+  
+  @Column({ type: 'varchar', length: 30, nullable: true })
+  deliveryMessage?: string;    
 }

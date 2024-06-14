@@ -58,7 +58,6 @@ export class AuthController {
       }), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
-      console.log(tokenResponse)
       const profileResponse = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokenResponse.data.access_token}`)
       const profile: ProfileDto = {
         snsId: profileResponse.data.id,

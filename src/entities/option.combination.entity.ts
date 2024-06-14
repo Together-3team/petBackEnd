@@ -38,36 +38,36 @@ export class OptionCombination {
   * 옵션 조합
   */
   @Column({ type: 'varchar', length: 15 })
-  optionCombination?: string;
+  optionCombination!: string;
 
   /**
    * 조합 가격
    */
   @Column({ type: 'int' })
-  combinationPrice?: number;
+  combinationPrice!: number;
 
   /**
    * 조합 명
    */
   @Column({ type: 'varchar', length: 100 })
-  combinationName?: String;
+  combinationName!: string;
 
   /**
    * 생성일
    */
   @CreateDateColumn()
-  createdAt?: Timestamp;
+  createdAt!: Timestamp;
 
   /**
    * 재고
    */
   @Column({ type: 'int' })
-  amount?: number;
+  amount!: number;
 
   /**
    * 상품 참조 키
    */
   @ManyToOne(() => Product, product => product.optionCombinations, { nullable: true })
-  product?: Product;
+  product!: Product;
 
 }

@@ -1,9 +1,8 @@
 import { DeleteResult } from 'typeorm'
 import { Delivery, User } from '../entities'
 import { DeliveryRepository } from '../repositories'
-import { DeliveryCreateRequestDto, DeliveryUpdateRequestDto } from '../dtos'
+import { DeliveryCreateRequestDto, DeliveryUpdateRequestDto, DeliveryResponseDto } from '../dtos'
 import { plainToInstance } from 'class-transformer'
-import { DeliveryResponseDto } from '../dtos/delivery/delivery.response'
 
 export class DeliveryService {
   private deliveryRepository: DeliveryRepository

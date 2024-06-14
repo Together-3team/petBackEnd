@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { AppDataSource } from './config/typeorm'
 import { setupSwagger } from '../swagger'
-import { UserRouter, ReviewRouter, AuthRouter, ProductRouter, Utility, DeliveryRouter, ZzimRouter, PaymentRouter, SelectedProductRouter } from './routes';
+import { UserRouter, ReviewRouter, AuthRouter, ProductRouter, Utility, DeliveryRouter, ZzimRouter, PaymentRouter, SelectedProductRouter, PurchaseRouter } from './routes';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import './passport';
@@ -42,6 +42,8 @@ app.use('/zzims', ZzimRouter);
 app.use('/payments', PaymentRouter)
 // selecetProduct 라우터 세팅
 app.use('/selected-products', SelectedProductRouter)
+// purchase 라우터 세팅
+app.use('/purchases', PurchaseRouter)
 
 // 기존 라우트 설정
 app.get('/', (req, res) => {
