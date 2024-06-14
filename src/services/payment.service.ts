@@ -4,7 +4,7 @@ import { PaymentRequestDto } from '../dtos'
 import { Purchase, SelectedProduct, User } from '../entities'
 import { InsertResult } from 'typeorm'
 import { GroupBuying } from '../entities'
-import { PurchaseProduct } from '../entities/purchase.product.entity'
+import { PurchaseProduct } from '../entities'
 
 export class PaymentService {
   private paymentRepository: PaymentRepository
@@ -35,7 +35,7 @@ export class PaymentService {
       const purchaseProducts = paymentComplete.purchaseProducts;
 
       if (!purchaseProducts || purchaseProducts.length === 0) {
-        throw new Error('No selected products found');
+        new Error('No selected products found');
       }
 
       for (const purchaseProduct of purchaseProducts) {
@@ -48,10 +48,8 @@ export class PaymentService {
         purchaseProduct.status = 2;
         await this.purchaseProductRepository.updatePurchaseProductOrigin(purchaseProduct);
       }
-
     } catch (error) {
-      console.error(error);
-      throw new Error('createGroupBuyingError');
+      throw new Error('createGroupBuying Error');
     }
   }
 
