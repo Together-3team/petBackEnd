@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import { ReviewController } from '../controllers'
+import passport from 'passport'
 
 const ReviewRouter: Router = express.Router()
 const reviewController = new ReviewController();
@@ -112,5 +113,9 @@ const reviewController = new ReviewController();
  *                   type: string
  */
 ReviewRouter.post('/new', reviewController.createReview);
+
+ReviewRouter.get('/reviewable', passport.authenticate('jwt', { session: false }), reviewController.getReviewable)
+
+ReviewRouter.get('/wrote-reviews', passport.authenticate('jwt', { session: false }), reviewController.getWroteReviews)
 
 export default ReviewRouter

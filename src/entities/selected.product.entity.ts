@@ -52,16 +52,9 @@ export class SelectedProduct {
     @CreateDateColumn()
     createdAt!: Timestamp
 
-    @ManyToOne(() => GroupBuying, groupBuying => groupBuying.selectedProducts)
-    groupBuying?: GroupBuying
-
     @ManyToOne(() => User, {eager: true})
     @JoinColumn()
     user: User
-
-    @ManyToOne(() => Purchase, purchase => purchase.selectedProducts, { onDelete: 'CASCADE'})
-    @JoinColumn({name: 'orderId', referencedColumnName: 'orderId'})
-    purchase?: Purchase
 
     @ManyToOne(() => OptionCombination, {eager: true})
     @JoinColumn()

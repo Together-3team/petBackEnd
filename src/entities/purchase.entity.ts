@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
 import { User, Product, Delivery, SelectedProduct } from "../entities"
+import { PurchaseProduct } from './purchase.product.entity'
 
 /**
  * @swagger
@@ -61,17 +62,11 @@ export class Purchase {
     @ManyToOne(() => User, user => user)
     user?: User
 
-    @OneToMany(() => SelectedProduct, selectedProduct => selectedProduct.purchase, { cascade: true })
-    selectedProducts?: SelectedProduct[];
+    @OneToMany(() => PurchaseProduct, purchaseProduct => purchaseProduct.purchase, { cascade: true })
+    purchaseProducts?: PurchaseProduct[];
 
     @Column({ type: 'varchar', length: 30, unique: true })
     orderId?: string;
-
-    @Column({type: 'int', nullable: true })
-    amount?: number;
-
-    @Column( { type: 'int', nullable: true })
-    discount?: number;
 
     @Column({ type: 'varchar', length: 30, unique: true })
     paymentKey?: string;

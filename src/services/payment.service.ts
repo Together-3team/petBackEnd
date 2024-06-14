@@ -27,32 +27,32 @@ export class PaymentService {
     }
   }
 
-  public createGroupBuying = async (paymentComplete: Purchase): Promise<void> => {
-    try {
-      const selectedProducts = paymentComplete.selectedProducts;
+  // public createGroupBuying = async (paymentComplete: Purchase): Promise<void> => {
+  //   try {
+  //     const selectedProducts = paymentComplete.selectedProducts;
+  //
+  //     if (!selectedProducts || selectedProducts.length === 0) {
+  //       throw new Error('No selected products found');
+  //     }
+  //
+  //     for (const selectedProduct of selectedProducts) {
+  //       const newGroupBuying = new GroupBuying();
+  //       newGroupBuying.status = 0; // Example status, change as needed
+  //       newGroupBuying.selectedProducts = [selectedProduct];
+  //       await this.paymentRepository.createGroupBuying(newGroupBuying)
+  //
+  //       selectedProduct.groupBuying = newGroupBuying;
+  //       selectedProduct.status = 2;
+  //       await this.selectedPaymentRepository.updateSelectedProductOrigin(selectedProduct);
+  //     }
+  //
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error('createGroupBuyingError');
+  //   }
+  // }
 
-      if (!selectedProducts || selectedProducts.length === 0) {
-        throw new Error('No selected products found');
-      }
-
-      for (const selectedProduct of selectedProducts) {
-        const newGroupBuying = new GroupBuying();
-        newGroupBuying.status = 0; // Example status, change as needed
-        newGroupBuying.selectedProducts = [selectedProduct];
-        await this.paymentRepository.createGroupBuying(newGroupBuying)
-
-        selectedProduct.groupBuying = newGroupBuying;
-        selectedProduct.status = 2;
-        await this.selectedPaymentRepository.updateSelectedProductOrigin(selectedProduct);
-      }
-
-    } catch (error) {
-      console.error(error);
-      throw new Error('createGroupBuyingError');
-    }
-  }
-
-  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<Purchase> => {
+  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<void> => {
 
     const selectedProductList = await Promise.all((paymentRequestDto?.selectedProductIds?.split(',') ?? []).map(async (productId) => {
       return await this.selectedPaymentRepository.findSelectedProductById(Number(productId));
@@ -60,26 +60,26 @@ export class PaymentService {
 
     console.log('Selected Products:', selectedProductList);
 
-    const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
+    // const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
 
-    const user = await this.userRepository.findUserById(paymentRequestDto?.userId);
-
-    const newPurchase: Purchase = {
-      selectedProducts: selectedProductList,
-      delivery: delivery,
-      user: user,
-      amount: paymentRequestDto!.amount,
-      discount: paymentRequestDto!.discount,
-      orderId: paymentRequestDto!.orderId!,
-      paymentKey: paymentRequestDto!.paymentKey!,
-      createdAt: new Date(),
-      id: 0,
-      paymentStatus: 0,
-      deliveryCompany: '',
-      trackingNumber: '',
-    }
-
-    return await this.paymentRepository.create(newPurchase);
+    // const user = await this.userRepository.findUserById(paymentRequestDto?.userId);
+    //
+    // const newPurchase: Purchase = {
+    //   selectedProducts: selectedProductList,
+    //   delivery: delivery,
+    //   user: user,
+    //   amount: paymentRequestDto!.amount,
+    //   discount: paymentRequestDto!.discount,
+    //   orderId: paymentRequestDto!.orderId!,
+    //   paymentKey: paymentRequestDto!.paymentKey!,
+    //   createdAt: new Date(),
+    //   id: 0,
+    //   paymentStatus: 0,
+    //   deliveryCompany: '',
+    //   trackingNumber: '',
+    // }
+    //
+    // return await this.paymentRepository.create(newPurchase);
 
 
   }
