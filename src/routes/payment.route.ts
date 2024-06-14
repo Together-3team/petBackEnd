@@ -78,7 +78,7 @@ const paymentController = new PaymentController();
  *       500:
  *         description: 서버 오류
  */
-// PaymentRouter.post('/webhook', paymentController.webHook)
+PaymentRouter.post('/webhook', paymentController.webHook)
 
 /**
  * @swagger
