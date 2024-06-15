@@ -1,5 +1,15 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
-import { User, Delivery, SelectedProduct, GroupBuying, Purchase } from '../entities'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Timestamp,
+} from 'typeorm'
+import { User, Delivery, SelectedProduct, GroupBuying, Purchase, Review } from '../entities'
 
 /**
  * @swagger
@@ -112,6 +122,10 @@ export class PurchaseProduct {
 
   @Column({ type: 'text', nullable: true })
   thumbNailImage!: string;
+
+  @OneToOne(() => Review, (review) => review.purchaseProduct)
+  @JoinColumn()
+  review!: Review
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   deliveryCompany?: string;

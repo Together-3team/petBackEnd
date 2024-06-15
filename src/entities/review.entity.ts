@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp, OneToOne } from 'typeorm'
 import { Product } from './product.entity';
 import { User } from './user.entity';
+import { PurchaseProduct } from './purchase.product.entity'
 
 /**
  * @swagger
@@ -53,6 +54,9 @@ export class Review {
 
     @ManyToOne(() => User, user => user.id, { nullable: true })
     user?: User;
+
+    @OneToOne(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.review)
+    purchaseProduct!: PurchaseProduct;
 
     @Column({ type: 'int' })
     rating?: number;
