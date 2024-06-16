@@ -9,7 +9,6 @@ import {
 import axios from 'axios'
 import { PaymentRequestDto } from '../dtos'
 import { Purchase, SelectedProduct, User } from '../entities'
-import { InsertResult } from 'typeorm'
 import { GroupBuying } from '../entities'
 import { PurchaseProduct } from '../entities'
 
