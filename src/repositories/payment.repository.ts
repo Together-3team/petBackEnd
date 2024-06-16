@@ -2,7 +2,7 @@ import { Delivery, Product, Purchase, Review, User } from '../entities'
 import { AppDataSource } from '../config/typeorm'
 import { InsertResult } from 'typeorm'
 import { GroupBuying } from '../entities'
-import { PurchaseProduct } from '../entities/purchase.product.entity'
+import { PurchaseProduct } from '../entities'
 
 export class PaymentRepository {
   private reviewRepository = AppDataSource.getRepository(Review)

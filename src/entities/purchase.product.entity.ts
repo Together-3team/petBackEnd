@@ -131,5 +131,8 @@ export class PurchaseProduct {
   deliveryCompany?: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  trackingNumber?: string;   
+  trackingNumber?: string;
+
+  @Column({ type: 'bigint'})
+  productId?: number;
 }

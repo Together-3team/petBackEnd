@@ -39,8 +39,9 @@ export class PaymentService {
       }
 
       for (const purchaseProduct of purchaseProducts) {
+        console.log(purchaseProduct);
         const newGroupBuying = new GroupBuying();
-        newGroupBuying.status = 0; // Example status, change as needed
+        newGroupBuying.status = 0;
         newGroupBuying.purchaseProducts = [purchaseProduct];
         await this.paymentRepository.createGroupBuying(newGroupBuying)
 
@@ -97,6 +98,7 @@ export class PaymentService {
       title: product.optionCombination?.product?.title ?? '',
       trackingNumber: '',
       user: user,
+      productId: product.optionCombination?.product?.id ?? '',
     } as unknown as PurchaseProduct; // Explicitly type-cast
   }
 
@@ -132,9 +134,8 @@ export class PaymentService {
       createdAt: new Date(),
       id: 0,
       paymentStatus: 0,
+      deliveryMessage: paymentRequestDto!.deliveryMessage!
     }
-
-    console.log(newPurchase)
 
     return await this.paymentRepository.create(newPurchase);
   }

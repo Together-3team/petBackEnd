@@ -34,6 +34,9 @@ const paymentController = new PaymentController();
  *         discount:
  *           type: number
  *           description: 할인 금액
+ *         deliveryMessage:
+ *           type: string
+ *           description: 주문 상세 요청
  *         orderId:
  *           type: string
  *           description: 주문 ID

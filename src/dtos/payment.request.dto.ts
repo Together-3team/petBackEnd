@@ -23,5 +23,9 @@ export class PaymentRequestDto {
 
   @IsNotEmpty()
   @IsString()
+  deliveryMessage?: string;
+
+  @IsNotEmpty()
+  @IsString()
   paymentKey?: string;
 }
