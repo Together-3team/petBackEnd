@@ -8,7 +8,7 @@ export class PaymentController {
 
   constructor() {
     this.paymentService = new PaymentService();
-    // this.webHook = this.webHook.bind(this);
+    this.webHook = this.webHook.bind(this);
     this.paymentsConfirm = this.paymentsConfirm.bind(this);
   }
 
