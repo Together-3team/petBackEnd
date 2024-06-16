@@ -1,4 +1,11 @@
-import { DeliveryRepository, PaymentRepository, PurchaseProductRepository, SelectedProductRepository, UserRepository } from '../repositories'
+import {
+  DeliveryRepository,
+  PaymentRepository,
+  ProductRepository,
+  PurchaseProductRepository,
+  SelectedProductRepository,
+  UserRepository,
+} from '../repositories'
 import axios from 'axios'
 import { PaymentRequestDto } from '../dtos'
 import { Purchase, SelectedProduct, User } from '../entities'
@@ -12,6 +19,7 @@ export class PaymentService {
   private deliveryRepository: DeliveryRepository
   private userRepository: UserRepository
   private purchaseProductRepository: PurchaseProductRepository
+  private productRepository: ProductRepository
 
   constructor() {
     this.selectedPaymentRepository = new SelectedProductRepository();
@@ -19,6 +27,7 @@ export class PaymentService {
     this.deliveryRepository = new DeliveryRepository();
     this.userRepository = new UserRepository();
     this.purchaseProductRepository = new PurchaseProductRepository();
+    this.productRepository = new ProductRepository();
   }
 
   public changedStatus = async (orderId: string): Promise<Purchase> => {
@@ -39,9 +48,11 @@ export class PaymentService {
       }
 
       for (const purchaseProduct of purchaseProducts) {
-        console.log(purchaseProduct);
+        const productId = Number(purchaseProduct.productId);
+        const product = await this.productRepository.getProductById(productId);
         const newGroupBuying = new GroupBuying();
         newGroupBuying.status = 0;
+        newGroupBuying.product = product;
         newGroupBuying.purchaseProducts = [purchaseProduct];
         await this.paymentRepository.createGroupBuying(newGroupBuying)
 
