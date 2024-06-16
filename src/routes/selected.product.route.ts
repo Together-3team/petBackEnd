@@ -83,7 +83,7 @@ SelectedProductRouter.get('/orders',
 /**
  * @swagger
  * /selected-products/orders-to-carts:
- *   get:
+ *   put:
  *     summary: 장바구니 목록 추가
  *     tags: [SelectedProducts]
  *     security:
@@ -98,7 +98,7 @@ SelectedProductRouter.get('/orders',
  *       500:
  *         description: Internal server error
  */
-SelectedProductRouter.get('/orders-to-carts',
+SelectedProductRouter.put('/orders-to-carts',
     passport.authenticate('jwt', { session: false }),
     selectedProductController.orderToCart)
 

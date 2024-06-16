@@ -2,7 +2,7 @@ import express, { Router } from 'express'
 import { PurchaseController } from '../controllers'
 import passport from 'passport'
 import { validateDto } from '../middleware'
-import { PurchaseCreateRequestDto } from '../dtos'
+import { PurchaseCreateRequestDto, PurchaseProductUpdateRequestDto, PurchaseUpdateRequestDto } from '../dtos'
 
 const PurchaseRouter: Router = express.Router()
 const purchaseController = new PurchaseController()
@@ -64,6 +64,7 @@ PurchaseRouter.get('/',
 PurchaseRouter.get('/:id',
     passport.authenticate('jwt', { session: false }),
     purchaseController.getPurchaseById)
+
 /**
  * @swagger
  * /purchases:
@@ -114,6 +115,79 @@ PurchaseRouter.post('/',
     passport.authenticate('jwt', { session: false }),
     validateDto(PurchaseCreateRequestDto),
     purchaseController.createPurchase)
+
+/**
+ * @swagger
+ * /purchases/products/{id}:
+ *   put:
+ *     summary: 구매 상품 수정
+ *     description: 2 - 주문 완료, 3 - 배송 준비, 4 - 배송 중, 5 - 배송 완료, 6 - 상품 취소
+ *     tags: [Purchases]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: 구매 상품 ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PurchaseProductUpdateRequestDto'
+ *     responses:
+ *       200:
+ *         description: 수정된 구매 상품
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PurchaseProductResponseDto'
+ *       500:
+ *         description: Internal server error
+ */
+PurchaseRouter.put('/products/:id',
+    passport.authenticate('jwt', { session: false }),
+    validateDto(PurchaseProductUpdateRequestDto),
+    purchaseController.updatePurchaseProduct)
+
+/**
+ * @swagger
+ * /purchases/{id}:
+ *   put:
+ *     summary: 구매 내역 수정
+ *     tags: [Purchases]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: 구매 내역 ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PurchaseUpdateRequestDto'
+ *     responses:
+ *       200:
+ *         description: 수정된 구매 내역
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PurchaseResponseDto'
+ *       500:
+ *         description: Internal server error
+ */
+PurchaseRouter.put('/:id',
+    passport.authenticate('jwt', { session: false }),
+    validateDto(PurchaseUpdateRequestDto),
+    purchaseController.updatePurchase)
 
 /**
  * @swagger

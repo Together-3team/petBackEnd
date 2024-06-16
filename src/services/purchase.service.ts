@@ -1,14 +1,16 @@
 import { DeleteResult } from 'typeorm'
-import { DeliveryResponseDto, PurchaseCreateRequestDto, PurchaseProductResponseDto, PurchaseResponseDto } from '../dtos'
+import { DeliveryResponseDto, PurchaseCreateRequestDto, PurchaseProductResponseDto, PurchaseProductUpdateRequestDto, PurchaseResponseDto, PurchaseUpdateRequestDto } from '../dtos'
 import { Purchase, User } from '../entities'
-import { PurchaseRepository } from '../repositories'
+import { PurchaseProductRepository, PurchaseRepository } from '../repositories'
 import { plainToInstance } from 'class-transformer'
 
 export class PurchaseService {
   private purchaseRepository: PurchaseRepository
+  private purchaseProductRepository: PurchaseProductRepository
 
   constructor() {
     this.purchaseRepository = new PurchaseRepository()
+    this.purchaseProductRepository = new PurchaseProductRepository()
   }
 
   public entityToResponseDto = (purchase: Purchase): PurchaseResponseDto => {
@@ -27,9 +29,19 @@ export class PurchaseService {
     return purchases.map((purchase: Purchase) => this.entityToResponseDto(purchase))
   }
 
-  public createPurchase = async (PurchaseData: PurchaseCreateRequestDto, user: User): Promise<PurchaseResponseDto> => {
-    const purchase = await this.purchaseRepository.createPurchase(PurchaseData, user)
+  public createPurchase = async (purchaseData: PurchaseCreateRequestDto, user: User): Promise<PurchaseResponseDto> => {
+    const purchase = await this.purchaseRepository.createPurchase(purchaseData, user)
     return this.entityToResponseDto(purchase)
+  }
+
+  public updatePurchase = async (purchaseId: string, purchaseData: PurchaseUpdateRequestDto, user: User): Promise<PurchaseResponseDto> => {
+    const purchase = await this.purchaseRepository.updatePurchase(parseInt(purchaseId), purchaseData, user)
+    return plainToInstance(PurchaseResponseDto, purchase)
+  }
+
+  public updatePurchaseProduct = async (purchaseProductId: string, purchaseProductData: PurchaseProductUpdateRequestDto, user: User): Promise<PurchaseProductResponseDto> => {
+    const purchaseProduct = await this.purchaseProductRepository.updatePurchaseProduct(parseInt(purchaseProductId), purchaseProductData, user)
+    return plainToInstance(PurchaseProductResponseDto, purchaseProduct)
   }
 
   public deletePurchase = (purchaseId: string): Promise<DeleteResult> => {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { PurchaseService } from '../services'
-import { PurchaseCreateRequestDto } from '../dtos'
+import { PurchaseCreateRequestDto, PurchaseProductUpdateRequestDto, PurchaseUpdateRequestDto } from '../dtos'
 import { User } from '../entities'
 
 export class PurchaseController {
@@ -39,6 +39,32 @@ export class PurchaseController {
     try {
       const purchase = await this.purchaseService.createPurchase(purchaseData, user)
       res.json(purchase)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
+  public updatePurchase = async (req: Request, res: Response): Promise<void> => {
+    const purchaseData: PurchaseUpdateRequestDto = req.body
+    const purchaseId = req.params.id
+    const user = req.user as User
+    try {
+      const purchase = await this.purchaseService.updatePurchase(purchaseId, purchaseData, user)
+      res.json(purchase)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
+  public updatePurchaseProduct = async (req: Request, res: Response): Promise<void> => {
+    const purchaseProductData: PurchaseProductUpdateRequestDto = req.body
+    const purchaseProductId = req.params.id
+    const user = req.user as User
+    try {
+      const purchaseProduct = await this.purchaseService.updatePurchaseProduct(purchaseProductId, purchaseProductData, user)
+      res.json(purchaseProduct)
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })

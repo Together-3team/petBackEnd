@@ -1,6 +1,6 @@
 import { User, Purchase, SelectedProduct, PurchaseProduct } from '../entities'
 import { AppDataSource } from '../config/typeorm'
-import { PurchaseCreateRequestDto } from '../dtos'
+import { PurchaseCreateRequestDto, PurchaseUpdateRequestDto } from '../dtos'
 import { DeleteResult } from 'typeorm'
 
 export class PurchaseRepository {
@@ -44,8 +44,15 @@ export class PurchaseRepository {
         thumbNailImage: selectedProduct.optionCombination.product.thumbNailImage
       })
       await this.purchaseProductRepo.insert(newPurchaseProduct)
+      await this.selectedProductRepo.delete({id})
     }
     return this.purchaseRepo.findOneByOrFail({id: result.identifiers[0].id})
+  }
+
+  public updatePurchase = async (id: number, purchaseData: PurchaseUpdateRequestDto, user: User): Promise<Purchase> => {
+    await this.purchaseRepo.findOneByOrFail({id, user: {id: user.id}})
+    await this.purchaseRepo.save({...purchaseData, id})
+    return this.purchaseRepo.findOneByOrFail({id})
   }
 
   public deletePurchase = (id: number): Promise<DeleteResult> => {
