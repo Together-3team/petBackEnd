@@ -54,7 +54,6 @@ export class PaymentRepository {
       console.log('newPurchaseProduct :::::: ', newPurchaseProduct);
       return await this.purchaseProductRepository.save(newPurchaseProduct);
     } catch (error) {
-
       console.log(error);
       throw new Error('Failed to create Purchase');
     }
