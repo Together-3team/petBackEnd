@@ -19,7 +19,7 @@ import { Timestamp } from "typeorm"
  *         combinationName:
  *           type: string
  *         combinationPrice:
- *           type: string
+ *           type: integer
  *         amount:
  *           type: integer
  */
