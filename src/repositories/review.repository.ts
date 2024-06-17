@@ -56,9 +56,9 @@ export class ReviewRepository {
   }
 
   public createReview = async (userId: number, reviewInfo: ReviewCreateRequestDto): Promise<Review> => {
-    const { productId, purChaseProductId, ...rest } = reviewInfo;
+    const { productId, purchaseProductId, ...rest } = reviewInfo;
 
-    if (purChaseProductId === undefined) {
+    if (purchaseProductId === undefined) {
       throw new Error(`purChaseProduct ID is undefined`);
     }
 
@@ -69,9 +69,9 @@ export class ReviewRepository {
       throw new Error(`User ID is undefined`);
     }
 
-    const purchaseProduct = await this.purchaseProductRepository.findOne({ where: { id: purChaseProductId }})
+    const purchaseProduct = await this.purchaseProductRepository.findOne({ where: { id: purchaseProductId }})
     if (!purchaseProduct) {
-      throw new Error(`Product with ID ${purChaseProductId} not found`);
+      throw new Error(`Product with ID ${purchaseProductId} not found`);
     }
 
     const product = await this.productRepository.findOne({ where: { id: productId } });

@@ -46,6 +46,10 @@ export class ProductResponseDto {
   isDeleted!: number
 
   @Exclude()
+  @IsInt()
+  petType!: number
+
+  @Exclude()
   createdAt!: Timestamp
 
   @Exclude()

@@ -16,6 +16,7 @@ export class ProductController {
    * @param res
    */
   public getProductList = async (req: Request<ProductListRequestDTO>, res: Response): Promise<void> => {
+
     try {
       // 쿼리 파라미터에서 페이지 번호와 페이지 크기를 추출
       // 페이지 번호와 페이지 크기가 제공되지 않은 경우 기본값 설정
@@ -23,7 +24,7 @@ export class ProductController {
       const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as any, 10) : 5;
 
       // ProductService를 사용하여 상품 목록을 가져옴
-      const productList: Product[] = await this.productService.getProductList(page, pageSize);
+      const productList: Product[] = await this.productService.getProductList(page, pageSize, 0);
       res.json(productList);
     } catch(error) {
       const errorMessage = (error as Error).message;

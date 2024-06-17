@@ -13,8 +13,8 @@ export class ProductService {
     return this.productRepository.getProductById(parseInt(productId))
   }
 
-  public getProductList = (page: number, pageSize: number): Promise<Product[]> => {
-    return this.productRepository.getProductList(page, pageSize)
+  public getProductList = (page: number, pageSize: number, preferredPet: number): Promise<Product[]> => {
+    return this.productRepository.getProductList(page, pageSize, preferredPet)
   }
 
   public makeOptions = async (options: Option[] | undefined) => {

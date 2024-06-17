@@ -39,7 +39,6 @@ export class ReviewController {
       const createReviewDto: ReviewCreateRequestDto = req.body;
 
       const user = req.user as User;
-
       const createReview = await this.reviewService.createReview(user.id, createReviewDto);
       res.status(200).json({"result": "Success"});
     } catch(error) {

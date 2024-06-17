@@ -38,6 +38,9 @@ import { GroupBuying } from './group.buying.entity'
  *         isDeleted:
  *           type: integer
  *           description: 삭제 여부
+ *         petType:
+ *           type: integer
+ *           description: 대상 반려동물 종류
  *         createdAt:
  *           type: string
  *           format: Timestamp
@@ -53,6 +56,7 @@ import { GroupBuying } from './group.buying.entity'
  *         - price
  *         - discountRate
  *         - isDeleted
+ *         - petType
  *         - createdAt
  *         - updatedAt
  */
@@ -94,6 +98,9 @@ export class Product {
      */
     @Column({ type: 'tinyint', default: 0 })
     isDeleted: number = 0;
+
+    @Column({ type: 'tinyint', default: 0 })
+    petType: number = 0;
 
     @OneToMany(() => GroupBuying, (groupBuying) => groupBuying.product)
     groupBuying!: GroupBuying[];

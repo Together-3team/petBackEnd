@@ -12,11 +12,11 @@ passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
   }, async (payload, done) => {
     try {
+      if (payload.type !== 'access') return done(null, false, { message: "accessToken이 필요합니다" })
       const user = await userRepository.findUserById(payload.id);
       if (!user) return done(null, false, { message: "로그인이 필요합니다" });
-      if (payload.type !== 'access') return done(null, false, { message: "accessToken이 필요합니다" })
       return done(null, user);
     }
-    catch(err) { console.log(err); return done(err); }
+    catch(err) { return done(err); }
   }
 ));
