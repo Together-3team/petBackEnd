@@ -13,7 +13,7 @@ passport.use(new GoogleStrategy({
       profile.id,
       profile.provider,
       profile.emails ? profile.emails[0].value : '',
-      profile.photos ? profile.photos[0].value : ''
+      profile.photos ? profile.photos[0].value : 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png'
     )
     return done(null, googleProfile);
   }

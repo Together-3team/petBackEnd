@@ -1,4 +1,4 @@
-import { User, Purchase, SelectedProduct, PurchaseProduct } from '../entities'
+import { User, Purchase, SelectedProduct, PurchaseProduct, Delivery } from '../entities'
 import { AppDataSource } from '../config/typeorm'
 import { PurchaseCreateRequestDto, PurchaseUpdateRequestDto } from '../dtos'
 import { DeleteResult } from 'typeorm'
@@ -7,6 +7,7 @@ export class PurchaseRepository {
   private purchaseRepo = AppDataSource.getRepository(Purchase)
   private purchaseProductRepo = AppDataSource.getRepository(PurchaseProduct)
   private selectedProductRepo = AppDataSource.getRepository(SelectedProduct)
+  private deliveryRepo = AppDataSource.getRepository(Delivery)
 
   public findPurchaseById = async (id: number, user: User): Promise<Purchase> => {
     return this.purchaseRepo.findOneByOrFail({id, user: {id: user.id}})
@@ -18,9 +19,15 @@ export class PurchaseRepository {
 
   public createPurchase = async (purchaseData: PurchaseCreateRequestDto, user: User): Promise<Purchase> => {
     // @ts-ignore
+    const delivery = await this.deliveryRepo.findOneByOrFail({id: purchaseData.deliveryId})
     const newPurchase = this.purchaseRepo.create({
       user,
-      delivery: {id: purchaseData.deliveryId},
+      deliveryName: delivery.name,
+      recipient: delivery.recipient,
+      recipientPhoneNumber: delivery.recipientPhoneNumber,
+      zipCode: delivery.zipCode,
+      address: delivery.address,
+      detailedAddress: delivery.detailedAddress,
       orderId: purchaseData.orderId,
       paymentKey: purchaseData.paymentKey,
       deliveryMessage: purchaseData.deliveryMessage
@@ -34,14 +41,16 @@ export class PurchaseRepository {
       })
       console.log(id, selectedProduct)
       const newPurchaseProduct = this.purchaseProductRepo.create({
-        purchase: {id: purchase.id},
+        purchase,
+        user,
         title: selectedProduct.optionCombination.product.title,
         combinationName: selectedProduct.optionCombination.combinationName,
         quantity: selectedProduct.quantity,
         originalPrice: selectedProduct.optionCombination.product.originalPrice,
         price: selectedProduct.optionCombination.product.price,
         combinationPrice: selectedProduct.optionCombination.combinationPrice,
-        thumbNailImage: selectedProduct.optionCombination.product.thumbNailImage
+        thumbNailImage: selectedProduct.optionCombination.product.thumbNailImage,
+        productId: selectedProduct.optionCombination.product.id
       })
       await this.purchaseProductRepo.insert(newPurchaseProduct)
       await this.selectedProductRepo.delete({id})

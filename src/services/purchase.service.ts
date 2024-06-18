@@ -14,9 +14,8 @@ export class PurchaseService {
   }
 
   public entityToResponseDto = (purchase: Purchase): PurchaseResponseDto => {
-    const delivery = plainToInstance(DeliveryResponseDto, purchase.delivery)
     const purchaseProducts = purchase.purchaseProducts.map(product => plainToInstance(PurchaseProductResponseDto, product))
-    return plainToInstance(PurchaseResponseDto, {...purchase, delivery, purchaseProducts})
+    return plainToInstance(PurchaseResponseDto, {...purchase, purchaseProducts})
   }
 
   public getPurchaseById = async (purchaseId: string, user: User): Promise<PurchaseResponseDto> => {
