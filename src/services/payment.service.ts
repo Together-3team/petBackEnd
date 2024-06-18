@@ -1,5 +1,5 @@
 import {
-  DeliveryRepository,
+  DeliveryRepository, GroupBuyingRepository,
   PaymentRepository,
   ProductRepository,
   PurchaseProductRepository,
@@ -19,6 +19,7 @@ export class PaymentService {
   private userRepository: UserRepository
   private purchaseProductRepository: PurchaseProductRepository
   private productRepository: ProductRepository
+  private groupBuyingRepository: GroupBuyingRepository
 
   constructor() {
     this.selectedPaymentRepository = new SelectedProductRepository();
@@ -27,6 +28,7 @@ export class PaymentService {
     this.userRepository = new UserRepository();
     this.purchaseProductRepository = new PurchaseProductRepository();
     this.productRepository = new ProductRepository();
+    this.groupBuyingRepository = new GroupBuyingRepository();
   }
 
   public changedStatus = async (orderId: string): Promise<Purchase> => {
@@ -47,6 +49,7 @@ export class PaymentService {
       }
 
       for (const purchaseProduct of purchaseProducts) {
+        if (purchaseProduct.groupBuying) return;
         const productId = Number(purchaseProduct.productId);
         const product = await this.productRepository.getProductById(productId);
         const newGroupBuying = new GroupBuying();
@@ -112,13 +115,30 @@ export class PaymentService {
     } as unknown as PurchaseProduct; // Explicitly type-cast
   }
 
-  public createPurchase = async (paymentRequestDto: PaymentRequestDto): Promise<Purchase> => {
+  public setGroupBuying = async (purchaseProduct: PurchaseProduct, groupBuyingId: number): Promise<void> => {
+    const groupBuyingItem = await this.groupBuyingRepository.findById(groupBuyingId);
 
+    if (!groupBuyingItem) {
+      throw new Error('Group buy not found');
+    }
+
+    if (!groupBuyingItem.purchaseProducts) {
+      groupBuyingItem.purchaseProducts = [];
+    }
+
+    groupBuyingItem.purchaseProducts.push(purchaseProduct);
+
+    groupBuyingItem.status = 1;
+
+    await this.groupBuyingRepository.save(groupBuyingItem);
+  }
+
+  public createPurchase = async (paymentRequestDto: PaymentRequestDto, user: User): Promise<Purchase> => {
     const purchaseProducts: PurchaseProduct[] = [];
 
-    const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
+    const groupBuyingId = paymentRequestDto?.groupBuyingId;
 
-    const user = await this.userRepository.findUserById(paymentRequestDto?.userId);
+    const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
 
     const selectedProductList = await Promise.all((paymentRequestDto?.selectedProductIds?.split(',') ?? []).map(async (productId) => {
       const selectedProduct = await this.selectedPaymentRepository.findSelectedProductById(Number(productId));
@@ -126,13 +146,12 @@ export class PaymentService {
     }));
 
     for (const product of selectedProductList) {
-
       const newPurchaseProduct = await this.toPurchaseProduct(product, user);
+      const purchaseProduct = await this.paymentRepository.createPurchaseProduct(newPurchaseProduct);
 
+      if (groupBuyingId) await this.setGroupBuying(purchaseProduct, groupBuyingId);
 
-      await this.paymentRepository.createPurchaseProduct(newPurchaseProduct);
-
-      purchaseProducts.push(newPurchaseProduct);
+      purchaseProducts.push(purchaseProduct);
     }
 
     const newPurchase: Purchase = {
@@ -173,5 +192,4 @@ export class PaymentService {
       throw new Error(error as string);
     }
   }
-
 }

@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import { PaymentController } from '../controllers'
+import passport from 'passport'
 
 const PaymentRouter: Router = express.Router()
 const paymentController = new PaymentController();
@@ -25,9 +26,9 @@ const paymentController = new PaymentController();
  *         deliveryId:
  *           type: number
  *           description: 배송 ID
- *         userId:
+ *         groupBuyingId:
  *           type: number
- *           description: 사용자 ID
+ *           description: 공동구매 ID
  *         amount:
  *           type: number
  *           description: 결제 금액
@@ -103,6 +104,6 @@ PaymentRouter.post('/webhook', paymentController.webHook)
  *       500:
  *         description: 서버 오류
  */
-PaymentRouter.post('/confirm', paymentController.paymentsConfirm)
+PaymentRouter.post('/confirm', passport.authenticate('jwt', { session: false }), paymentController.paymentsConfirm)
 
 export default PaymentRouter

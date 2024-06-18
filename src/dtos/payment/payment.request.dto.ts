@@ -11,8 +11,7 @@ export class PaymentRequestDto {
   deliveryId?: number;
 
   @IsNumber()
-  @IsNotEmpty()
-  userId?: number;
+  groupBuyingId?: number;
 
   @IsNumber()
   amount?: number;

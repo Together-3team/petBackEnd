@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { PaymentService } from '../services';
 import { PaymentRequestDto } from '../dtos'
 import { plainToClass } from 'class-transformer'
+import { User } from '../entities'
 
 export class PaymentController {
   private paymentService: PaymentService;
@@ -35,7 +36,9 @@ export class PaymentController {
     try {
       const paymentRequestDto: PaymentRequestDto = req.body
 
-      const paymentInfo = await this.paymentService.createPurchase(paymentRequestDto);
+      const user = req.user as User;
+
+      const paymentInfo = await this.paymentService.createPurchase(paymentRequestDto, user);
 
       const { amount, orderId, paymentKey } = paymentRequestDto;
       await this.paymentService.paymentsConfirm(amount, orderId, paymentKey);
