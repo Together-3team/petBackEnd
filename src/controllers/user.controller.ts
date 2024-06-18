@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { UserService } from '../services'
 import { UserUpdateRequestDto } from '../dtos'
+import { User } from '../entities'
 
 export class UserController {
   private userService: UserService
@@ -47,6 +48,17 @@ export class UserController {
     try {
       const result = await this.userService.deleteUser(userId)
       res.json(result)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
+  public withdraw = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      await this.userService.deleteUser(user.id.toString())
+      res.json({message: 'success'})
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })

@@ -33,6 +33,6 @@ export class UserRepository {
   }
 
   public deleteUser = (id: number): Promise<DeleteResult> => {
-    return this.userRepo.delete({id})
+    return this.userRepo.softDelete({id})
   }
 }

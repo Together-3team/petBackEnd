@@ -12,6 +12,20 @@ const userController = new UserController()
  * tags:
  *   name: Users
  *   description: 사용자
+ * 
+ * components:
+ *   schemas:
+ *     DeleteResultDto:
+ *       type: object
+ *       properties:
+ *         raw:
+ *           type: array
+ *           items:
+ *             type: object
+ *           description: Raw database response
+ *         affected:
+ *           type: integer
+ *           description: Number of rows affected
  */
 
 /**
@@ -36,6 +50,31 @@ UserRouter.get('/me',
     passport.authenticate('jwt', { session: false }),
     userController.getMe)
 
+/**
+ * @swagger
+ * /users/withdraw:
+ *   delete:
+ *     summary: 회원 탈퇴
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 탈퇴 메시지
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: 존재하지 않는 사용자입니다
+ */
+UserRouter.delete('/withdraw',
+    passport.authenticate('jwt', { session: false }),
+    userController.withdraw)
+    
 /**
  * @swagger
  * /users/verify-nickname:
@@ -127,6 +166,7 @@ UserRouter.get('/:id',
 UserRouter.put('/:id',
     validateDto(UserUpdateRequestDto),
     userController.updateUser)
+    
 
 /**
  * @swagger
@@ -151,19 +191,6 @@ UserRouter.put('/:id',
  *       500:
  *         description: Internal server error
  * 
- * components:
- *   schemas:
- *     DeleteResultDto:
- *       type: object
- *       properties:
- *         raw:
- *           type: array
- *           items:
- *             type: object
- *           description: Raw database response
- *         affected:
- *           type: integer
- *           description: Number of rows affected
  */
 UserRouter.delete('/:id',
     userController.deleteUser)

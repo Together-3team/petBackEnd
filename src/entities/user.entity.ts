@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
 
 /**
  * @swagger
@@ -33,6 +33,9 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Ti
  *           type: string
  *           format: Timestamp
  *           description: 생성일
+ *         deletedAt:
+ *           type: string
+ *           format: Timestamp
  *       required:
  *         - id
  *         - email
@@ -71,9 +74,12 @@ export class User {
 
     @Column('tinyint')
     preferredPet: number = 0
-
+    
     @CreateDateColumn()
     createdAt!: Timestamp
+
+    @DeleteDateColumn({ nullable: true })
+    deletedAt?: Timestamp
     
     constructor(email: string, nickname: string, phoneNumber: string, profileImage: string) {
         this.email = email
