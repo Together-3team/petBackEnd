@@ -96,7 +96,7 @@ export class PurchaseProduct {
   @ManyToOne(() => User, { eager: true })
   user!: User
 
-  @ManyToOne(() => GroupBuying, groupBuying => groupBuying.purchaseProducts)
+  @ManyToOne(() => GroupBuying, groupBuying => groupBuying.purchaseProducts, { eager: true })
   groupBuying?: GroupBuying
 
   @ManyToOne(() => Purchase, purchase => purchase.purchaseProducts)
