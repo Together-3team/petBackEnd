@@ -41,7 +41,8 @@ export class PurchaseRepository {
         originalPrice: selectedProduct.optionCombination.product.originalPrice,
         price: selectedProduct.optionCombination.product.price,
         combinationPrice: selectedProduct.optionCombination.combinationPrice,
-        thumbNailImage: selectedProduct.optionCombination.product.thumbNailImage
+        thumbNailImage: selectedProduct.optionCombination.product.thumbNailImage,
+        productId: selectedProduct.optionCombination.product.id
       })
       await this.purchaseProductRepo.insert(newPurchaseProduct)
       await this.selectedProductRepo.delete({id})
