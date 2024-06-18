@@ -32,6 +32,8 @@ import { Timestamp } from "typeorm"
  *           type: string
  *         trackingNumber:
  *           type: string
+ *         productId:
+ *           type: integer
  *     PurchaseProductListResponseDto:
  *       type: array
  *       items:
@@ -93,4 +95,8 @@ export class PurchaseProductResponseDto {
   @Expose()
   @IsString()
   trackingNumber?: string;   
+
+  @Exclude()
+  @IsInt()
+  productId!: number;   
 }

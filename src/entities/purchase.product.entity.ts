@@ -57,6 +57,9 @@ import { User, Delivery, SelectedProduct, GroupBuying, Purchase, Review } from '
  *         trackingNumber:
  *           type: string
  *           description: 송장 번호
+ *         productId:
+ *           type: integer
+ *           description: 물품 ID
  *         createdAt:
  *           type: string
  *           format: Timestamp

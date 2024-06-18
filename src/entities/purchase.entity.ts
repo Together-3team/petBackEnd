@@ -14,8 +14,27 @@ import { PurchaseProduct } from './purchase.product.entity'
  *           description: 고유 ID
  *         user:
  *           $ref: '#/components/schemas/User'
- *         delivery:
- *           $ref: '#/components/schemas/Delivery'
+ *         deliveryName:
+ *           type: string
+ *           description: 배송지명
+ *         recipient:
+ *           type: string
+ *           description: 수령인
+ *         recipientPhoneNumber:
+ *           type: string
+ *           description: 수령인 연락처
+ *         zipCode:
+ *           type: integer
+ *           description: 우편번호
+ *         address:
+ *           type: string
+ *           description: 주소지
+ *         detailedAddress:
+ *           type: string
+ *           description: 상세 주소
+ *         deliveryMessage:
+ *           type: string
+ *           description: 배송 메시지
  *         purchaseProducts:
  *           $ref: '#/components/schemas/PurchaseProductList'
  *         orderId:
@@ -27,9 +46,6 @@ import { PurchaseProduct } from './purchase.product.entity'
  *         paymentStatus:
  *           type: integer
  *           description: 결제 상태
- *         deliveryMessage:
- *           type: string
- *           description: 배송 메시지
  *         createdAt:
  *           type: string
  *           format: Timestamp
@@ -56,8 +72,26 @@ export class Purchase {
   @ManyToOne(() => User, { eager: true })
   user!: User
 
-  @ManyToOne(() => Delivery, { eager: true })
-  delivery!: Delivery
+  @Column('varchar', {length: 30})
+  deliveryName!: string
+
+  @Column('varchar', {length: 30})
+  recipient!: string
+
+  @Column('varchar', {length: 20})
+  recipientPhoneNumber!: string
+
+  @Column('int')
+  zipCode!: number
+
+  @Column('varchar', {length: 30})
+  address!: string
+
+  @Column('varchar', {length: 30})
+  detailedAddress!: string
+
+  @Column('varchar', {length: 30})
+  deliveryMessage?: string
 
   @OneToMany(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.purchase, { eager: true, cascade: true })
   purchaseProducts!: PurchaseProduct[];
@@ -71,6 +105,4 @@ export class Purchase {
   @Column({ type: 'tinyint' })
   paymentStatus: number = 0;
 
-  @Column({ type: 'varchar', length: 30 })
-  deliveryMessage?: string;
 }

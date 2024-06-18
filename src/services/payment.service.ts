@@ -137,8 +137,13 @@ export class PaymentService {
 
     const newPurchase: Purchase = {
       purchaseProducts: purchaseProducts,
-      delivery: delivery,
-      user: user,
+      deliveryName: delivery.name,
+      recipient: delivery.recipient,
+      recipientPhoneNumber: delivery.recipientPhoneNumber,
+      zipCode: delivery.zipCode,
+      address: delivery.address,
+      detailedAddress: delivery.detailedAddress,
+      user,
       orderId: paymentRequestDto!.orderId!,
       paymentKey: paymentRequestDto!.paymentKey!,
       createdAt: new Date(),

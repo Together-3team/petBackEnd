@@ -1,8 +1,8 @@
-import { IsInt, IsString } from "class-validator"
+import { IsInt, IsString, Matches } from "class-validator"
 import { User } from "../../entities"
 import { Exclude, Expose } from "class-transformer"
 import { Timestamp } from "typeorm"
-import { PurchaseProductResponseDto, DeliveryResponseDto } from "../../dtos"
+import { PurchaseProductResponseDto } from "../../dtos"
 
 /**
  * @swagger
@@ -13,8 +13,22 @@ import { PurchaseProductResponseDto, DeliveryResponseDto } from "../../dtos"
  *       properties:
  *         id:
  *           type: integer
- *         delivery:
- *           $ref: '#/components/schemas/DeliveryResponseDto'
+ *         deliveryName:
+ *           type: string
+ *         recipient:
+ *           type: string
+ *         recipientPhoneNumber:
+ *           type: string
+ *           example: 010-1234-5678
+ *           pattern: ^010-\\d{4}-\\d{4}$
+ *         zipCode:
+ *           type: integer
+ *         address:
+ *           type: string
+ *         detailedAddress:
+ *           type: string
+ *         deliveryMessage:
+ *           type: string
  *         purchaseProducts:
  *           $ref: '#/components/schemas/PurchaseProductListResponseDto'
  *         orderId:
@@ -23,8 +37,6 @@ import { PurchaseProductResponseDto, DeliveryResponseDto } from "../../dtos"
  *           type: string
  *         paymentStatus:
  *           type: integer
- *         deliveryMessage:
- *           type: string
  *     PurchaseListResponseDto:
  *       type: array
  *       items:
@@ -42,7 +54,33 @@ export class PurchaseResponseDto {
   user!: User
 
   @Expose()
-  delivery!: DeliveryResponseDto
+  @IsString()
+  deliveryName!: string
+
+  @Expose()
+  @IsString()
+  recipient!: string
+
+  @Expose()
+  @IsString()
+  @Matches(/^010-\d{4}-\d{4}$/, {message: 'phoneNumber must be a valid Korean phone number (010-XXXX-XXXX)'})
+  recipientPhoneNumber!: string
+
+  @Expose()
+  @IsInt()
+  zipCode!: number
+
+  @Expose()
+  @IsString()
+  address!: string
+
+  @Expose()
+  @IsString()
+  detailedAddress!: string
+
+  @Expose()
+  @IsString()
+  deliveryMessage?: string;
 
   @Expose()
   purchaseProducts!: PurchaseProductResponseDto[]
@@ -58,8 +96,4 @@ export class PurchaseResponseDto {
   @Expose()
   @IsInt()
   paymentStatus!: number;
-
-  @Expose()
-  @IsString()
-  deliveryMessage?: string;
 }
