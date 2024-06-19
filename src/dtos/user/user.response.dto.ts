@@ -34,6 +34,9 @@ import { Timestamp } from 'typeorm'
  *         isSubscribedToPromotions:
  *           type: boolean
  *           description: 광고성 정보 수신 여부
+ *         preferredPet:
+ *           type: integer
+ *           description: 선호하는 반려동물
  */
 export class UserResponseDto {
   @Expose()
@@ -76,6 +79,10 @@ export class UserResponseDto {
   @Exclude()
   @IsDate()
   createdAt!: Timestamp
+
+  @Exclude()
+  @IsDate()
+  deletedAt?: Timestamp | undefined
 
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial)
