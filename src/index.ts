@@ -13,6 +13,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import { initializeWebSocket } from './websockets/group.buying.websocket';
 import { PaymentController } from './controllers';
 import { WebSocketService } from './services';
+import createPaymentRouter from './routes/payment.route'
 
 dotenv.config();
 
@@ -32,6 +33,14 @@ app.use(cors());
 app.use(cookieParser());
 AppDataSource.initialize().catch(error => console.log(error));
 
+// 웹소켓 모듈 초기화
+initializeWebSocket(io);
+
+// 웹소켓 서비스 초기화 및 컨트롤러 설정
+const paymentController = new PaymentController();
+const webSocketService = new WebSocketService(io);
+paymentController.setWebSocketService(webSocketService);
+
 // 스웨거 기본 세팅
 const swaggerSpec = setupSwagger();
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -44,7 +53,7 @@ app.use('/review', ReviewRouter);
 app.use('/utility', Utility);
 app.use('/deliveries', DeliveryRouter);
 app.use('/zzims', ZzimRouter);
-app.use('/payments', PaymentRouter);
+app.use('/payments', createPaymentRouter(paymentController));
 app.use('/selected-products', SelectedProductRouter);
 app.use('/purchases', PurchaseRouter);
 
@@ -52,17 +61,6 @@ app.use('/purchases', PurchaseRouter);
 app.get('/', (req, res) => {
     res.send('Hello, TypeScript with Express!');
 });
-
-// 웹소켓 모듈 초기화
-initializeWebSocket(io);
-
-// 웹소켓 서비스 초기화 및 컨트롤러 설정
-const paymentController = new PaymentController();
-const webSocketService = new WebSocketService(io);
-paymentController.setWebSocketService(webSocketService);
-
-app.post('/webhook', paymentController.webHook);
-app.post('/payments/confirm', paymentController.paymentsConfirm);
 
 
 const PORT = process.env.SERVER_PORT || 3000;

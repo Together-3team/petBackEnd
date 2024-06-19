@@ -121,7 +121,7 @@ class PaymentService {
                 paymentStatus: 0,
                 deliveryMessage: paymentRequestDto.deliveryMessage
             };
-            return await this.paymentRepository.create(newPurchase);
+            return this.paymentRepository.create(newPurchase)
         };
         this.paymentsConfirm = async (amount, orderId, paymentKey) => {
             const paymentSecretKey = process.env.PAYMENT_SECRET_KEY;

@@ -5,12 +5,14 @@ import { User } from '../entities'
 
 export class PaymentController {
   private paymentService: PaymentService;
-  private webSocketService: WebSocketService | undefined;
+  private webSocketService!: WebSocketService;
 
   constructor() {
     this.paymentService = new PaymentService();
     this.webHook = this.webHook.bind(this);
     this.paymentsConfirm = this.paymentsConfirm.bind(this);
+    this.sendProductUpdateWebSocket = this.sendProductUpdateWebSocket.bind(this);
+    this.test = this.test.bind(this);
   }
 
   public setWebSocketService(webSocketService: WebSocketService) {
@@ -19,12 +21,27 @@ export class PaymentController {
 
   public async sendProductUpdateWebSocket(productIds: (number | undefined)[]) {
     try {
-      console.log(productIds);
-      for (const productId of productIds) {
-        this.webSocketService!.sendProductUpdate(productId)
+      const uniqueArray = [...new Set(productIds)];
+      for (const productId of uniqueArray) {
+        console.log(productId);
+        console.log(this.webSocketService);
+        if (this.webSocketService) {
+          this.webSocketService.sendProductUpdate(productId)
+        } else {
+          throw new Error('WebSocketService is not initialized');
+        }
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error in sendProductUpdateWebSocket:', error);
+      throw error; // 예외를 호출자로 전파하거나 적절히 처리
+    }
+  }
+
+  public async test() {
+    try {
+      await this.sendProductUpdateWebSocket([1]);
+    } catch (error) {
+      console.log(error);
     }
   }
 
