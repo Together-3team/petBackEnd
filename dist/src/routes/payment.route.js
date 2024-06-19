@@ -1,18 +1,19 @@
-import express, { Router } from 'express'
-import { PaymentController } from '../controllers'
-import passport from 'passport'
-
-const PaymentRouter: Router = express.Router()
-const paymentController = new PaymentController();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const controllers_1 = require("../controllers");
+const passport_1 = __importDefault(require("passport"));
+const PaymentRouter = express_1.default.Router();
+const paymentController = new controllers_1.PaymentController();
 /**
  * @swagger
  * tags:
  *   name: Payment
  *   description: 결제 관련 API
  */
-
-
 /**
  * @swagger
  * components:
@@ -42,7 +43,6 @@ const paymentController = new PaymentController();
  *           type: string
  *           description: 결제 키
  */
-
 /**
  * @swagger
  * /payments/webhook:
@@ -79,8 +79,7 @@ const paymentController = new PaymentController();
  *       500:
  *         description: 서버 오류
  */
-PaymentRouter.post('/webhook', paymentController.webHook)
-
+PaymentRouter.post('/webhook', paymentController.webHook);
 /**
  * @swagger
  * /payments/confirm:
@@ -101,6 +100,5 @@ PaymentRouter.post('/webhook', paymentController.webHook)
  *       500:
  *         description: 서버 오류
  */
-PaymentRouter.post('/confirm', passport.authenticate('jwt', { session: false }), paymentController.paymentsConfirm)
-
-export default PaymentRouter
+PaymentRouter.post('/confirm', passport_1.default.authenticate('jwt', { session: false }), paymentController.paymentsConfirm);
+exports.default = PaymentRouter;

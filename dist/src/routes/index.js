@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PurchaseRouter = exports.SelectedProductRouter = exports.PaymentRouter = exports.ZzimRouter = exports.DeliveryRouter = exports.Utility = exports.ReviewRouter = exports.AuthRouter = exports.ProductRouter = exports.UserRouter = void 0;
+var user_route_1 = require("./user.route");
+Object.defineProperty(exports, "UserRouter", { enumerable: true, get: function () { return __importDefault(user_route_1).default; } });
+var product_route_1 = require("./product.route");
+Object.defineProperty(exports, "ProductRouter", { enumerable: true, get: function () { return __importDefault(product_route_1).default; } });
+var auth_route_1 = require("./auth.route");
+Object.defineProperty(exports, "AuthRouter", { enumerable: true, get: function () { return __importDefault(auth_route_1).default; } });
+var review_route_1 = require("./review.route");
+Object.defineProperty(exports, "ReviewRouter", { enumerable: true, get: function () { return __importDefault(review_route_1).default; } });
+var utility_route_1 = require("./utility.route");
+Object.defineProperty(exports, "Utility", { enumerable: true, get: function () { return __importDefault(utility_route_1).default; } });
+var delivery_route_1 = require("./delivery.route");
+Object.defineProperty(exports, "DeliveryRouter", { enumerable: true, get: function () { return __importDefault(delivery_route_1).default; } });
+var zzim_route_1 = require("./zzim.route");
+Object.defineProperty(exports, "ZzimRouter", { enumerable: true, get: function () { return __importDefault(zzim_route_1).default; } });
+var payment_route_1 = require("./payment.route");
+Object.defineProperty(exports, "PaymentRouter", { enumerable: true, get: function () { return __importDefault(payment_route_1).default; } });
+var selected_product_route_1 = require("./selected.product.route");
+Object.defineProperty(exports, "SelectedProductRouter", { enumerable: true, get: function () { return __importDefault(selected_product_route_1).default; } });
+var purchase_route_1 = require("./purchase.route");
+Object.defineProperty(exports, "PurchaseRouter", { enumerable: true, get: function () { return __importDefault(purchase_route_1).default; } });

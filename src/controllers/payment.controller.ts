@@ -1,16 +1,31 @@
 import { NextFunction, Request, Response } from 'express'
-import { PaymentService } from '../services';
+import { PaymentService, WebSocketService } from '../services'
 import { PaymentRequestDto } from '../dtos'
-import { plainToClass } from 'class-transformer'
 import { User } from '../entities'
 
 export class PaymentController {
   private paymentService: PaymentService;
+  private webSocketService: WebSocketService | undefined;
 
   constructor() {
     this.paymentService = new PaymentService();
     this.webHook = this.webHook.bind(this);
     this.paymentsConfirm = this.paymentsConfirm.bind(this);
+  }
+
+  public setWebSocketService(webSocketService: WebSocketService) {
+    this.webSocketService = webSocketService;
+  }
+
+  public async sendProductUpdateWebSocket(productIds: (number | undefined)[]) {
+    try {
+      console.log(productIds);
+      for (const productId of productIds) {
+        this.webSocketService!.sendProductUpdate(productId)
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   public async webHook(req: Request, res: Response, next: NextFunction) {
@@ -24,6 +39,9 @@ export class PaymentController {
         console.log('start');
         const paymentComplete = await this.paymentService.changedStatus(orderId);
         await this.paymentService.createGroupBuying(paymentComplete);
+        const productIds = paymentComplete.purchaseProducts.map((pp) => pp.productId);
+        console.log(productIds);
+        await this.sendProductUpdateWebSocket(productIds);
       }
       return res.status(200).send({ "result": "finish" })
     } catch (error) {
