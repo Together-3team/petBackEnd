@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { UserService } from '../services'
-import { UserUpdateRequestDto } from '../dtos'
+import { UserResponseDto, UserUpdateRequestDto } from '../dtos'
 import { User } from '../entities'
+import { plainToInstance } from 'class-transformer'
 
 export class UserController {
   private userService: UserService
@@ -22,8 +23,9 @@ export class UserController {
   }
   
   public getMe = async (req: Request, res: Response): Promise<void> => {
+    const user = plainToInstance(UserResponseDto, req.user)
     try {
-      res.json(req.user)
+      res.json(user)
     } catch (error) {
       const errorMessage = (error as Error).message
       res.status(500).json({ error: errorMessage })
