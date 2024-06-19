@@ -14,7 +14,11 @@ export class UserRepository {
   }
 
   public findUserBySNS = async (snsId: string, provider: string): Promise<User | null> => {
-    return this.userRepo.findOneBy({ snsId, provider })
+    return this.userRepo.findOne({ where: { snsId, provider }, withDeleted: true })
+  }
+
+  public restoreUser = async (user: User): Promise<void> => {
+    await this.userRepo.restore(user.id)
   }
 
   public findUserByNickname = async (nickname: string): Promise<User | null> => {

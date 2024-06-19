@@ -24,6 +24,7 @@ export class AuthController {
       else {
         const user = await this.userRepository.findUserBySNS(profile.snsId, profile.provider);
         if (user) {
+          if (user.deletedAt) await this.userRepository.restoreUser(user)
           const response: AuthRegisteredResponseDto = {
             registered: true,
             ...this.login(user.id)
