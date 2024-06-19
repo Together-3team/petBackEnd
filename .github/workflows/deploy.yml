@@ -64,6 +64,7 @@ jobs:
             -e AWS_SECRET_ACCESS_KEY='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
             -e KAKAO_CLIENT_ID='${{ secrets.KAKAO_CLIENT_ID }}' \
             -e KAKAO_CALLBACK_URL='${{ secrets.KAKAO_CALLBACK_URL }}' \
+            -e PAYMENT_SECRET_KEY='${{ secrets.PAYMENT_SECRET_KEY }}' \
             --name 3team-back-server \
             ohseungjun/3team-back-server:latest
         
