@@ -14,4 +14,8 @@ export class PurchaseProductRepository {
   public updatePurchaseProductOrigin = (purchaseProduct: PurchaseProduct): Promise<PurchaseProduct> => {
     return this.purchaseProductRepository.save(purchaseProduct)
   }
+
+  public getRecentPurchaseProduct = (user: User): Promise<PurchaseProduct[]> => {
+    return this.purchaseProductRepository.find({ order: { createdAt: 'DESC' }, take: 1 })
+  }
 }
