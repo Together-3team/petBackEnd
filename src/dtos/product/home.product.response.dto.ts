@@ -6,7 +6,7 @@ import { Timestamp } from "typeorm"
  * @swagger
  * components:
  *   schemas:
- *     ProductResponseDto:
+ *     HomeProductResponseDto:
  *       type: object
  *       properties:
  *         id:
@@ -19,12 +19,24 @@ import { Timestamp } from "typeorm"
  *           type: string
  *         thumbNailImage:
  *           type: string
- *     ProductListResponseDto:
+ *         petType:
+ *           type: integer
+ *         productType:
+ *           type: integer
+ *         averageRating:
+ *           type: integer
+ *         reviewCount:
+ *           type: integer
+ *         totalAmount:
+ *           type: integer
+ *         isZzimed:
+ *           type: boolean
+ *     HomeProductListResponseDto:
  *       type: array
  *       items:
- *         $ref: '#/components/schemas/ProductResponseDto'
+ *         $ref: '#/components/schemas/HomeProductResponseDto'
  */
-export class ProductResponseDto {
+export class HomeProductResponseDto {
   @Expose()
   @IsInt()
   id!: number
@@ -49,11 +61,11 @@ export class ProductResponseDto {
   @IsInt()
   isDeleted!: number
 
-  @Exclude()
+  @Expose()
   @IsInt()
   petType!: number
 
-  @Exclude()
+  @Expose()
   @IsInt()
   productType!: number
 
@@ -62,4 +74,20 @@ export class ProductResponseDto {
 
   @Exclude()
   updatedAt!: Timestamp
+  
+  @Expose()
+  @IsInt()
+  averageRating!: number
+  
+  @Expose()
+  @IsInt()
+  reviewCount!: number
+  
+  @Expose()
+  @IsInt()
+  totalAmount!: number
+
+  @Expose()
+  @IsBoolean()
+  isZzimed!: boolean
 }

@@ -1,20 +1,31 @@
-import { Option, Product, Review } from '../entities'
-import { ProductRepository } from '../repositories'
-import { ProductDetailResponseDTO } from '../dtos'
+import { Option, Product, Review, User } from '../entities'
+import { ProductRepository, ZzimRepository } from '../repositories'
+import { HomeProductResponseDto, PaginationDto, ProductDetailResponseDTO } from '../dtos'
+import { plainToInstance } from 'class-transformer';
 
 export class ProductService {
   private productRepository: ProductRepository
+  private zzimRepository: ZzimRepository
 
   constructor() {
     this.productRepository = new ProductRepository();
+    this.zzimRepository = new ZzimRepository();
   }
 
   public getProductById = (productId: string): Promise<Product> => {
     return this.productRepository.getProductById(parseInt(productId))
   }
 
-  public getProductList = (page: number, pageSize: number, preferredPet: number): Promise<Product[]> => {
-    return this.productRepository.getProductList(page, pageSize, preferredPet)
+  public getProductList = async (page: number, pageSize: number, petType: number | undefined, productType: number | undefined, orderBy: number | undefined, user: User): Promise<PaginationDto<HomeProductResponseDto>> => {
+    const products = await this.productRepository.getProductList(page, pageSize, petType, productType, orderBy)
+    console.log(products)
+    const productResponses = await Promise.all(products.map(async product => {
+      const zzim = user.id ? await this.zzimRepository.findZzimByUserAndProductId(product.id, user) : null
+      return zzim ? plainToInstance(HomeProductResponseDto, {...product, isZzimed: true}):
+        plainToInstance(HomeProductResponseDto, {...product, isZzimed: false})
+    }))
+    const totalCount = await this.productRepository.getCount(petType, productType)
+    return { page, pageSize, totalCount, data: productResponses}
   }
 
   public makeOptions = async (options: Option[] | undefined) => {

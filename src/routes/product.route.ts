@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import { ProductController } from '../controllers'
+import passport from 'passport';
 
 const ProductRouter: Router = express.Router()
 const productController = new ProductController();
@@ -136,6 +137,8 @@ const productController = new ProductController();
  *   get:
  *     summary: 제품 목록 가져오는 엔드포인트
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -149,6 +152,24 @@ const productController = new ProductController();
  *           type: integer
  *           default: 5
  *         description: 페이지당 항목 수
+ *       - in: query
+ *         name: petType
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 선호하는 반려동물
+ *       - in: query
+ *         name: productType
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 찾아보려는 물품 종류
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 정렬 방식
  *     responses:
  *       200:
  *         description: 요청 성공
@@ -157,11 +178,13 @@ const productController = new ProductController();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/ProductPaginationResponseDto'
  *       500:
  *         description: Internal server error
  */
-ProductRouter.get('/', productController.getProductList);
+ProductRouter.get('/', 
+    passport.authenticate('jwt-guest', { session: false }),
+    productController.getProductList);
 
 /**
  * @swagger
