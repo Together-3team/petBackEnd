@@ -9,7 +9,6 @@ export class WebSocketService {
   }
 
   public sendProductUpdate(productId: number | undefined) {
-    console.log('fefef', productId);
     sendProductUpdate(this.io, productId);
   }
 }

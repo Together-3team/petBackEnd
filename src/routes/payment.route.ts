@@ -80,7 +80,7 @@ const createPaymentRouter = (paymentController: PaymentController): Router => {
    */
   PaymentRouter.post('/webhook', paymentController.webHook);
 
-  // PaymentRouter.post('/test', paymentController.test);
+  PaymentRouter.post('/test', paymentController.test);
 
   /**
    * @swagger

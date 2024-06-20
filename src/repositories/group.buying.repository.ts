@@ -1,14 +1,46 @@
-import { GroupBuying } from '../entities'
+import { GroupBuying, Product } from '../entities'
 import { AppDataSource } from '../config/typeorm'
+import { ProductByGroupBuyingDto } from '../dtos/groupBuying/product.by.group.buying.dto'
+import { GroupUserDto } from '../dtos/groupBuying/group.user.dto'
 
 export class GroupBuyingRepository {
   private groupBuyingRepository = AppDataSource.getRepository(GroupBuying)
+  private productRepository = AppDataSource.getRepository(Product)
 
 
-  public findById = (id: number): Promise<GroupBuying> => {
-    return this.groupBuyingRepository.findOneByOrFail({id})
+  public findById = async (id: number): Promise<GroupBuying> => {
+    return await this.groupBuyingRepository.findOneByOrFail({ id })
   }
-  public save = (groupBuying: GroupBuying): Promise<GroupBuying> => {
-    return this.groupBuyingRepository.save(groupBuying);
+  public save = async (groupBuying: GroupBuying): Promise<GroupBuying> => {
+    return await this.groupBuyingRepository.save(groupBuying);
+  }
+  public getProductByGroupBuying = async (id: number): Promise<ProductByGroupBuyingDto[]> => {
+    try{
+      const product = await this.productRepository.createQueryBuilder('product')
+        .leftJoinAndSelect('product.groupBuying', 'groupBuying')
+        .leftJoinAndSelect('groupBuying.purchaseProducts', 'purchaseProduct')
+        .leftJoinAndSelect('purchaseProduct.user', 'user')
+        .where('product.id = :id', { id })
+        .getOne();
+
+      if (!product) {
+        return [];
+      }
+
+      return product.groupBuying.map(gb => {
+        const userGroup: GroupUserDto[] = (gb.purchaseProducts ?? []).map(pp => ({
+          nickname: pp.user.nickname,
+        }));
+
+        return {
+          id: gb.id,
+          status: gb.status,
+          userGroup,
+        };
+      });
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
   }
 }

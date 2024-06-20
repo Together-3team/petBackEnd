@@ -14,6 +14,7 @@ import { initializeWebSocket } from './websockets/group.buying.websocket';
 import { PaymentController } from './controllers';
 import { WebSocketService } from './services';
 import createPaymentRouter from './routes/payment.route'
+import GroupBuyingRoute from './routes/group.buying.route'
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ app.use('/zzims', ZzimRouter);
 app.use('/payments', createPaymentRouter(paymentController));
 app.use('/selected-products', SelectedProductRouter);
 app.use('/purchases', PurchaseRouter);
+app.use('/group-buying', GroupBuyingRoute)
 
 // 기존 라우트 설정
 app.get('/', (req, res) => {

@@ -23,8 +23,6 @@ export class PaymentController {
     try {
       const uniqueArray = [...new Set(productIds)];
       for (const productId of uniqueArray) {
-        console.log(productId);
-        console.log(this.webSocketService);
         if (this.webSocketService) {
           this.webSocketService.sendProductUpdate(productId)
         } else {
@@ -39,7 +37,7 @@ export class PaymentController {
 
   public async test() {
     try {
-      await this.sendProductUpdateWebSocket([1]);
+      await this.sendProductUpdateWebSocket([1,3]);
     } catch (error) {
       console.log(error);
     }
