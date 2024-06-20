@@ -191,6 +191,7 @@ ProductRouter.get('/',
  * /products/recommended:
  *   get:
  *     summary: 추천 제품 목록 조회
+ *     description: 가장 최근에 구매한 상품의 productType을 가져옵니다.
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
@@ -240,6 +241,7 @@ ProductRouter.get('/recommended',
  * /products/hot:
  *   get:
  *     summary: 인기 제품 목록 조회
+ *     description: 모든 productType, 평균 별점이 4.5 이상인 제품을 가져옵니다.
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
@@ -289,6 +291,7 @@ ProductRouter.get('/hot',
  * /products/search:
  *   get:
  *     summary: 제품 목록 검색
+ *     description: 검색어 기반이기 때문에 petType, productType 필터링이 없습니다.
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
