@@ -135,7 +135,7 @@ const productController = new ProductController();
  * @swagger
  * /products:
  *   get:
- *     summary: 제품 목록 가져오는 엔드포인트
+ *     summary: 제품 목록 조회
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
@@ -157,19 +157,19 @@ const productController = new ProductController();
  *         schema:
  *           type: integer
  *           default: 0
- *         description: 선호하는 반려동물
+ *         description: 선호하는 반려동물 (0 - 전체, 1 - 강아지, 2 - 고양이)
  *       - in: query
  *         name: productType
  *         schema:
  *           type: integer
  *           default: 0
- *         description: 찾아보려는 물품 종류
+ *         description: 찾아보려는 물품 종류 (0 - 전체, 1 - 사료, 2 - 간식, 3 - 용품)
  *       - in: query
  *         name: orderBy
  *         schema:
  *           type: integer
  *           default: 0
- *         description: 정렬 방식
+ *         description: 정렬 방식 (0 - 최신 순, 1 - 별점 높은 순, 2 - 별점 낮은 순, 3 - 가격 높은 순, 4 - 가격 낮은 순)
  *     responses:
  *       200:
  *         description: 요청 성공
@@ -184,7 +184,156 @@ const productController = new ProductController();
  */
 ProductRouter.get('/', 
     passport.authenticate('jwt-guest', { session: false }),
-    productController.getProductList);
+    productController.getProducts);
+
+/**
+ * @swagger
+ * /products/recommended:
+ *   get:
+ *     summary: 추천 제품 목록 조회
+ *     description: 가장 최근에 구매한 상품의 productType을 가져옵니다.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 페이지 번호
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: 페이지당 항목 수
+ *       - in: query
+ *         name: petType
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 선호하는 반려동물 (0 - 전체, 1 - 강아지, 2 - 고양이)
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 정렬 방식 (0 - 최신 순, 1 - 별점 높은 순, 2 - 별점 낮은 순, 3 - 가격 높은 순, 4 - 가격 낮은 순)
+ *     responses:
+ *       200:
+ *         description: 요청 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProductPaginationResponseDto'
+ *       500:
+ *         description: Internal server error
+ */
+ProductRouter.get('/recommended', 
+    passport.authenticate('jwt-guest', { session: false }),
+    productController.getRecommendedProducts);
+
+/**
+ * @swagger
+ * /products/hot:
+ *   get:
+ *     summary: 인기 제품 목록 조회
+ *     description: 모든 productType, 평균 별점이 4.5 이상인 제품을 가져옵니다.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 페이지 번호
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: 페이지당 항목 수
+ *       - in: query
+ *         name: petType
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 선호하는 반려동물 (0 - 전체, 1 - 강아지, 2 - 고양이)
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 정렬 방식 (0 - 최신 순, 1 - 별점 높은 순, 2 - 별점 낮은 순, 3 - 가격 높은 순, 4 - 가격 낮은 순)
+ *     responses:
+ *       200:
+ *         description: 요청 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProductPaginationResponseDto'
+ *       500:
+ *         description: Internal server error
+ */
+ProductRouter.get('/hot', 
+    passport.authenticate('jwt-guest', { session: false }),
+    productController.getHotProducts);
+
+/**
+ * @swagger
+ * /products/search:
+ *   get:
+ *     summary: 제품 목록 검색
+ *     description: 검색어 기반이기 때문에 petType, productType 필터링이 없습니다.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: 페이지 번호
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: 페이지당 항목 수
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: 정렬 방식 (0 - 최신 순, 1 - 별점 높은 순, 2 - 별점 낮은 순, 3 - 가격 높은 순, 4 - 가격 낮은 순)
+ *       - in: query
+ *         name: keyword
+ *         schema:
+ *           type: string
+ *         description: 검색어
+ *     responses:
+ *       200:
+ *         description: 요청 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProductPaginationResponseDto'
+ *       500:
+ *         description: Internal server error
+ */
+ProductRouter.get('/search', 
+    passport.authenticate('jwt-guest', { session: false }),
+    productController.searchProducts);
 
 /**
  * @swagger

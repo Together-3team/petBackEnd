@@ -137,5 +137,5 @@ export class PurchaseProduct {
   trackingNumber?: string;
 
   @Column({ type: 'bigint'})
-  productId?: number;
+  productId!: number;
 }

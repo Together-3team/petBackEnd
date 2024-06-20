@@ -1,31 +1,41 @@
 import { Option, Product, Review, User } from '../entities'
-import { ProductRepository, ZzimRepository } from '../repositories'
+import { ProductRepository, PurchaseProductRepository, ZzimRepository } from '../repositories'
 import { HomeProductResponseDto, PaginationDto, ProductDetailResponseDTO } from '../dtos'
 import { plainToInstance } from 'class-transformer';
 
 export class ProductService {
   private productRepository: ProductRepository
   private zzimRepository: ZzimRepository
+  private purchaseProductRepository: PurchaseProductRepository
 
   constructor() {
     this.productRepository = new ProductRepository();
     this.zzimRepository = new ZzimRepository();
+    this.purchaseProductRepository = new PurchaseProductRepository();
   }
 
   public getProductById = (productId: string): Promise<Product> => {
     return this.productRepository.getProductById(parseInt(productId))
   }
 
-  public getProductList = async (page: number, pageSize: number, petType: number | undefined, productType: number | undefined, orderBy: number | undefined, user: User): Promise<PaginationDto<HomeProductResponseDto>> => {
-    const products = await this.productRepository.getProductList(page, pageSize, petType, productType, orderBy)
-    console.log(products)
-    const productResponses = await Promise.all(products.map(async product => {
+  public getProductList = async (page: number, pageSize: number, petType: number | undefined, productType: number | undefined, orderBy: number | undefined, keyword: string | undefined, hot: boolean, user: User): Promise<PaginationDto<HomeProductResponseDto>> => {
+    const products = await this.productRepository.getProductList(petType, productType, orderBy, keyword, hot)
+    const raw = (products.raw as any[]).slice((page-1)*pageSize, page*pageSize)
+    const entities = products.entities.slice((page-1)*pageSize, page*pageSize)
+    const productResponses = await Promise.all(entities.map(async (product, i) => {
       const zzim = user.id ? await this.zzimRepository.findZzimByUserAndProductId(product.id, user) : null
-      return zzim ? plainToInstance(HomeProductResponseDto, {...product, isZzimed: true}):
-        plainToInstance(HomeProductResponseDto, {...product, isZzimed: false})
+      return zzim ? plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: true}):
+        plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: false})
     }))
-    const totalCount = await this.productRepository.getCount(petType, productType)
-    return { page, pageSize, totalCount, data: productResponses}
+    return { page, pageSize, totalCount: products.entities.length, data: productResponses}
+  }
+
+  public getProductTypeFromRecentPurchase = async (user: User): Promise<number> => {
+    if (!user.id) return 0
+    const purchaseProduct = await this.purchaseProductRepository.getRecentPurchaseProduct(user)
+    if (!purchaseProduct.length) return 0
+    const product = await this.productRepository.getProductById(purchaseProduct[0].productId)
+    return product.productType
   }
 
   public makeOptions = async (options: Option[] | undefined) => {
