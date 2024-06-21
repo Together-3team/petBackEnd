@@ -34,7 +34,7 @@ const zzimController = new ZzimController()
  */
 ZzimRouter.get('/',
     passport.authenticate('jwt', { session: false }),
-    zzimController.getZzimsByUser)
+    zzimController.getZzimedProducts)
 
 /**
  * @swagger

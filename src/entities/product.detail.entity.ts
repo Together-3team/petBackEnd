@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp, OneToMany, OneToOne } from 'typeorm'
 import { Category, Product, Option, OptionCombination, Review } from '../entities'
 
 /**
@@ -52,8 +52,8 @@ export class ProductDetail {
     /**
      * 상품 참조 키
      */
-    @ManyToOne(() => Product, product => product.id, { nullable: true })
-    productId?: Product;
+    @OneToOne(() => Product, product => product.detail)
+    product!: Product;
 
     /**
      * review 관계 설정
@@ -72,12 +72,6 @@ export class ProductDetail {
      */
     @Column('text', { nullable: true })
     descriptionImages?: string;
-
-    /**
-     * 재고
-     */
-    @Column('int', { nullable: false })
-    inventory?: number;
 
     /**
      * 설명

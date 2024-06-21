@@ -31,4 +31,8 @@ export class ZzimService {
   public deleteZzim = (zzimId: string): Promise<DeleteResult> => {
     return this.zzimRepository.deleteZzim(parseInt(zzimId))
   }
+
+  public getZzimedProducts = (user: User) => {
+    return this.zzimRepository.getZzimedProducts(user)
+  }
 }

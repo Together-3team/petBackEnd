@@ -12,6 +12,7 @@ import { OptionCombination } from './option.combination.entity'
 import { Category } from './category.entity'
 import { GroupBuying } from './group.buying.entity'
 import { Review } from './review.entity'
+import { ProductDetail } from './product.detail.entity'
 
 /**
  * @swagger
@@ -110,13 +111,17 @@ export class Product {
     groupBuying!: GroupBuying[];
 
     @OneToMany(() => Option, option => option.product, { nullable: true })
-    options?: Option[];
+    options!: Option[];
 
     @OneToMany(() => Review, review => review.product, { nullable: true })
-    reviews?: Review[];
+    reviews!: Review[];
+
+    @OneToOne(() => ProductDetail, detail => detail.product)
+    @JoinColumn()
+    detail!: ProductDetail
 
     @OneToMany(() => OptionCombination, optionCombination => optionCombination.product, { nullable: true })
-    optionCombinations?: OptionCombination[];
+    optionCombinations!: OptionCombination[];
 
     @OneToOne(() => Category, (category: { product: any; }) => category.product, { nullable: true })
     @JoinColumn()

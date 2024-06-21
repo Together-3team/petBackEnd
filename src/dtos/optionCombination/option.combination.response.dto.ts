@@ -22,6 +22,10 @@ import { Timestamp } from "typeorm"
  *           type: integer
  *         amount:
  *           type: integer
+ *     OptionCombinationListResponseDto:
+ *       type: array
+ *       items:
+ *         $ref: '#/components/schemas/OptionCombinationResponseDto'
  */
 export class OptionCombinationResponseDto {
   @Expose()

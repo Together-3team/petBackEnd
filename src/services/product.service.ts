@@ -1,6 +1,6 @@
 import { Option, Product, Review, User } from '../entities'
 import { ProductRepository, PurchaseProductRepository, ZzimRepository } from '../repositories'
-import { HomeProductResponseDto, OptionResponseDto, PaginationDto, ProductDetailResponseDTO } from '../dtos'
+import { HomeProductResponseDto, OptionCombinationResponseDto, OptionResponseDto, PaginationDto, FullProductResponseDto, ReviewResponseDto, ProductDetailResponseDto, ProductResponseDto } from '../dtos'
 import { plainToInstance } from 'class-transformer';
 
 export class ProductService {
@@ -73,48 +73,16 @@ export class ProductService {
     return { rating, reviewCount };
   }
 
-  public getProductDetail = async (productId: number): Promise<{
-    productImages: any;
-    originalPrice: any;
-    productId: any;
-    reviewCount: any;
-    price: any;
-    options: any;
-    thumbNailImage: any;
-    optionCombinations: any;
-    title: any;
-    category: any;
-    descriptionImages: any;
-    reviewRating: any
-  }> => {
-    const result = await this.productRepository.getProductDetail(productId);
-
-
-    let makeOptions;
-    let makeReviews;
-
-    if (result?.product?.options) {
-      makeOptions = await this.makeOptions(result?.product?.options);
-    }
-
-    if (result?.productDetail?.reviews) {
-      makeReviews = await this.makeReviews(result?.productDetail.reviews);
-    }
-
-    // 필요한 데이터만 추출
-    return {
-      productImages: result?.productDetail?.productImages,
-      descriptionImages: result?.productDetail?.descriptionImages,
-      thumbNailImage: result?.productDetail?.productId?.thumbNailImage,
-      title: result?.productDetail?.productId?.title,
-      originalPrice: result?.productDetail?.productId?.originalPrice,
-      price: result?.productDetail?.productId?.price,
-      reviewRating: makeReviews?.rating,
-      reviewCount: makeReviews?.reviewCount,
-      productId: result?.productDetail?.productId?.id,
-      category: result?.product?.category?.categoryStr,
-      options: makeOptions,
-      optionCombinations: result?.product?.optionCombinations?.map(({ createdAt, ...rest }) => rest),
-    }
+  public getProductDetail = async (productId: number, user: User): Promise<FullProductResponseDto> => {
+    const raw = await this.productRepository.getProductDetail(productId)
+    const isZzimed = await this.zzimRepository.findZzimByUserAndProductId(productId, user) ? true : false
+    const detail = plainToInstance(ProductDetailResponseDto, raw.detail)
+    const options = await this.makeOptions(raw.options)
+    const optionCombinations = raw.optionCombinations.map(oc => plainToInstance(OptionCombinationResponseDto, oc))
+    const reviews = raw.reviews.map(review => plainToInstance(ReviewResponseDto, {...review, reviewerName: review.user ? review.user.nickname : '탈퇴한 사용자입니다', reviewerProfileImage: review.user ? review.user.profileImage : 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png'}))
+    const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    const reviewCount = reviews.length
+    const totalAmount = optionCombinations.reduce((sum, oc) => sum + oc.amount, 0)
+    return plainToInstance(FullProductResponseDto, {...raw, isZzimed, detail, averageRating, reviewCount, totalAmount, optionCombinations, reviews, options})
   }
 }

@@ -344,6 +344,8 @@ ProductRouter.get('/search',
  *   get:
  *     summary: 제품 상세 정보 가져오는 엔드포인트
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -357,12 +359,14 @@ ProductRouter.get('/search',
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductDetailResponseDTO'
+ *               $ref: '#/components/schemas/FullProductResponseDto'
  *       404:
  *         description: 제품을 찾을 수 없음
  *       500:
  *         description: Internal server error
  */
-ProductRouter.get('/detail/:id', productController.getProductDetail);
+ProductRouter.get('/detail/:id',
+    passport.authenticate('jwt-guest', { session: false }),
+    productController.getProductDetail);
 
 export default ProductRouter

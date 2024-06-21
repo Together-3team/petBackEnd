@@ -45,4 +45,15 @@ export class ZzimController {
       res.status(500).json({ error: errorMessage })
     }
   }
+
+  public getZzimedProducts = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const result = await this.zzimService.getZzimedProducts(user)
+      res.json(result)
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
 }

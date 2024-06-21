@@ -5,6 +5,7 @@ import { DeleteResult } from 'typeorm'
 
 export class ZzimRepository {
   private zzimRepo = AppDataSource.getRepository(Zzim)
+  private userRepo = AppDataSource.getRepository(User)
 
   public findZzimById = async (id: number, user: User): Promise<Zzim> => {
     return this.zzimRepo.findOneByOrFail({id, user: {id: user.id}})
@@ -19,12 +20,21 @@ export class ZzimRepository {
   }
 
   public createZzim = async (zzimData: ZzimCreateRequestDto, user: User): Promise<Zzim> => {
-    const newZzim = this.zzimRepo.create({...zzimData, user})
+    const newZzim = this.zzimRepo.create({product: {id: zzimData.productId}, user})
     const result = await this.zzimRepo.insert(newZzim)
     return this.zzimRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 
   public deleteZzim = (id: number): Promise<DeleteResult> => {
     return this.zzimRepo.delete({id})
+  }
+
+  public getZzimedProducts = async (user: User) => {
+    const querybuilder = this.zzimRepo.createQueryBuilder('zzim')
+      .leftJoin('zzim.user', 'user')
+      .leftJoinAndSelect('zzim.product', 'product')
+      .where('user.id = :userId', { userId: user.id })
+    console.log(await querybuilder.getMany())
+    return querybuilder.getRawMany()
   }
 }

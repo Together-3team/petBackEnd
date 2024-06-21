@@ -14,7 +14,7 @@ export class ProductRepository {
   }
   
   // 페이지 번호와 페이지 크기를 사용하여 상품 목록을 가져오는 메서드
-  public getProductList = (petType: number | undefined, productType: number | undefined, orderBy: number | undefined, keyword: string | undefined, hot: boolean): Promise<{entities: Product[], raw: any}> => {
+  public getProductList = async (petType: number | undefined, productType: number | undefined, orderBy: number | undefined, keyword: string | undefined, hot: boolean): Promise<{entities: Product[], raw: any}> => {
     const orderByMap = [
       ['product.updatedAt', 'DESC'],
       ['averageRating', 'DESC'],
@@ -38,29 +38,10 @@ export class ProductRepository {
     return querybuilder.getRawAndEntities()
   }
 
-  public getProductDetail = async (productId: number): Promise<{
-    product: Product;
-    productDetail: ProductDetail
-  } | null> => {
-    const productDetail = await this.productDetailRepository.findOne({
+  public getProductDetail = (productId: number): Promise<Product> => {
+    return this.productListRepository.findOneOrFail({
       where: { id: productId },
-      relations: ['productId']
-    });
-
-    const product = await this.productListRepository.findOne({
-      where: { id: productId },
-      relations: ['options', 'optionCombinations']
+      relations: ['options', 'optionCombinations', 'detail', 'reviews', 'reviews.user']
     })
-
-
-
-    if (!productDetail || !product) {
-      return null;
-    }
-
-    // productId에 해당하는 모든 Review를 가져옴
-    productDetail.reviews = await this.reviewRepositoryInstance.getReviewsByProductId(productId);
-
-    return {productDetail, product} || null;
   }
 }

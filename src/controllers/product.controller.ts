@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ProductService } from '../services';
 import { Product, User } from '../entities';
-import { HomeProductResponseDto, PaginationDto, ProductDetailResponseDTO, ProductListRequestDTO } from '../dtos'
+import { HomeProductResponseDto, PaginationDto, ProductListRequestDTO } from '../dtos'
 
 export class ProductController {
   private productService: ProductService;
@@ -100,16 +100,12 @@ export class ProductController {
    */
 
   public getProductDetail = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
     try {
-      const productId = parseInt(req.params.id, 10);
-      if (isNaN(productId)) {
-        res.status(400).json({ error: 'Invalid product id' });
-        return
-      }
-
-      const productInfo: ProductDetailResponseDTO | null = await this.productService.getProductDetail(productId);
+      const productId = parseInt(req.params.id, 10)
+      const product = await this.productService.getProductDetail(productId, user)
       if (productId) {
-        res.status(200).json(productInfo);
+        res.json(product);
       } else {
         res.status(404).json({ error: 'Product not found' });
       }
