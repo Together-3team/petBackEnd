@@ -8,8 +8,11 @@ export class GroupBuyingRepository {
   private productRepository = AppDataSource.getRepository(Product)
 
 
-  public findById = async (id: number): Promise<GroupBuying> => {
-    return await this.groupBuyingRepository.findOneByOrFail({ id })
+  public findById = async (id: number): Promise<GroupBuying | null> => {
+    return await this.groupBuyingRepository.findOne({
+      relations: ['purchaseProducts'],
+      where: { id }
+    })
   }
   public save = async (groupBuying: GroupBuying): Promise<GroupBuying> => {
     return await this.groupBuyingRepository.save(groupBuying);

@@ -111,14 +111,10 @@ export class PaymentService {
       throw new Error('Group buy not found');
     }
 
-    console.log(groupBuyingItem.purchaseProducts)
 
     if (!groupBuyingItem.purchaseProducts) {
-      console.log('puchase out')
       groupBuyingItem.purchaseProducts = [];
     }
-
-    console.log(groupBuyingItem.purchaseProducts)
 
     groupBuyingItem.purchaseProducts.push(purchaseProduct);
 
