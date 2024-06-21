@@ -1,6 +1,6 @@
 import { Option, Product, Review, User } from '../entities'
 import { ProductRepository, PurchaseProductRepository, ZzimRepository } from '../repositories'
-import { HomeProductResponseDto, PaginationDto, ProductDetailResponseDTO } from '../dtos'
+import { HomeProductResponseDto, OptionResponseDto, PaginationDto, ProductDetailResponseDTO } from '../dtos'
 import { plainToInstance } from 'class-transformer';
 
 export class ProductService {
@@ -40,15 +40,15 @@ export class ProductService {
 
   public makeOptions = async (options: Option[] | undefined) => {
     return options?.reduce((acc, option) => {
-      const { id, optionKey, optionValue } = option;
+      const { id, optionKey, optionValue, optionPrice } = option;
       if (optionKey !== undefined && id !== undefined && optionValue !== undefined) { // 타입 가드 추가
         if (!acc[optionKey]) {
           acc[optionKey] = [];
         }
-        acc[optionKey].push({ id, optionValue });
+        acc[optionKey].push(plainToInstance(OptionResponseDto, option));
       }
       return acc;
-    }, {} as Record<string, { id: number; optionValue: string }[]>);
+    }, {} as Record<string, OptionResponseDto[]>);
   }
 
   public makeReviews = async (reviews: Review[]): Promise<{ reviewCount: number; rating: number }> => {

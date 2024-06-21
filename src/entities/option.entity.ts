@@ -35,30 +35,33 @@ export class Option {
    * 고유 ID
    */
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   /**
    * 옵션 타입
    */
   @Column({ type: 'varchar', length: 15 })
-  optionKey?: string;
+  optionKey!: string;
 
   /**
    * 옵션 명
    */
   @Column({ type: 'varchar', length: 50 })
-  optionValue?: string;
+  optionValue!: string;
+
+  @Column('int')
+  optionPrice!: number
 
   /**
    * 생성일
    */
   @CreateDateColumn()
-  createdAt?: Timestamp;
+  createdAt!: Timestamp;
 
   /**
    * 상품 참조 키
    */
   @ManyToOne(() => Product, product => product.options, { nullable: true })
-  product?: number;
+  product!: number;
 
 }

@@ -24,7 +24,7 @@ import { IsBoolean, IsInt, IsString, Matches } from "class-validator"
  *           pattern: ^010-\\d{4}-\\d{4}$
  *           description: 수령인 연락처
  *         zipCode:
- *           type: integer
+ *           type: string
  *           description: 우편 번호
  *         address:
  *           type: string
@@ -47,8 +47,8 @@ export class DeliveryCreateRequestDto {
   @Matches(/^010-\d{4}-\d{4}$/, {message: 'phoneNumber must be a valid Korean phone number (010-XXXX-XXXX)'})
   recipientPhoneNumber!: string
 
-  @IsInt()
-  zipCode!: number
+  @IsString()
+  zipCode!: string
 
   @IsString()
   address!: string

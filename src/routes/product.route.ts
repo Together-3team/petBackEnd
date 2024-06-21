@@ -66,7 +66,10 @@ const productController = new ProductController();
  *           description: 리뷰 갯수
  *         options:
  *           type: object
- *           nullable: true
+ *           additionalProperties:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/OptionResponseDto'
  *           description: 상품 옵션들
  *         thumbNailImage:
  *           type: string

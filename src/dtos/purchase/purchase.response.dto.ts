@@ -22,7 +22,7 @@ import { PurchaseProductResponseDto } from "../../dtos"
  *           example: 010-1234-5678
  *           pattern: ^010-\\d{4}-\\d{4}$
  *         zipCode:
- *           type: integer
+ *           type: string
  *         address:
  *           type: string
  *         detailedAddress:
@@ -67,8 +67,8 @@ export class PurchaseResponseDto {
   recipientPhoneNumber!: string
 
   @Expose()
-  @IsInt()
-  zipCode!: number
+  @IsString()
+  zipCode!: string
 
   @Expose()
   @IsString()

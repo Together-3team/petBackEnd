@@ -21,7 +21,7 @@ import { User } from "../../entities"
  *           example: 010-1234-5678
  *           pattern: ^010-\\d{4}-\\d{4}$
  *         zipCode:
- *           type: number
+ *           type: string
  *         address:
  *           type: string
  *         detailedAddress:
@@ -52,8 +52,8 @@ export class DeliveryResponseDto {
   recipientPhoneNumber!: string
 
   @Expose()
-  @IsInt()
-  zipCode!: number
+  @IsString()
+  zipCode!: string
 
   @Expose()
   @IsString()

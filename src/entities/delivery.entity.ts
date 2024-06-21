@@ -24,7 +24,7 @@ import { User } from "../entities"
  *           type: string
  *           description: 수령인 연락처
  *         zipCode:
- *           type: integer
+ *           type: string
  *           description: 우편번호
  *         address:
  *           type: string
@@ -70,8 +70,8 @@ export class Delivery {
     @Column('varchar', {length: 20})
     recipientPhoneNumber: string
 
-    @Column('int')
-    zipCode: number
+    @Column('varchar', { length: 10})
+    zipCode: string
 
     @Column('varchar', {length: 30})
     address: string
@@ -89,7 +89,7 @@ export class Delivery {
     @JoinColumn()
     user: User
 
-    constructor(name: string, recipient: string, recipientPhoneNumber: string, zipCode: number, address: string, detailedAddress: string, user: User) {
+    constructor(name: string, recipient: string, recipientPhoneNumber: string, zipCode: string, address: string, detailedAddress: string, user: User) {
         this.name = name
         this.recipient = recipient
         this.recipientPhoneNumber = recipientPhoneNumber

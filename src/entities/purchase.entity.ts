@@ -24,7 +24,7 @@ import { PurchaseProduct } from './purchase.product.entity'
  *           type: string
  *           description: 수령인 연락처
  *         zipCode:
- *           type: integer
+ *           type: string
  *           description: 우편번호
  *         address:
  *           type: string
@@ -81,8 +81,8 @@ export class Purchase {
   @Column('varchar', {length: 20})
   recipientPhoneNumber!: string
 
-  @Column('int')
-  zipCode!: number
+  @Column('varchar', {length: 10})
+  zipCode!: string
 
   @Column('varchar', {length: 30})
   address!: string

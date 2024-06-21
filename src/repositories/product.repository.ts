@@ -49,7 +49,7 @@ export class ProductRepository {
 
     const product = await this.productListRepository.findOne({
       where: { id: productId },
-      relations: ['options', 'optionCombinations', 'category']
+      relations: ['options', 'optionCombinations']
     })
 
 

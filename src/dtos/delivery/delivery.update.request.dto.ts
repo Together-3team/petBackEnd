@@ -19,7 +19,7 @@ import { IsBoolean, IsInt, IsOptional, IsString, Matches } from "class-validator
  *           pattern: ^010-\\d{4}-\\d{4}$
  *           description: 수령인 연락처
  *         zipCode:
- *           type: integer
+ *           type: string
  *           description: 우편 번호
  *         address:
  *           type: string
@@ -46,8 +46,8 @@ export class DeliveryUpdateRequestDto {
   recipientPhoneNumber?: string
 
   @IsOptional()
-  @IsInt()
-  zipCode?: number
+  @IsString()
+  zipCode?: string
 
   @IsOptional()
   @IsString()
