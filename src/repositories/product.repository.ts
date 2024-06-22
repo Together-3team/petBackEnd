@@ -41,7 +41,7 @@ export class ProductRepository {
   public getProductDetail = (productId: number): Promise<Product> => {
     return this.productListRepository.findOneOrFail({
       where: { id: productId },
-      relations: ['options', 'optionCombinations', 'detail', 'reviews', 'reviews.user']
+      relations: ['options', 'optionCombinations', 'detail', 'reviews', 'reviews.user', 'reviews.purchaseProduct']
     })
   }
 }

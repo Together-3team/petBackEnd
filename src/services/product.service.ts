@@ -79,7 +79,12 @@ export class ProductService {
     const detail = plainToInstance(ProductDetailResponseDto, raw.detail)
     const options = await this.makeOptions(raw.options)
     const optionCombinations = raw.optionCombinations.map(oc => plainToInstance(OptionCombinationResponseDto, oc))
-    const reviews = raw.reviews.map(review => plainToInstance(ReviewResponseDto, {...review, reviewerName: review.user ? review.user.nickname : '탈퇴한 사용자입니다', reviewerProfileImage: review.user ? review.user.profileImage : 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png'}))
+    const reviews = raw.reviews.map(review => plainToInstance(ReviewResponseDto, {
+      ...review,
+      reviewerName: review.user ? review.user.nickname : '탈퇴한 사용자입니다',
+      reviewerProfileImage: review.user ? review.user.profileImage : 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png',
+      optionCombination: review.purchaseProduct ? `${review.purchaseProduct.combinationName} | ${review.purchaseProduct.quantity}개` : ''
+    }))
     const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
     const reviewCount = reviews.length
     const totalAmount = optionCombinations.reduce((sum, oc) => sum + oc.amount, 0)
