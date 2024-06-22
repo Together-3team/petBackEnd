@@ -23,9 +23,7 @@ export class ZzimService {
   }
 
   public getZzimedProducts = async (user: User) => {
-    const zzims = await this.zzimRepository.getZzimedProducts(user)
-    const entities = zzims.entities
-    const raw = zzims.raw
+    const { raw, entities } = await this.zzimRepository.getZzimedProducts(user)
     return Promise.all(entities.map(async (zzim, i) => plainToInstance(HomeProductResponseDto, {...zzim.product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: true})))
   }
 }

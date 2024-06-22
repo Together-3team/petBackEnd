@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ProductService } from '../services';
-import { Product, User } from '../entities';
-import { HomeProductResponseDto, PaginationDto, ProductListRequestDTO } from '../dtos'
+import { User } from '../entities';
+import { HomeProductResponseDto, PaginationDto } from '../dtos'
 
 export class ProductController {
   private productService: ProductService;

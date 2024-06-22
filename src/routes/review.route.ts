@@ -26,18 +26,7 @@ const reviewController = new ReviewController();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               productId:
- *                 type: integer
- *               purchaseProductId:
- *                 type: integer
- *               rating:
- *                 type: integer
- *               description:
- *                 type: string
- *               reviewImages:
- *                 type: string
+ *             $ref: '#/components/schemas/ReviewCreateRequestDto'
  *     responses:
  *       200:
  *         description: 리뷰 작성 성공
