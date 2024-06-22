@@ -68,7 +68,7 @@ jobs:
             -e GUEST_ACCESS_TOKEN='${{ secrets.GUEST_ACCESS_TOKEN }}' \
             --name 3team-back-server \
             --memory=1g \
-            --node-options="--max-old-space-size=1024" \
+            -e NODE_OPTIONS="--max-old-space-size=1024" \
             ohseungjun/3team-back-server:latest
         
           # Clean up unused images
