@@ -1,7 +1,7 @@
 import { IsInt, IsString } from "class-validator"
 import { Exclude, Expose } from "class-transformer"
 import { Timestamp } from "typeorm"
-import { User } from "../../entities"
+import { PurchaseProduct, User } from "../../entities"
 
 /**
  * @swagger
@@ -17,6 +17,11 @@ import { User } from "../../entities"
  *         reviewImages:
  *           type: string
  *         description:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         optionCombination:
  *           type: string
  *     ReviewListResponseDto:
  *       type: array
@@ -43,7 +48,7 @@ export class ReviewResponseDto {
   @Exclude()
   isDeleted!: number
 
-  @Exclude()
+  @Expose()
   createdAt!: Timestamp
 
   @Exclude()
@@ -54,4 +59,10 @@ export class ReviewResponseDto {
   
   @Expose()
   reviewerProfileImage!: string
+
+  @Expose()
+  optionCombination!: string
+
+  @Exclude()
+  purchaseProduct!: PurchaseProduct
 }
