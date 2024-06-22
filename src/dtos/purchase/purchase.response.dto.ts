@@ -37,6 +37,9 @@ import { PurchaseProductResponseDto } from "../../dtos"
  *           type: string
  *         paymentStatus:
  *           type: integer
+ *         createdAt:
+ *           type: string
+ *           format: date-time
  *     PurchaseListResponseDto:
  *       type: array
  *       items:
@@ -47,7 +50,7 @@ export class PurchaseResponseDto {
   @IsInt()
   id!: number
 
-  @Exclude()
+  @Expose()
   createdAt!: Date | Timestamp
 
   @Exclude()

@@ -34,6 +34,9 @@ import { Timestamp } from "typeorm"
  *           type: string
  *         productId:
  *           type: integer
+ *         createdAt:
+ *           type: string
+ *           format: date-time
  *     PurchaseProductListResponseDto:
  *       type: array
  *       items:
@@ -44,7 +47,7 @@ export class PurchaseProductResponseDto {
   @IsInt()
   id!: number
 
-  @Exclude()
+  @Expose()
   createdAt!: Date | Timestamp
 
   @Exclude()
