@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import { ReviewController } from '../controllers'
 import passport from 'passport'
+import { validateDto } from '../middleware';
+import { ReviewCreateRequestDto } from '../dtos';
 
 const ReviewRouter: Router = express.Router()
 const reviewController = new ReviewController();
@@ -37,7 +39,10 @@ const reviewController = new ReviewController();
  *       500:
  *         description: 서버 오류
  */
-ReviewRouter.post('/new', passport.authenticate('jwt', { session: false }), reviewController.createReview);
+ReviewRouter.post('/new',
+    passport.authenticate('jwt', { session: false }),
+    validateDto(ReviewCreateRequestDto),
+    reviewController.createReview);
 
 /**
  * @swagger
