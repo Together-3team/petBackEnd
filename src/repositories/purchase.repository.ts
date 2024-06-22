@@ -58,6 +58,10 @@ export class PurchaseRepository {
     return this.purchaseRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 
+  public getRecentPurchase = async (user: User): Promise<Purchase[]> => {
+    return this.purchaseRepo.find({ where: { user: { id: user.id } }, order: { createdAt: 'DESC' }, take: 1 })
+  }
+
   public updatePurchase = async (id: number, purchaseData: PurchaseUpdateRequestDto, user: User): Promise<Purchase> => {
     await this.purchaseRepo.findOneByOrFail({id, user: {id: user.id}})
     await this.purchaseRepo.save({...purchaseData, id})

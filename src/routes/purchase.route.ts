@@ -35,6 +35,52 @@ const purchaseController = new PurchaseController()
 PurchaseRouter.get('/',
     passport.authenticate('jwt', { session: false }),
     purchaseController.getPurchasesByUser)
+/**
+ * @swagger
+ * /purchases/delivery-message:
+ *   get:
+ *     summary: 최근 배송 메시지
+ *     tags: [Purchases]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 최근 배송 메시지
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 deliveryMessage:
+ *                   type: string
+ *       404:
+ *         description: 존재하지 않는 사용자입니다
+ */
+PurchaseRouter.get('/delivery-message',
+    passport.authenticate('jwt', { session: false }),
+    purchaseController.getRecentDeliveryMessage)
+
+/**
+ * @swagger
+ * /purchases:
+ *   get:
+ *     summary: 구매 내역 조회
+ *     tags: [Purchases]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 구매 내역 리스트
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PurchaseListResponseDto'
+ *       404:
+ *         description: 존재하지 않는 사용자입니다
+ */
+PurchaseRouter.get('/',
+    passport.authenticate('jwt', { session: false }),
+    purchaseController.getPurchasesByUser)
 
 /**
  * @swagger

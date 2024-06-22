@@ -33,6 +33,12 @@ export class PurchaseService {
     return this.entityToResponseDto(purchase)
   }
 
+  public getRecentDeliveryMessage = async (user: User): Promise<string> => {
+    const purchase = await this.purchaseRepository.getRecentPurchase(user)
+    if (!purchase.length) return ''
+    else return purchase[0].deliveryMessage || ''
+  }
+
   public updatePurchase = async (purchaseId: string, purchaseData: PurchaseUpdateRequestDto, user: User): Promise<PurchaseResponseDto> => {
     const purchase = await this.purchaseRepository.updatePurchase(parseInt(purchaseId), purchaseData, user)
     return plainToInstance(PurchaseResponseDto, purchase)

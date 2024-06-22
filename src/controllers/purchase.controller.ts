@@ -45,6 +45,17 @@ export class PurchaseController {
     }
   }
 
+  public getRecentDeliveryMessage = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as User
+    try {
+      const deliveryMessage = await this.purchaseService.getRecentDeliveryMessage(user)
+      res.json({ deliveryMessage: deliveryMessage })
+    } catch (error) {
+      const errorMessage = (error as Error).message
+      res.status(500).json({ error: errorMessage })
+    }
+  }
+
   public updatePurchase = async (req: Request, res: Response): Promise<void> => {
     const purchaseData: PurchaseUpdateRequestDto = req.body
     const purchaseId = req.params.id
