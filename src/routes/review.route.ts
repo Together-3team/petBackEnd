@@ -70,7 +70,7 @@ ReviewRouter.post('/new',
 
 /**
  * @swagger
- * /reviews/detail/{rid}:
+ * /review/detail/{rid}:
  *   get:
  *     summary: 특정 리뷰 조회
  *     tags: [Reviews]
