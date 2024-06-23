@@ -3,6 +3,7 @@ import { IsBoolean, IsInt, IsString } from "class-validator"
 import { Timestamp } from "typeorm"
 import { OptionCombinationResponseDto } from "../optionCombination"
 import { ReviewResponseDto } from "../review"
+import { HomeProductResponseDto } from "./home.product.response.dto"
 
 /**
  * @swagger
@@ -43,6 +44,8 @@ import { ReviewResponseDto } from "../review"
  *           $ref: '#/components/schemas/OptionCombinationListResponseDto'
  *         reviews:
  *           $ref: '#/components/schemas/ReviewListResponseDto'
+ *         similarProducts:
+ *           $ref: '#/components/schemas/HomeProductListResponseDto'
  */
 export class FullProductResponseDto {
   @Expose()
@@ -113,4 +116,7 @@ export class FullProductResponseDto {
 
   @Exclude()
   category!: any
+
+  @Expose()
+  similarProducts!: HomeProductResponseDto[]
 }
