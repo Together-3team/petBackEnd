@@ -18,6 +18,17 @@ export class AuthController {
     return { accessToken, refreshToken }
   }
 
+  public authenticate = (provider: string, local: boolean) => (req: Request, res: Response) => {
+    const redirect_uri = local ?
+      `http://localhost:3000/auth/${provider}/callback` :
+      `https://pawing-market.vercel.app/auth/${provider}/callback`
+    const url = (provider === 'google' ?
+      `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&scope=https://www.googleapis.com/auth/userinfo.email` :
+      `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}`)
+      +`&redirect_uri=${redirect_uri}&response_type=code`
+    res.redirect(url)
+  }
+
   public authenticateCallback = async (req: Request, res: Response, profile: ProfileDto) => {
     try {
       if (!profile) res.status(404).json({message: '로그인에 실패했습니다'})

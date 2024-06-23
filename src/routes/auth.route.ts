@@ -9,9 +9,9 @@ const authController = new AuthController()
 
 /**
  * @swagger
- * /auth/google:
+ * /auth/google/local:
  *   get:
- *     summary: 구글 인증
+ *     summary: 구글 localhost 인증
  *     tags: [Auth]
  *     responses:
  *       200:
@@ -25,14 +25,33 @@ const authController = new AuthController()
  *       404:
  *         description: 로그인에 실패했습니다
  */
-AuthRouter.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
+AuthRouter.get('/google/local', authController.authenticate('google', true))
+/**
+ * @swagger
+ * /auth/google/server:
+ *   get:
+ *     summary: 구글 vercel 인증
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: 사용자 상세 정보
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - $ref: '#/components/schemas/AuthRegisteredResponseDto'
+ *                 - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
+ *       404:
+ *         description: 로그인에 실패했습니다
+ */
+AuthRouter.get('/google/server', authController.authenticate('google', false))
 AuthRouter.get('/google/callback', authController.authenticateGoogle)
 
 /**
  * @swagger
- * /auth/kakao:
+ * /auth/kakao/local:
  *   get:
- *     summary: 카카오 인증
+ *     summary: 카카오 localhost 인증
  *     tags: [Auth]
  *     responses:
  *       200:
@@ -46,7 +65,26 @@ AuthRouter.get('/google/callback', authController.authenticateGoogle)
  *       404:
  *         description: 로그인에 실패했습니다
  */
-AuthRouter.get('/kakao', passport.authenticate('kakao'))
+AuthRouter.get('/kakao/local', authController.authenticate('kakao', true))
+/**
+ * @swagger
+ * /auth/kakao/server:
+ *   get:
+ *     summary: 카카오 vercel 인증
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: 사용자 상세 정보
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - $ref: '#/components/schemas/AuthRegisteredResponseDto'
+ *                 - $ref: '#/components/schemas/AuthNotRegisteredResponseDto'
+ *       404:
+ *         description: 로그인에 실패했습니다
+ */
+AuthRouter.get('/kakao/server', authController.authenticate('kakao', false))
 AuthRouter.get('/kakao/callback', authController.authenticateKakao)
 
 /**
