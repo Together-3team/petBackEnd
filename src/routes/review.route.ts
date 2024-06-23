@@ -29,6 +29,10 @@ const reviewController = new ReviewController();
  *           type: string
  *         description:
  *           type: string
+ *         combinationName:
+ *           type: string
+ *         title:
+ *           type: string
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -66,7 +70,7 @@ ReviewRouter.post('/new',
 
 /**
  * @swagger
- * /review/{rid}:
+ * /reviews/detail/{rid}:
  *   get:
  *     summary: 특정 리뷰 조회
  *     tags: [Reviews]

@@ -14,6 +14,12 @@ export class ResponseMyReviewDto {
   @IsString()
   description?: string = '';
 
+  @IsString()
+  combinationName?: string = '';
+
+  @IsString()
+  title?: string = '';
+
   @IsDate()
   createdAt?: Timestamp;
 

@@ -12,7 +12,6 @@ export class ReviewService {
   public async getMyReview(user: User, reviewId: number): Promise<ResponseMyReviewDto | { error: string }> {
     const review = await this.reviewRepository.findById(reviewId);
 
-    console.log(review);
 
     if (!review) {
       return { error: "Review not found" };
@@ -28,6 +27,8 @@ export class ReviewService {
       rating: review.rating,
       reviewImages: review.reviewImages,
       description: review.description,
+      combinationName: review.purchaseProduct.combinationName,
+      title: review.purchaseProduct.title,
       createdAt: review.createdAt,
     };
   }
