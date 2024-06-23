@@ -1,5 +1,7 @@
 import { IsInt } from "class-validator"
-import { Product } from "../../entities"
+import { Product, User } from "../../entities"
+import { Exclude, Expose } from "class-transformer"
+import { timestamp } from "aws-sdk/clients/cloudfront"
 
 /**
  * @swagger
@@ -11,15 +13,23 @@ import { Product } from "../../entities"
  *         id:
  *           type: integer
  *         product:
- *           $ref: '#/components/schemas/ProductList'
+ *           $ref: '#/components/schemas/ProductResponseDto'
  *     ZzimListResponseDto:
  *       type: array
  *       items:
  *         $ref: '#/components/schemas/ZzimResponseDto'
  */
 export class ZzimResponseDto {
+  @Expose()
   @IsInt()
   id!: number
 
+  @Exclude()
+  user!: User
+
+  @Expose()
   product!: Product
+
+  @Exclude()
+  createdAt!: timestamp
 }

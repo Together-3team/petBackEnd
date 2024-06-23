@@ -25,16 +25,21 @@ export class ZzimRepository {
     return this.zzimRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 
-  public deleteZzim = (id: number): Promise<DeleteResult> => {
-    return this.zzimRepo.delete({id})
+  public deleteZzim = (productId: number): Promise<DeleteResult> => {
+    return this.zzimRepo.delete({product: {id: productId}})
   }
 
   public getZzimedProducts = async (user: User) => {
     const querybuilder = this.zzimRepo.createQueryBuilder('zzim')
       .leftJoin('zzim.user', 'user')
       .leftJoinAndSelect('zzim.product', 'product')
+      .leftJoin('product.reviews', 'review')
+      .leftJoin('product.optionCombinations', 'optionCombination')
+      .addSelect('AVG(review.rating)', 'averageRating')
+      .addSelect('COUNT(review.id)', 'reviewCount')
+      .addSelect('SUM(optionCombination.amount)', 'totalAmount')
+      .groupBy('zzim.id')
       .where('user.id = :userId', { userId: user.id })
-    console.log(await querybuilder.getMany())
-    return querybuilder.getRawMany()
+    return querybuilder.getRawAndEntities()
   }
 }

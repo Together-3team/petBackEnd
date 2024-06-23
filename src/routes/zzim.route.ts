@@ -28,7 +28,7 @@ const zzimController = new ZzimController()
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ZzimListResponseDto'
+ *               $ref: '#/components/schemas/HomeProductListResponseDto'
  *       404:
  *         description: 존재하지 않는 사용자입니다
  */
@@ -79,7 +79,7 @@ ZzimRouter.post('/',
  *         schema:
  *           type: number
  *         required: true
- *         description: 찜 ID
+ *         description: 상품 ID
  *     responses:
  *       200:
  *         description: 삭제된 찜

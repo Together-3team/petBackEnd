@@ -9,17 +9,6 @@ export class ZzimController {
   constructor() {
     this.zzimService = new ZzimService()
   }
-
-  public getZzimsByUser = async (req: Request, res: Response): Promise<void> => {
-    const user = req.user as User
-    try {
-      const Zzims = await this.zzimService.getZzimsByUser(user)
-      res.json(Zzims)
-    } catch (error) {
-      const errorMessage = (error as Error).message
-      res.status(500).json({ error: errorMessage })
-    }
-  }
   
   public createZzim = async (req: Request, res: Response): Promise<void> => {
     const zzimData: ZzimCreateRequestDto = req.body
@@ -34,11 +23,10 @@ export class ZzimController {
   }
 
   public deleteZzim = async (req: Request, res: Response): Promise<void> => {
-    const zzimId = req.params.id
+    const productId = req.params.id
     const user = req.user as User
     try {
-      await this.zzimService.getZzimById(zzimId, user)
-      const result = await this.zzimService.deleteZzim(zzimId)
+      const result = await this.zzimService.deleteZzim(productId)
       res.json(result)
     } catch (error) {
       const errorMessage = (error as Error).message

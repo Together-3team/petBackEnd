@@ -16,6 +16,6 @@ export class PurchaseProductRepository {
   }
 
   public getRecentPurchaseProduct = (user: User): Promise<PurchaseProduct[]> => {
-    return this.purchaseProductRepository.find({ order: { createdAt: 'DESC' }, take: 1 })
+    return this.purchaseProductRepository.find({ where: { user: { id: user.id } }, order: { createdAt: 'DESC' }, take: 1 })
   }
 }
