@@ -37,7 +37,7 @@ export class OptionCombination {
   /**
   * 옵션 조합
   */
-  @Column({ type: 'varchar', length: 15 })
+  @Column({ type: 'varchar', length: 30 })
   optionCombination!: string;
 
   /**
