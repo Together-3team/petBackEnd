@@ -19,9 +19,7 @@ export class AuthController {
   }
 
   public authenticate = (provider: string, local: boolean) => (req: Request, res: Response) => {
-    const redirect_uri = local ?
-      `http://localhost:3000/auth/${provider}/callback` :
-      `https://pawing-market.vercel.app/auth/${provider}/callback`
+    const redirect_uri = (local ? process.env.LOCAL_BASE_URL || '' : process.env.SERVER_BASE_URL || '') + `/auth/${provider}/callback`
     const url = (provider === 'google' ?
       `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&scope=https://www.googleapis.com/auth/userinfo.email` :
       `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}`)
@@ -60,12 +58,13 @@ export class AuthController {
 
   public authenticateGoogle = async (req: Request, res: Response) => {
     try {
+      const redirect_uri = (req.query.local === 'false' ? process.env.SERVER_BASE_URL || '' : process.env.LOCAL_BASE_URL || '') + `/auth/google/callback`
       if (req.query.error === 'access_denied') return res.status(404).json({ message: "google OAuth2 로그인 액세스 요청을 거부하였습니다"})
       const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', qs.stringify({
         code: req.query.code as string,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: process.env.GOOGLE_CALLBACK_URL,
+        redirect_uri: redirect_uri,
         grant_type: 'authorization_code'
       }), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -91,10 +90,11 @@ export class AuthController {
 
   public authenticateKakao = async (req: Request, res: Response) => {
     try {
+      const redirect_uri = (req.query.local === 'false' ? process.env.SERVER_BASE_URL || '' : process.env.LOCAL_BASE_URL || '') + `/auth/kakao/callback`
       const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token'
         + `?${encodeURIComponent('code')}=${encodeURIComponent(req.query.code as string)}`
         + `&${encodeURIComponent('client_id')}=${encodeURIComponent(process.env.KAKAO_CLIENT_ID || '')}`
-        + `&${encodeURIComponent('redirect_uri')}=${encodeURIComponent(process.env.KAKAO_CALLBACK_URL || '')}`
+        + `&${encodeURIComponent('redirect_uri')}=${encodeURIComponent(redirect_uri)}`
         + `&${encodeURIComponent('grant_type')}=${encodeURIComponent('authorization_code')}`,
         {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
