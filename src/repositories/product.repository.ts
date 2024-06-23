@@ -44,4 +44,19 @@ export class ProductRepository {
       relations: ['options', 'optionCombinations', 'detail', 'reviews', 'reviews.user', 'reviews.purchaseProduct']
     })
   }
+  public getSimilarProducts = async (productId: number): Promise<{entities: Product[], raw: any}> => {
+    const { petType, productType, ...rest } = await this.getProductById(productId)
+    const querybuilder = this.productListRepository.createQueryBuilder('product')
+      .leftJoin('product.reviews', 'review')
+      .leftJoin('product.optionCombinations', 'optionCombination')
+      .addSelect('AVG(review.rating)', 'averageRating')
+      .addSelect('COUNT(review.id)', 'reviewCount')
+      .addSelect('SUM(optionCombination.amount)', 'totalAmount')
+      .groupBy('product.id')
+      .orderBy('RAND()')
+      .where("product.id <> :productId", { productId })
+      .andWhere("product.petType = :petType", { petType })
+      .andWhere("product.productType = :productType", { productType })
+    return querybuilder.getRawAndEntities()
+  }
 }

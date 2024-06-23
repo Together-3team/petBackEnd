@@ -94,7 +94,7 @@ export class AuthController {
       const profile: ProfileDto = {
         snsId: profileResponse.data.id,
         email: profileResponse.data.kakao_account.email,
-        profileImage: profileResponse.data.properties.profile_image,
+        profileImage: profileResponse.data.kakao_account.profile.profile_image_url || 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png',
         provider: 'kakao'
       }
       this.authenticateCallback(req, res, profile)

@@ -74,12 +74,12 @@ export class ProductService {
   }
 
   public getProductDetail = async (productId: number, user: User): Promise<FullProductResponseDto> => {
-    const raw = await this.productRepository.getProductDetail(productId)
+    const product = await this.productRepository.getProductDetail(productId)
     const isZzimed = await this.zzimRepository.findZzimByUserAndProductId(productId, user) ? true : false
-    const detail = plainToInstance(ProductDetailResponseDto, raw.detail)
-    const options = await this.makeOptions(raw.options)
-    const optionCombinations = raw.optionCombinations.map(oc => plainToInstance(OptionCombinationResponseDto, oc))
-    const reviews = raw.reviews.map(review => plainToInstance(ReviewResponseDto, {
+    const detail = plainToInstance(ProductDetailResponseDto, product.detail)
+    const options = await this.makeOptions(product.options)
+    const optionCombinations = product.optionCombinations.map(oc => plainToInstance(OptionCombinationResponseDto, oc))
+    const reviews = product.reviews.map(review => plainToInstance(ReviewResponseDto, {
       ...review,
       reviewerName: review.user ? review.user.nickname : '탈퇴한 사용자입니다',
       reviewerProfileImage: review.user ? review.user.profileImage : 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png',
@@ -88,6 +88,12 @@ export class ProductService {
     const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
     const reviewCount = reviews.length
     const totalAmount = optionCombinations.reduce((sum, oc) => sum + oc.amount, 0)
-    return plainToInstance(FullProductResponseDto, {...raw, isZzimed, detail, averageRating, reviewCount, totalAmount, optionCombinations, reviews, options})
+    const { raw, entities } = await this.productRepository.getSimilarProducts(productId)
+    const similarProducts = await Promise.all(entities.splice(0, 8).map(async (product, i) => {
+      const zzim = user.id ? await this.zzimRepository.findZzimByUserAndProductId(product.id, user) : null
+      return zzim ? plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: true}):
+        plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: false})
+    }))
+    return plainToInstance(FullProductResponseDto, {...product, isZzimed, detail, averageRating, reviewCount, totalAmount, optionCombinations, reviews, options, similarProducts})
   }
 }
