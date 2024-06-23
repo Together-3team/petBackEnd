@@ -1,12 +1,35 @@
 import { ReviewRepository } from '../repositories'
-import { ReviewCreateRequestDto } from '../dtos'
-import { PurchaseProduct, Review } from '../entities'
+import { ResponseMyReviewDto, ReviewCreateRequestDto } from '../dtos'
+import { PurchaseProduct, Review, User } from '../entities'
 
 export class ReviewService {
   private reviewRepository: ReviewRepository
 
   constructor() {
     this.reviewRepository = new ReviewRepository();
+  }
+
+  public async getMyReview(user: User, reviewId: number): Promise<ResponseMyReviewDto | { error: string }> {
+    const review = await this.reviewRepository.findById(reviewId);
+
+    console.log(review);
+
+    if (!review) {
+      return { error: "Review not found" };
+    }
+
+
+    if (review.user?.id !== user.id) {
+      return { error: "Unauthorized" };
+    }
+
+    return {
+      id: review.id,
+      rating: review.rating,
+      reviewImages: review.reviewImages,
+      description: review.description,
+      createdAt: review.createdAt,
+    };
   }
 
   public async removeReview(userId: number, reviewId: number): Promise<{ result: string } | { error: string }> {

@@ -16,6 +16,26 @@ const reviewController = new ReviewController();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     ReviewResponseDto:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         rating:
+ *           type: number
+ *         reviewImages:
+ *           type: string
+ *         description:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
  * /review/new:
  *   post:
  *     summary: 새로운 리뷰 작성
@@ -43,6 +63,40 @@ ReviewRouter.post('/new',
     passport.authenticate('jwt', { session: false }),
     validateDto(ReviewCreateRequestDto),
     reviewController.createReview);
+
+/**
+ * @swagger
+ * /review/{rid}:
+ *   get:
+ *     summary: 특정 리뷰 조회
+ *     tags: [Reviews]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: rid
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: 조회할 리뷰의 ID
+ *     responses:
+ *       200:
+ *         description: 리뷰 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ReviewResponseDto'
+ *       401:
+ *         description: 인증 실패
+ *       403:
+ *         description: 권한 없음
+ *       404:
+ *         description: 리뷰를 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+
+ReviewRouter.get('/:rid', passport.authenticate('jwt', { session: false }), reviewController.getMyReview)
 
 /**
  * @swagger

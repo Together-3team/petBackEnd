@@ -10,6 +10,25 @@ export class ReviewController {
     this.reviewService = new ReviewService();
   }
 
+  public getMyReview = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user = req.user as User;
+
+      const reviewId = parseInt(req.params.rid, 10);
+
+      const result = await this.reviewService.getMyReview(user, reviewId);
+
+      if ('error' in result) {
+        res.status(401).json({ error: result.error });
+      } else {
+        res.status(200).json(result);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
   public removeReview = async (req: Request, res: Response): Promise<void> => {
     try {
       const user = req.user as User;

@@ -96,7 +96,7 @@ export class Purchase {
   @OneToMany(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.purchase, { eager: true, cascade: true })
   purchaseProducts!: PurchaseProduct[];
 
-  @Column({ type: 'varchar', length: 30, unique: true })
+  @Column({ type: 'varchar', length: 60, unique: true })
   orderId!: string;
 
   @Column({ type: 'varchar', length: 30, unique: true })

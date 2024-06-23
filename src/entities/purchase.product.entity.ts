@@ -127,7 +127,6 @@ export class PurchaseProduct {
   thumbNailImage!: string;
 
   @OneToOne(() => Review, (review) => review.purchaseProduct)
-  @JoinColumn()
   review!: Review
 
   @Column({ type: 'varchar', length: 20, nullable: true })

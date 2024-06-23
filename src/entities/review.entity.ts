@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Timestamp, OneToOne } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    CreateDateColumn,
+    Timestamp,
+    OneToOne,
+    JoinColumn,
+} from 'typeorm'
 import { Product } from './product.entity';
 import { User } from './user.entity';
 import { PurchaseProduct } from './purchase.product.entity'
@@ -56,6 +65,7 @@ export class Review {
     user?: User;
 
     @OneToOne(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.review)
+    @JoinColumn()
     purchaseProduct!: PurchaseProduct;
 
     @Column({ type: 'int' })

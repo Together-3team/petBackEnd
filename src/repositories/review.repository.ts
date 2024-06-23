@@ -8,6 +8,16 @@ export class ReviewRepository {
   private userRepository = AppDataSource.getRepository(User)
   private purchaseProductRepository = AppDataSource.getRepository(PurchaseProduct)
 
+  public async findById(id: number): Promise<Review | null> {
+    try {
+      return await this.reviewRepository.findOne({
+        relations: ['user', 'purchaseProduct'],
+        where : { id }})
+    } catch (error) {
+      throw new Error('findById error');
+    }
+  }
+
   public async findReviewById(reviewId: number): Promise<Review | null> {
     return this.reviewRepository
       .createQueryBuilder('review')
