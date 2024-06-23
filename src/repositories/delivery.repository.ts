@@ -19,7 +19,7 @@ export class DeliveryRepository {
   }
   
   public findDeliveriesByUser = (user: User): Promise<Delivery[]> => {
-    return this.deliveryRepo.findBy({user: {id: user.id}})
+    return this.deliveryRepo.find({order: {isDefault: 'DESC'}, where: {user: {id: user.id}}})
   }
 
   public findDefaultDelivery = (user: User): Promise<Delivery | null> => {
