@@ -96,7 +96,7 @@ ReviewRouter.post('/new',
  *         description: 서버 오류
  */
 
-ReviewRouter.get('/:rid', passport.authenticate('jwt', { session: false }), reviewController.getMyReview)
+ReviewRouter.get('/detail/:rid', passport.authenticate('jwt', { session: false }), reviewController.getMyReview)
 
 /**
  * @swagger
