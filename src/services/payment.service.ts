@@ -130,10 +130,16 @@ export class PaymentService {
 
     const delivery = await this.deliveryRepository.findDeliveryById(paymentRequestDto?.deliveryId);
 
-    const selectedProductList = await Promise.all((paymentRequestDto?.selectedProductIds?.split(',') ?? []).map(async (productId) => {
-      const selectedProduct = await this.selectedPaymentRepository.findSelectedProductById(Number(productId));
+    const selectedProductIdArray = paymentRequestDto?.selectedProductIds?.split(',').map(Number) ?? [];
+
+    const selectedProductList = await Promise.all((selectedProductIdArray).map(async (productId) => {
+      const selectedProduct = await this.selectedPaymentRepository.findSelectedProductById(productId);
       return this.toSelectedProductDTO(selectedProduct);
     }));
+
+    // 모든 Selected Product 삭제
+
+    await this.selectedPaymentRepository.deleteReviewsByIds(selectedProductIdArray);
 
     for (const product of selectedProductList) {
       const newPurchaseProduct = await this.toPurchaseProduct(product, user);

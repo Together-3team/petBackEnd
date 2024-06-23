@@ -1,13 +1,16 @@
 import { User, SelectedProduct, OptionCombination } from '../entities'
 import { AppDataSource } from '../config/typeorm'
-import { DeleteResult } from 'typeorm'
-import { SelectedProductCreateRequestDto, SelectedProductUpdateRequestDto } from '../dtos/selectedProduct'
-import { PurchaseProduct } from '../entities/purchase.product.entity'
+import { DeleteResult, In } from 'typeorm'
+import { SelectedProductCreateRequestDto, SelectedProductUpdateRequestDto } from '../dtos'
+import { PurchaseProduct } from '../entities'
 
 export class SelectedProductRepository {
   private selectedProductRepo = AppDataSource.getRepository(SelectedProduct)
   private optionCombinationRepo = AppDataSource.getRepository(OptionCombination)
 
+  public deleteReviewsByIds = async (ids: number[]) => {
+    await this.selectedProductRepo.delete({ id: In(ids) })
+  }
   
   public findSelectedProductByUser = (user: User): Promise<SelectedProduct[]> => {
     return this.selectedProductRepo.find({

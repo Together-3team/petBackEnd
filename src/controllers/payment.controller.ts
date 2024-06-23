@@ -55,7 +55,6 @@ export class PaymentController {
         const paymentComplete = await this.paymentService.changedStatus(orderId);
         await this.paymentService.createGroupBuying(paymentComplete);
         const productIds = paymentComplete.purchaseProducts.map((pp) => pp.productId);
-        console.log(productIds);
         await this.sendProductUpdateWebSocket(productIds);
       }
       return res.status(200).send({ "result": "finish" })
