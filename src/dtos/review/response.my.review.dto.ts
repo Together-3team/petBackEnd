@@ -17,6 +17,12 @@ export class ResponseMyReviewDto {
   @IsString()
   combinationName?: string = '';
 
+  @IsNumber()
+  quantity?: number = 0;
+
+  @IsString()
+  thumbNailImage?: string = '';
+
   @IsString()
   title?: string = '';
 

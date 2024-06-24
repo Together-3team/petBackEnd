@@ -29,6 +29,8 @@ export class ReviewService {
       description: review.description,
       combinationName: review.purchaseProduct.combinationName,
       title: review.purchaseProduct.title,
+      quantity: review.purchaseProduct.quantity,
+      thumbNailImage: review.purchaseProduct.thumbNailImage,
       createdAt: review.createdAt,
     };
   }
