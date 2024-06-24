@@ -66,6 +66,8 @@ jobs:
             -e KAKAO_CALLBACK_URL='${{ secrets.KAKAO_CALLBACK_URL }}' \
             -e PAYMENT_SECRET_KEY='${{ secrets.PAYMENT_SECRET_KEY }}' \
             -e GUEST_ACCESS_TOKEN='${{ secrets.GUEST_ACCESS_TOKEN }}' \
+            -e LOCAL_BASE_URL='${{ secrets.LOCAL_BASE_URL }}' \
+            -e SERVER_BASE_URL='${{ secrets.SERVER_BASE_URL }}' \
             --name 3team-back-server \
             --memory=1g \
             -e NODE_OPTIONS="--max-old-space-size=1024" \
