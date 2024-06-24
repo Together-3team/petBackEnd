@@ -24,6 +24,8 @@ export class GroupBuyingRepository {
         .leftJoinAndSelect('groupBuying.purchaseProducts', 'purchaseProduct')
         .leftJoinAndSelect('purchaseProduct.user', 'user')
         .where('product.id = :id', { id })
+        .orderBy('CASE WHEN groupBuying.status = 0 THEN 0 ELSE 1 END', 'ASC')
+        .addOrderBy('groupBuying.createdAt', 'DESC')
         .getOne();
 
       if (!product) {
