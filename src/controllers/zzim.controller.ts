@@ -26,7 +26,7 @@ export class ZzimController {
     const productId = req.params.id
     const user = req.user as User
     try {
-      const result = await this.zzimService.deleteZzim(productId)
+      const result = await this.zzimService.deleteZzim(productId, user)
       res.json(result)
     } catch (error) {
       const errorMessage = (error as Error).message

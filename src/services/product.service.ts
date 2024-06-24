@@ -23,9 +23,8 @@ export class ProductService {
     const raw = (products.raw as any[]).slice((page-1)*pageSize, page*pageSize)
     const entities = products.entities.slice((page-1)*pageSize, page*pageSize)
     const productResponses = await Promise.all(entities.map(async (product, i) => {
-      const zzim = user.id ? await this.zzimRepository.findZzimByUserAndProductId(product.id, user) : null
-      return zzim ? plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: true}):
-        plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: false})
+      const isZzimed = user.id && await this.zzimRepository.findZzimByUserAndProductId(product.id, user) ? true : false
+      return plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(parseFloat(raw[i].averageRating).toFixed(1)), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed})
     }))
     return { page, pageSize, totalCount: products.entities.length, data: productResponses}
   }
@@ -75,7 +74,7 @@ export class ProductService {
 
   public getProductDetail = async (productId: number, user: User): Promise<FullProductResponseDto> => {
     const product = await this.productRepository.getProductDetail(productId)
-    const isZzimed = await this.zzimRepository.findZzimByUserAndProductId(productId, user) ? true : false
+    const isZzimed = user.id && await this.zzimRepository.findZzimByUserAndProductId(productId, user) ? true : false
     const detail = plainToInstance(ProductDetailResponseDto, product.detail)
     const options = await this.makeOptions(product.options)
     const optionCombinations = product.optionCombinations.map(oc => plainToInstance(OptionCombinationResponseDto, oc))
@@ -85,14 +84,13 @@ export class ProductService {
       reviewerProfileImage: review.user ? review.user.profileImage : 'https://review-image-3team.s3.ap-northeast-2.amazonaws.com/f066016b-da8d-4513-b7b0-0cf6d5d684a0.png',
       optionCombination: review.purchaseProduct ? `${review.purchaseProduct.combinationName} | ${review.purchaseProduct.quantity}개` : ''
     }))
-    const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    const averageRating = parseFloat((reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1))
     const reviewCount = reviews.length
     const totalAmount = optionCombinations.reduce((sum, oc) => sum + oc.amount, 0)
     const { raw, entities } = await this.productRepository.getSimilarProducts(productId)
     const similarProducts = await Promise.all(entities.splice(0, 8).map(async (product, i) => {
-      const zzim = user.id ? await this.zzimRepository.findZzimByUserAndProductId(product.id, user) : null
-      return zzim ? plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: true}):
-        plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(raw[i].averageRating), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed: false})
+      const isZzimed = user.id && await this.zzimRepository.findZzimByUserAndProductId(product.id, user) ? true : false
+      return plainToInstance(HomeProductResponseDto, {...product, averageRating: parseFloat(parseFloat(raw[i].averageRating).toFixed(1)), reviewCount: parseInt(raw[i].reviewCount), totalAmount: parseInt(raw[i].totalAmount)/(parseInt(raw[i].reviewCount) || 1), isZzimed})
     }))
     return plainToInstance(FullProductResponseDto, {...product, isZzimed, detail, averageRating, reviewCount, totalAmount, optionCombinations, reviews, options, similarProducts})
   }

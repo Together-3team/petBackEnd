@@ -18,8 +18,8 @@ export class ZzimService {
     return plainToInstance(ZzimResponseDto, {...zzim, product: plainToInstance(ProductResponseDto, zzim.product)})
   }
 
-  public deleteZzim = (productId: string): Promise<DeleteResult> => {
-    return this.zzimRepository.deleteZzim(parseInt(productId))
+  public deleteZzim = (productId: string, user: User): Promise<DeleteResult> => {
+    return this.zzimRepository.deleteZzim(parseInt(productId), user)
   }
 
   public getZzimedProducts = async (user: User) => {

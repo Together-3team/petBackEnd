@@ -25,8 +25,8 @@ export class ZzimRepository {
     return this.zzimRepo.findOneByOrFail({id: result.identifiers[0].id})
   }
 
-  public deleteZzim = (productId: number): Promise<DeleteResult> => {
-    return this.zzimRepo.delete({product: {id: productId}})
+  public deleteZzim = (productId: number, user: User): Promise<DeleteResult> => {
+    return this.zzimRepo.delete({product: {id: productId}, user: {id: user.id}})
   }
 
   public getZzimedProducts = async (user: User) => {
